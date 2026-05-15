@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{% if q %}{{ q }} — {% endif %}Search — Cooking Issues{% endblock %}
+
+{% block content %}
+
+<div class="search-hero">
+  <div class="container">
+    <h1>Search</h1>
+    <form class="search-form-lg" action="/search" method="get">
+      <input name="q" type="search" value="{{ q }}" placeholder="Try: agar, centrifuge, sous vide…" autocomplete="off" autofocus>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="container" style="padding-top:0; padding-bottom: 3rem;">
+  {% if q %}
+    {% if error %}
+    <p class="result-count" style="color:#c0392b">Search error: {{ error }}</p>
+    {% elif count == 0 %}
+    <p class="result-count">No results for "<strong>{{ q }}</strong>". Try fewer or simpler terms.</p>
+    {% else %}
+    <p class="result-count">{{ count }} result{% if count != 1 %}s{% endif %} for "<strong>{{ q }}</strong>"</p>
+    <div class="result-list">
+      {% for r in results %}
+      <div class="result-item {% if r.post_type == 'primer' %}primer-result{% endif %}">
+        <div class="result-meta">
+          {% if r.post_type == 'primer' %}
+          <span style="color:var(--primer-accent);font-weight:600">▪ Primer</span>
+          <span>·</span>
+          {% endif %}
+          {% if r.date %}<span>{{ r.date | fmt_date }}</span>{% endif %}
+          {% if r.tags %}
+            {% for tag in r.tags.split(',')[:2] %}
+              {% set tag = tag.strip() %}
+              {% if tag and tag != 'Uncategorized' %}
+              <span>·</span>
+              <a href="/browse?tag={{ tag | urlencode }}" class="tag" style="font-size:.72rem">{{ tag }}</a>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>
+        <h3><a href="/post/{{ r.id }}">{{ r.title }}</a></h3>
+        <div class="result-excerpt">{{ r.excerpt | safe }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% else %}
+  <p style="margin-top:2rem; color:var(--muted)">
+    Enter a search term above. The full text of all 224 posts and primers is indexed.
+  </p>
+  <div style="margin-top:1.5rem; display:flex; flex-wrap:wrap; gap:.5rem;">
+    {% for term in ['sous vide', 'agar', 'centrifuge', 'liquid nitrogen', 'rotovap', 'cocktail', 'transglutaminase', 'pressure cooker', 'hydrocolloid', 'ike-jime'] %}
+    <a href="/search?q={{ term | urlencode }}" class="tag" style="font-size:.85rem; padding:.3rem .75rem;">{{ term }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Technical Primers — Cooking Issues{% endblock %}
+
+{% block content %}
+
+<div class="primers-page">
+  <div class="container">
+    <h1>Technical Primers</h1>
+    <p>In-depth reference guides on modernist cooking techniques by Dave Arnold.</p>
+
+    {% set icons = {
+      'Hydrocolloids Primer': '🧪',
+      'Liquid Nitrogen Primer': '❄️',
+      'Rotary Evaporation in the Kitchen': '⚗️',
+      'Transglutaminase, aka Meat Glue': '🔬',
+      'Low-Temperature and Sous-Vide Primer': '🌡️',
+      'Purdy Pictures: The Charts': '📊',
+    } %}
+
+    {% for p in primers %}
+    <a href="/post/{{ p.id }}" class="primer-full-card">
+      <div class="primer-icon">{{ icons.get(p.title, '📖') }}</div>
+      <div>
+        <div class="primer-badge">Reference Guide</div>
+        <h2>{{ p.title }}</h2>
+        <p>{{ p.body_text | short_excerpt(300) }}</p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

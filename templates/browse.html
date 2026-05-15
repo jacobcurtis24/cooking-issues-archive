@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}All Posts — Cooking Issues{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="container">
+    <h1>{% if tag %}Posts tagged "{{ tag }}"{% else %}All Posts{% endif %}</h1>
+    <p>{{ total }} post{% if total != 1 %}s{% endif %}{% if tag %} — <a href="/browse">Clear filter</a>{% endif %}</p>
+    {% if all_tags %}
+    <div class="tag-filter">
+      {% for t in all_tags %}
+      <a href="/browse?tag={{ t | urlencode }}"
+         class="{% if t == tag %}active{% endif %}">{{ t }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="container">
+  <div class="browse-list">
+    {% for p in posts %}
+    <div class="browse-item">
+      <div class="browse-date">{{ p.date | fmt_date }}</div>
+      <div class="browse-body">
+        <h3><a href="/post/{{ p.id }}">{{ p.title }}</a></h3>
+        <p>{{ p.body_text | short_excerpt(160) }}</p>
+        {% if p.tags %}
+        <div class="tags" style="margin-top:.5rem">
+          {% for t in p.tags.split(',')[:4] %}
+            {% set t = t.strip() %}
+            {% if t and t != 'Uncategorized' %}
+            <a href="/browse?tag={{ t | urlencode }}" class="tag">{{ t }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if total_pages > 1 %}
+  <div class="pagination">
+    {% if page > 1 %}
+    <a href="/browse?page={{ page - 1 }}{% if tag %}&tag={{ tag | urlencode }}{% endif %}">‹ Prev</a>
+    {% endif %}
+
+    {% set start = [1, page - 3] | max %}
+    {% set end   = [total_pages, page + 3] | min %}
+
+    {% if start > 1 %}
+    <a href="/browse?page=1{% if tag %}&tag={{ tag | urlencode }}{% endif %}">1</a>
+    {% if start > 2 %}<span class="ellipsis">…</span>{% endif %}
+    {% endif %}
+
+    {% for n in range(start, end + 1) %}
+    {% if n == page %}
+    <span class="current">{{ n }}</span>
+    {% else %}
+    <a href="/browse?page={{ n }}{% if tag %}&tag={{ tag | urlencode }}{% endif %}">{{ n }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if end < total_pages %}
+    {% if end < total_pages - 1 %}<span class="ellipsis">…</span>{% endif %}
+    <a href="/browse?page={{ total_pages }}{% if tag %}&tag={{ tag | urlencode }}{% endif %}">{{ total_pages }}</a>
+    {% endif %}
+
+    {% if page < total_pages %}
+    <a href="/browse?page={{ page + 1 }}{% if tag %}&tag={{ tag | urlencode }}{% endif %}">Next ›</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Cooking Issues — Archive{% endblock %}
+
+{% block content %}
+
+<!-- Hero Search -->
+<section class="hero-search">
+  <div class="container">
+    <h1>Cooking Issues Archive</h1>
+    <p>{{ total }} posts by Dave Arnold on food science, cocktails, and modernist technique</p>
+    <form class="hero-form" action="/search" method="get">
+      <input name="q" type="search" placeholder="Search: sous vide, agar, centrifuge, cocktail…" autocomplete="off">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- Primers -->
+<section class="primers-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Technical Primers</h2>
+      <a href="/primers">View all →</a>
+    </div>
+    <div class="primers-grid">
+      {% for p in primers %}
+      <a href="/post/{{ p.id }}" class="primer-card">
+        <div class="primer-badge">Reference Guide</div>
+        <h3>{{ p.title }}</h3>
+        <p>{{ p.body_text | short_excerpt(130) }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Recent Posts -->
+<div class="container">
+  <div class="section-header">
+    <h2>Recent Posts</h2>
+    <a href="/browse">Browse all {{ total }} posts →</a>
+  </div>
+  <div class="posts-grid">
+    {% for p in recent %}
+    <a href="/post/{{ p.id }}" class="post-card">
+      <div class="post-card-meta">
+        <span>{{ p.date | fmt_date }}</span>
+      </div>
+      <h3>{{ p.title }}</h3>
+      <p>{{ p.body_text | short_excerpt(200) }}</p>
+      {% if p.tags %}
+      <div class="tags">
+        {% for tag in p.tags.split(',')[:3] %}
+          {% set tag = tag.strip() %}
+          {% if tag and tag != 'Uncategorized' %}
+          <span class="tag">{{ tag }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </a>
+    {% endfor %}
+  </div>
+  <div style="text-align:center; padding: 2.5rem 0 1rem;">
+    <a href="/browse" style="
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: .75rem 2rem;
+      border-radius: 2rem;
+      font-size: .95rem;
+      font-weight: 600;
+      transition: background .15s;
+    ">Browse all {{ total }} posts</a>
+  </div>
+</div>
+
+{% endblock %}
