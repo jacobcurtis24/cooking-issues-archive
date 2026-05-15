@@ -37,12 +37,38 @@ for _b in range(256):
 
 
 def _fix_chunk(chunk: str) -> str:
-    """Convert one run of non-ASCII mojibake chars back to UTF-8 text."""
+    """Convert one run of non-ASCII mojibake chars back to UTF-8 text.
+
+    Handles two tricky cases:
+    1. Adjacent mojibake sequences whose combined bytes form invalid UTF-8
+       (e.g. â€\x9d followed by Â whose continuation byte is ASCII): falls
+       back to greedy prefix matching.
+    2. A correctly-decoded Unicode char (e.g. " U+201D → cp1252 byte 0x94)
+       sitting adjacent to mojibake: its cp1252 byte is a UTF-8 continuation
+       byte, so no prefix decode can start there. Detected by checking whether
+       the first byte would be a UTF-8 continuation byte (0x80–0xBF), in which
+       case we leave that char in place and recurse on the rest.
+    """
+    if not chunk:
+        return chunk
+    raw = bytes(_CP1252_REVERSE.get(c, ord(c) & 0xFF) for c in chunk)
+    # If the first byte is a UTF-8 continuation byte, the leading character is
+    # already a correctly-stored Unicode scalar — pass it through and recurse.
+    if 0x80 <= raw[0] <= 0xBF:
+        return chunk[0] + _fix_chunk(chunk[1:])
     try:
-        raw = bytes(_CP1252_REVERSE[c] for c in chunk)
         return raw.decode("utf-8")
-    except (KeyError, UnicodeDecodeError):
-        return chunk             # not mojibake — leave unchanged
+    except UnicodeDecodeError:
+        pass
+    # Greedy: find the longest valid UTF-8 prefix, fix it, recurse on remainder
+    for n in range(len(raw) - 1, 0, -1):
+        try:
+            head = raw[:n].decode("utf-8")
+            tail = _fix_chunk(chunk[n:])
+            return head + tail
+        except UnicodeDecodeError:
+            continue
+    return chunk  # nothing decoded — leave unchanged
 
 
 def fix_mojibake(text: str) -> str:

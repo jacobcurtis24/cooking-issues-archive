@@ -104,13 +104,60 @@ Responsive breakpoint at 700px hides the nav (accessible via header search) and 
 
 ---
 
+## Phase 4: Encoding Fix (`fix_encoding.py` + integrated into `scrape.py`)
+
+### Root cause
+
+`requests` defaults to Windows-1252 (cp1252) when a server omits a `charset` declaration in its `Content-Type` header — which cookingissues.com does. UTF-8 byte sequences were misread as cp1252 characters. Example:
+
+```
+UTF-8 bytes  E2 80 99  →  cp1252 chars  â € ™  →  stored as "â€™"  instead of  "'"
+```
+
+207 of 224 posts were affected. Top artifacts by frequency: `â€™` (1552×), `â€"` (380×), `Â°` (325×), `â€œ` (256×), `â€\x9d` (245×), `â€"` (156×), plus accented letters like `Ã©` → `é`.
+
+### Why the naive fix failed
+
+The obvious round-trip `text.encode('cp1252').decode('utf-8')` fails for 217/224 posts because five cp1252 byte values (0x81, 0x8D, 0x8F, 0x90, 0x9D) are undefined in the standard — Python's codec maps them to their Latin-1 Unicode equivalents on decode (e.g. byte 0x9D → U+009D), but refuses to encode them back. The right double-quote artifact `â€\x9d` (U+009D) was the most common blocker.
+
+### Fix: complete reverse map + per-chunk processing
+
+`fix_encoding.py` builds a full 256-entry reverse map (Unicode char → byte value) by iterating over all byte values, using `chr(b)` as the fallback for the five undefined bytes. It then applies the fix only to non-ASCII runs via regex, leaving ASCII untouched:
+
+```python
+_CP1252_REVERSE: dict[str, int] = {}
+for _b in range(256):
+    try:
+        _char = bytes([_b]).decode("cp1252")
+    except UnicodeDecodeError:
+        _char = chr(_b)          # undefined byte → Latin-1 char (ord == byte)
+    _CP1252_REVERSE[_char] = _b
+
+def fix_mojibake(text):
+    return re.sub(r"[^\x00-\x7f]+", lambda m: _fix_chunk(m.group()), text)
+```
+
+The one-time fix run corrected 207 posts across 377 fields (title, author, categories, tags, body_text, body_html) and rebuilt the FTS index. The fix is idempotent — already-correct text round-trips unchanged because the corrected Unicode characters (e.g. U+2019 `'`) can't be encoded as valid single-byte cp1252 then decoded as valid UTF-8.
+
+### Integration into scraper
+
+Two changes made to `scrape.py` so future scrapes are clean from the start:
+
+1. **Root cause fix** — `fetch()` now sets `resp.encoding = 'utf-8'` before accessing `resp.text`, overriding requests' cp1252 default.
+2. **Belt-and-suspenders** — `fix_mojibake()` is applied to all text fields in `parse_post()` before insertion, catching any edge cases.
+
+`fix_encoding.py` remains as a standalone tool for re-fixing the DB without re-scraping.
+
+---
+
 ## File Layout
 
 ```
 cooking_issues/
-├── scrape.py          # scraper + CLI search tool
+├── scrape.py          # scraper + CLI search tool (encoding fix integrated)
+├── fix_encoding.py    # standalone DB encoding fix tool
 ├── app.py             # Flask web server
-├── cooking_issues.db  # SQLite database (224 posts)
+├── cooking_issues.db  # SQLite database (224 posts, encoding corrected)
 ├── summary.md         # this file
 └── templates/
     ├── base.html      # shared layout + all CSS
@@ -142,7 +189,7 @@ python3 scrape.py --stats
 
 ## Known Issues / Future Work
 
-- **Encoding artifacts** in some `body_text` strings (`â€™` instead of `'`). This is a UTF-8/Latin-1 mojibake from the original site's HTTP response. `body_html` is unaffected, so the post reader looks correct; only excerpts/snippets in cards and search results may occasionally show garbled characters. Fix: re-scrape with explicit `response.encoding = 'utf-8'` override.
+- ~~**Encoding artifacts**~~ Fixed. All 207 affected posts corrected in DB; `scrape.py` now sets `resp.encoding = 'utf-8'` so future scrapes are clean.
 
 - **Images are not archived.** Posts with many images (photo diaries, centrifuge posts) won't display images offline. Future option: download images and rewrite `src` attributes.
 

@@ -21,6 +21,62 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
+# ---------------------------------------------------------------------------
+# Encoding fix  (cp1252 mojibake → correct UTF-8)
+# ---------------------------------------------------------------------------
+# Build a complete cp1252 byte→char reverse map. The five bytes undefined in
+# cp1252 (0x81, 0x8D, 0x8F, 0x90, 0x9D) are mapped to their Latin-1 char
+# equivalents by Python's codec, so ord(char) == byte for those five.
+_CP1252_REVERSE: dict[str, int] = {}
+for _b in range(256):
+    try:
+        _char = bytes([_b]).decode("cp1252")
+    except UnicodeDecodeError:
+        _char = chr(_b)
+    _CP1252_REVERSE[_char] = _b
+
+
+def _fix_chunk(chunk: str) -> str:
+    """Try to convert a non-ASCII run from cp1252 chars back to UTF-8 text.
+
+    Handles two tricky cases:
+    1. Adjacent mojibake sequences whose combined bytes form invalid UTF-8
+       (e.g. â€\x9d followed by Â whose continuation byte is ASCII): falls
+       back to greedy prefix matching.
+    2. A correctly-decoded Unicode char (e.g. " U+201D → cp1252 byte 0x94)
+       sitting adjacent to mojibake: its cp1252 byte is a UTF-8 continuation
+       byte, so no prefix decode can start there. Detected by checking whether
+       the first byte would be a UTF-8 continuation byte (0x80–0xBF), in which
+       case we leave that char in place and recurse on the rest.
+    """
+    if not chunk:
+        return chunk
+    raw = bytes(_CP1252_REVERSE.get(c, ord(c) & 0xFF) for c in chunk)
+    # If the first byte is a UTF-8 continuation byte, the leading character is
+    # already a correctly-stored Unicode scalar — pass it through and recurse.
+    if 0x80 <= raw[0] <= 0xBF:
+        return chunk[0] + _fix_chunk(chunk[1:])
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        pass
+    # Greedy: find the longest valid UTF-8 prefix, fix it, recurse on remainder
+    for n in range(len(raw) - 1, 0, -1):
+        try:
+            head = raw[:n].decode("utf-8")
+            tail = _fix_chunk(chunk[n:])
+            return head + tail
+        except UnicodeDecodeError:
+            continue
+    return chunk  # nothing decoded — leave unchanged
+
+
+def fix_mojibake(text: str) -> str:
+    """Fix cp1252-misread UTF-8 sequences in a string. Idempotent."""
+    if not text:
+        return text
+    return re.sub(r"[^\x00-\x7f]+", lambda m: _fix_chunk(m.group()), text)
+
 BASE_URL = "https://cookingissues.com"
 DB_PATH = Path("cooking_issues.db")
 DELAY = 1.5  # seconds between requests — be polite
@@ -123,6 +179,7 @@ def fetch(url: str) -> Optional[BeautifulSoup]:
             print(f"  404: {url}")
             return None
         resp.raise_for_status()
+        resp.encoding = "utf-8"  # override requests' cp1252 default for charset-less responses
         return BeautifulSoup(resp.text, "html.parser")
     except requests.RequestException as e:
         print(f"  ERROR fetching {url}: {e}")
@@ -200,13 +257,13 @@ def parse_post(soup: BeautifulSoup, url: str, post_type: str = "post") -> dict:
 
     return {
         "url": url,
-        "title": title,
+        "title": fix_mojibake(title),
         "date": date,
-        "author": author,
-        "categories": categories,
-        "tags": tags,
-        "body_html": body_html,
-        "body_text": body_text,
+        "author": fix_mojibake(author),
+        "categories": fix_mojibake(categories),
+        "tags": fix_mojibake(tags),
+        "body_html": fix_mojibake(body_html),
+        "body_text": fix_mojibake(body_text),
         "post_type": post_type,
         "scraped_at": datetime.utcnow().isoformat(),
     }
