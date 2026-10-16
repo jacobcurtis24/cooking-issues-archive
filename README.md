@@ -86,8 +86,15 @@ ciw poll                          # resolve + fetch Acast, HRN (and Patreon if c
 ciw poll --source hrn             # one feed (acast | hrn | patreon | all)
 ciw feeds diff                    # Patreon vs Acast, per episode (needs PATREON_FEED_URL in .env)
 ciw feeds check-audio --source hrn --sample 3 [--range]   # HEAD / 1-byte Range probes, never downloads
-ciw episodes list --source acast --limit 10
+ciw episodes list --source acast --limit 10 [--stage downloaded|discovered]
+ciw download --latest 3 [--source acast|hrn|patreon]      # the 3 newest (already-downloaded ones are skipped)
+ciw download --episode ID [--episode ID ...]              # specific episodes
+ciw download --since 2026-01-01 | --all [--limit N]       # bulk (not-yet-downloaded only); one of these is required
+ciw download --latest 3 --dry-run                         # preview: size from a Range probe, free disk
+ciw download --episode ID --redownload | --verify         # replace the stored file | re-check it
 ```
+
+`ciw download` streams to `<audio_dir>/<episode_id>.<ext>.part`, resumes after interruptions, checks the size against the server's own total and the duration with ffprobe, then renames atomically. A file that already exists but is not in state (the T0 fixture) is adopted after the same checks, without downloading. It is sequential (lock file `data/download.lock`), at most 2 requests/s, and refuses to start when `audio_dir`'s disk has less than `download.min_free_gb` free. Feed problems seen by `ciw poll` (401/403 or zero audio items) send one ntfy alert per status change when `NTFY_TOPIC` is set; otherwise they are only logged.
 
 Episodes land in `data/state.sqlite` and `data/episodes/<episode_id>/meta.json` (git-ignored). A second `ciw poll` with unchanged feeds changes nothing.
 
@@ -127,6 +134,9 @@ cooking-issues-archive/
     ├── matching.py        # Acast <-> Patreon matching rules
     ├── ingest.py          # poll / diff / audio-probe orchestration
     ├── state.py           # data/state.sqlite (versioned migrations)
+    ├── download.py        # resumable verified audio downloader, selection, lock
+    ├── notify.py          # minimal ntfy sender (T10 extends)
+    ├── health.py          # feed health alerts (deduped per status change)
     ├── blog/              # scrape.py, encoding.py, fix_encoding.py, compare.py
     └── web/               # create_app() factory, blog blueprint, templates/
 ```
