@@ -1,0 +1,130 @@
+# Whisper vocabulary for Cooking Issues. One term per line, MOST VALUABLE FIRST: the transcriber
+# cuts the prompt at 600 characters (about the first 60 lines), and the correction pass uses the
+# whole file. Edit freely; see vocab/README.md. Lines starting with # are ignored.
+Cooking Issues
+Dave Arnold
+Nastassia
+Quinn
+Jack Schramm
+Heritage Radio Network
+Searzall
+Spinzall
+polydextrose
+methylcellulose
+kansui
+Flavacol
+Pacojet
+Soxhlet
+rotovap
+hydrocolloids
+compensator
+sous vide
+Pectinex
+xanthan gum
+transglutaminase
+carbonator
+CVap
+iSi whippers
+PolyScience
+immersion circulator
+rotary evaporator
+Methocel
+carrageenan
+gellan
+maltodextrin
+Ultra-Sperse
+Activa
+kombu
+katsuobushi
+nixtamalization
+spherification
+espuma
+Maillard
+ike jime
+mokume-gane
+skoal
+low-temperature cooking
+pasteurization
+carbonation
+cold plate
+soda gun
+red hot poker
+French 75
+eggnog
+pu-erh
+tandoor
+Booker and Dax
+Harold McGee
+Wylie Dufresne
+Nathan Myhrvold
+Modernist Cuisine
+Modernist Pantry
+Momofuku
+MOFAD
+ChefSteps
+Mindy Lvoff
+Peter Kim
+Arielle Johnson
+Sother Teague
+Jim Lahey
+Nick Wong
+Matt Sartwell
+Rebecca Palkovics
+Daniel Gritzer
+Chris Young
+Jeffrey Steingarten
+Kenta Goto
+Cesare Casella
+Johnny Iuzzini
+Tony Conigliaro
+Del Posto
+Noma
+Ashmead's Kernel
+Vita-Prep
+Seattle Ultrasonics
+Cambro
+Silpat
+Microplane
+Ziploc
+lexan
+nichrome
+thermocouple
+refractometer
+dewar
+peristaltic pump
+combi oven
+centrifuge
+liquid nitrogen
+vacuum infusion
+meat glue
+dry ice
+nitrous
+guar gum
+gum arabic
+pectin
+agar
+lecithin
+ascorbic acid
+calcium hydroxide
+lactic acid
+glutamic acid
+calcium gluconate
+quinine sulfate
+MSG
+dextrose
+garum
+dashi
+guanciale
+pumpernickel
+calamansi
+Pernod Ricard
+Tanqueray
+aquavit
+Negroni
+daiquiri
+Sazerac
+HACCP
+ABV
+CO2
+N2O
+LN2
