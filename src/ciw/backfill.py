@@ -934,12 +934,11 @@ class Backfill:
         with ExitStack() as stack:
             self._locks(stack)
             self._clear_stale_stop()
-            previous = self._install_signals()
+            restore_signals = self._install_signals()
             try:
                 self._run_locked()
             finally:
-                for signum, handler in previous.items():
-                    signal.signal(signum, handler)
+                restore_signals()
                 if self._client is not None:
                     self._client.close()
         return self.summary
@@ -956,12 +955,51 @@ class Backfill:
         except OSError:
             pass
 
-    def _install_signals(self) -> dict[int, Any]:
-        previous: dict[int, Any] = {}
-        if self.install_signals and threading.current_thread() is threading.main_thread():
-            for signum in (signal.SIGINT, signal.SIGTERM):
-                previous[signum] = signal.signal(signum, self.handle_signal)
-        return previous
+    def _install_signals(self) -> Callable[[], None]:
+        """Route SIGINT/SIGTERM to :meth:`handle_signal` and return the function that undoes it.
+
+        A Python signal handler only runs when the main thread executes bytecode, but the main
+        thread spends minutes inside CTranslate2/torch, and two quick signals of the same kind
+        would also coalesce into one. So the (no-op) Python handlers only make the C handler
+        write each delivered signal number to a pipe (``set_wakeup_fd``), and a watcher thread
+        reads that pipe: every signal is seen at once, and the second one can abort the process
+        however busy the main thread is."""
+        if not (self.install_signals and threading.current_thread() is threading.main_thread()):
+            return lambda: None
+        read_fd, write_fd = os.pipe()
+        os.set_blocking(write_fd, False)
+        previous_fd = signal.set_wakeup_fd(write_fd, warn_on_full_buffer=False)
+        previous = {
+            signum: signal.signal(signum, lambda _s, _f: None)
+            for signum in (signal.SIGINT, signal.SIGTERM)
+        }
+
+        def watch() -> None:
+            while True:
+                try:
+                    data = os.read(read_fd, 16)
+                except OSError:
+                    return
+                if not data:
+                    return
+                for signum in data:
+                    try:
+                        self.handle_signal(signum)
+                    except ValueError:
+                        pass  # not a signal number
+
+        watcher = threading.Thread(target=watch, name="backfill-signals", daemon=True)
+        watcher.start()
+
+        def restore() -> None:
+            for signum, handler in previous.items():
+                signal.signal(signum, handler)
+            signal.set_wakeup_fd(previous_fd)
+            os.close(write_fd)  # the watcher sees EOF and ends
+            watcher.join(timeout=2)
+            os.close(read_fd)
+
+        return restore
 
     def _run_locked(self) -> None:
         cfg, plan, summary = self.cfg, self.plan, self.summary

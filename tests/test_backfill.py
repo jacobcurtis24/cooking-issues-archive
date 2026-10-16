@@ -172,6 +172,12 @@ def run(env, plan=None, *, signals=False, **kw):
     return summary, runner_, lines
 
 
+def send_signal(signum):
+    """Signal ourselves and give the watcher thread a moment to act on it."""
+    os.kill(os.getpid(), signum)
+    time.sleep(0.3)
+
+
 def log_events(cfg):
     files = sorted(cfg.backfill.log_dir.glob("backfill-*.jsonl"))
     assert len(files) == 1
@@ -501,7 +507,7 @@ def test_prefetched_but_untranscribed_audio_is_reused_by_the_next_run(env):
 def test_sigint_stops_after_the_current_episode_and_restores_handlers(env):
     seed(env)
     before = signal.getsignal(signal.SIGINT), signal.getsignal(signal.SIGTERM)
-    env.tr.hook = lambda stem, n: n == 2 and os.kill(os.getpid(), signal.SIGINT)
+    env.tr.hook = lambda stem, n: n == 2 and send_signal(signal.SIGINT)
     summary, _, lines = run(env, signals=True)
     assert summary.done == 2 and summary.stopped == "signal SIGINT"
     assert [p.stem for p in env.tr.calls] == [A, B]
@@ -513,7 +519,7 @@ def test_sigint_stops_after_the_current_episode_and_restores_handlers(env):
 
 def test_sigterm_behaves_like_sigint(env):
     seed(env)
-    env.tr.hook = lambda stem, n: n == 1 and os.kill(os.getpid(), signal.SIGTERM)
+    env.tr.hook = lambda stem, n: n == 1 and send_signal(signal.SIGTERM)
     summary, _, _ = run(env, signals=True)
     assert summary.done == 1 and summary.stopped == "signal SIGTERM"
 
@@ -531,6 +537,47 @@ def test_second_signal_aborts_immediately(env):
     runner_.handle_signal(signal.SIGINT)
     assert aborted == [130]
     assert "abort" in [e["event"] for e in log_events(env.cfg)]
+
+
+def test_second_signal_aborts_even_while_the_main_thread_is_stuck_in_c_code(env):
+    """The real situation: the main thread is inside CTranslate2/torch, so Python-level signal
+    handlers cannot run (and two quick signals would coalesce into one)."""
+    import ctypes
+
+    seed(env)
+    aborted: list[tuple[int, float]] = []
+    t0 = time.monotonic()
+    runner_ = bf.Backfill(
+        env.cfg, make_plan(env), transcriber=env.tr, download_fn=env.downloads,
+        echo=lambda s: None, install_signals=True,
+        abort_fn=lambda code: aborted.append((code, time.monotonic() - t0)),
+    )  # fmt: skip
+    before = signal.getsignal(signal.SIGINT)
+    restore = runner_._install_signals()
+    blocked = {signal.SIGINT, signal.SIGTERM}
+
+    def two_signals():
+        time.sleep(0.3)
+        os.kill(os.getpid(), signal.SIGINT)
+        time.sleep(0.2)
+        os.kill(os.getpid(), signal.SIGINT)
+
+    helper = threading.Thread(target=two_signals, daemon=True)
+    helper.start()  # created before the mask change, so it can still receive signals
+    try:
+        # the main thread cannot run any signal handler while it is blocked here: the C-level
+        # handler runs on another thread, exactly like a main thread buried in torch
+        signal.pthread_sigmask(signal.SIG_BLOCK, blocked)
+        ctypes.CDLL(None).usleep(1_500_000)
+        stuck_for = time.monotonic() - t0
+    finally:
+        signal.pthread_sigmask(signal.SIG_UNBLOCK, blocked)
+        helper.join()
+        restore()
+    assert aborted and aborted[0][0] == 130
+    assert aborted[0][1] < stuck_for - 0.5  # aborted long before the C call returned
+    assert runner_.stop_reason() == "signal SIGINT"
+    assert signal.getsignal(signal.SIGINT) == before
 
 
 def test_max_hours_stops_starting_new_work(env):
