@@ -747,7 +747,13 @@ def _run(
             if verify:
                 return _verify_local(cfg, conn, client, meta, row, recorded)
             return DownloadResult(
-                episode_id, "skipped", "already downloaded", recorded, recorded.stat().st_size
+                episode_id,
+                "skipped",
+                "already downloaded",
+                recorded,
+                recorded.stat().st_size,
+                0,
+                row["audio_duration_s"],
             )
         log.warning(
             "%s: state says downloaded but %s is missing; fetching again", episode_id, recorded
