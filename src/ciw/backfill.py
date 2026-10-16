@@ -617,7 +617,7 @@ class Backfill:
         self._stop_logged: str | None = None
         self._slots = threading.Semaphore(bf.prefetch)
         self._queue: queue.Queue[Any] = queue.Queue()
-        self._count_lock = threading.Lock()
+        self._count_lock = threading.RLock()  # counters/ETA state, shared by both threads
         self._dl_started = 0
         self._taken = 0
         self._client: dl.HttpClient | None = None
@@ -719,6 +719,9 @@ class Backfill:
                             ),
                         )
                     result.elapsed_s = result.elapsed_s or time.monotonic() - t0
+                    # logged and counted here, when it happens, not when the transcriber
+                    # gets round to the episode
+                    self._after_download(item, result)
                 self._queue.put((item, result))
                 if result is not None and result.fatal:
                     self._fatal.set()
@@ -741,6 +744,10 @@ class Backfill:
 
     def _eta(self, after: Item | None) -> tuple[float | None, float]:
         """(ETA seconds from the rolling per-episode rate, GPU hours left at the plan speed)."""
+        with self._count_lock:
+            return self._eta_locked()
+
+    def _eta_locked(self) -> tuple[float | None, float]:
         remaining = [i for i in self.plan.items if i.episode_id not in self._done_ids]
         rest = sum(
             i.audio_s for i in remaining if i.needs_transcribe or self.mode == "download-only"
@@ -791,9 +798,13 @@ class Backfill:
                 )
             retry_at = holder[0]
         parked = penalize and attempts >= self.cfg.backfill.max_attempts
-        self.summary.failed += 1
-        self.summary.failures.append((item.episode_id, stage, message))
-        self._done_ids.add(item.episode_id)
+        with self._count_lock:
+            self.summary.failed += 1
+            self.summary.failures.append((item.episode_id, stage, message))
+            self._done_ids.add(item.episode_id)
+            self._streak += 1
+            alert = self._streak >= CONSECUTIVE_FAILURES_ALERT and not self._alerted
+            self._alerted = self._alerted or alert
         self._ev(
             f"{stage}-failed", item, error=message, attempts=attempts, next_retry_at=retry_at,
             parked=parked or None,
@@ -805,9 +816,7 @@ class Backfill:
             + (f" | attempt {attempts}/{self.cfg.backfill.max_attempts}" if penalize else "")
             + (" | parked" if parked else ""),
         )
-        self._streak += 1
-        if self._streak >= CONSECUTIVE_FAILURES_ALERT and not self._alerted:
-            self._alerted = True
+        if alert:
             self._send(
                 "Backfill: repeated failures",
                 f"{self._streak} episodes in a row failed. Last: {item.episode_id} ({stage}): "
@@ -996,9 +1005,7 @@ class Backfill:
                 with self._count_lock:
                     self._taken += 1
                 self._slots.release()
-                if result is not None:
-                    self._handle_download(item, result)
-                if self.summary.fatal:  # e.g. the disk guard: stop cleanly, nothing was lost
+                if result is not None and result.fatal:  # the disk guard: stop cleanly
                     self._note_stop("fatal error")
                     break
                 if reason := self.stop_reason():
@@ -1017,7 +1024,11 @@ class Backfill:
         finally:
             self._finish(thread)
 
-    def _handle_download(self, item: Item, result: dl.DownloadResult) -> None:
+    def _after_download(self, item: Item, result: dl.DownloadResult) -> None:
+        with self._count_lock:
+            self._after_download_locked(item, result)
+
+    def _after_download_locked(self, item: Item, result: dl.DownloadResult) -> None:
         if result.outcome == "failed":
             if result.fatal:
                 self.summary.fatal = result.message

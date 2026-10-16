@@ -604,6 +604,23 @@ def test_downloads_run_ahead_but_never_more_than_prefetch(env):
     assert summary.done == 7 and env.downloads.calls == list(reversed(IDS[:7]))
 
 
+def test_download_events_are_logged_when_they_happen_not_when_consumed(env):
+    add(env.cfg, A, day=2)
+    add(env.cfg, B, day=1)
+    gate = threading.Event()
+    env.downloads.on_call = lambda eid: eid == B and gate.set()
+
+    def slow_first(stem, n):
+        if n == 1:  # the GPU is busy until the second download has been logged
+            gate.wait(timeout=5)
+            time.sleep(0.3)
+
+    env.tr.hook = slow_first
+    run(env)
+    kinds = [(e["event"], e.get("episode_id")) for e in log_events(env.cfg)]
+    assert kinds.index(("download-done", B)) < kinds.index(("transcribe-done", A))
+
+
 def test_pipeline_order_is_plan_order_and_slow_downloads_do_not_reorder(env):
     for n, eid in enumerate(IDS[:5]):
         add(env.cfg, eid, day=n + 1)  # newest = highest day = IDS[4]
