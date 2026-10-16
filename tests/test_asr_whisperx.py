@@ -78,11 +78,11 @@ def test_no_oom_means_one_attempt_and_no_cleanup():
     assert tried == [("float16", 8)] and cleanups == [] and notes == []
 
 
-def test_oom_halves_the_batch_and_keeps_the_loaded_model():
+def test_oom_halves_the_batch_and_reloads_the_model():
     out, tried, cleanups, notes = run_ladder(lambda c, b: b > 2)
     assert out[1:] == ("float16", 2)
     assert tried == [("float16", 8), ("float16", 4), ("float16", 2)]
-    assert cleanups == [False, False]  # same compute type: no need to reload the model
+    assert cleanups == [True, True]  # a CTranslate2 model is unusable after an OOM: reload
     assert len(notes) == 2 and "batch_size=8" in notes[0] and "batch_size=4" in notes[0]
 
 
@@ -90,7 +90,7 @@ def test_oom_at_every_float16_batch_falls_back_to_int8_float16_and_retries_from_
     out, tried, cleanups, notes = run_ladder(lambda c, b: c == "float16")
     assert out == ("ok-int8_float16-8", "int8_float16", 8)
     assert tried == [("float16", 8), ("float16", 4), ("float16", 2), ("int8_float16", 8)]
-    assert cleanups == [False, False, True]  # the compute-type change drops the model
+    assert cleanups == [True, True, True]
     assert "compute_type=int8_float16" in notes[2]
 
 
@@ -468,7 +468,7 @@ def test_oom_backoff_inside_the_real_flow_records_what_was_used(monkeypatch, tmp
     assert asr_calls == [
         ("float16", 8), ("float16", 4), ("float16", 2), ("int8_float16", 8), ("int8_float16", 4),
     ]  # fmt: skip
-    assert [e[1] for e in stack.events("load_model")] == ["float16", "int8_float16"]
+    assert [e[1] for e in stack.events("load_model")] == ["float16"] * 3 + ["int8_float16"] * 2
     assert (t.compute_type, t.batch_size) == ("int8_float16", 4)
     assert len([n for n in t.notes if "out of memory" in n]) == 4
 
@@ -524,6 +524,7 @@ def test_exhausted_oom_ladder_propagates(monkeypatch, tmp_cfg, audio):
         (Exception("Cannot access gated repo for url ... Access to model is restricted"), True),
         (type("GatedRepoError", (Exception,), {})("x"), True),
         (Exception("403 Forbidden"), True),
+        (AttributeError("'NoneType' object has no attribute 'to'"), True),  # pyannote returns None
         (ConnectionError("Name or service not known"), False),
         (RuntimeError("CUDA out of memory"), False),
     ],

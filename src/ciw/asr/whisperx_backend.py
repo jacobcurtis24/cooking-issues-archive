@@ -75,9 +75,10 @@ def prepare_environment(asr: AsrConfig, environ: dict[str, str] | None = None) -
     * ``HF_HOME`` and ``TORCH_HOME`` (model caches) default to ``asr.hf_home`` on the big disk
       unless the environment already sets them. They are read when ``huggingface_hub`` is first
       imported, so call this before importing torch/whisperx.
-    * The cuBLAS/cuDNN libraries need no ``LD_LIBRARY_PATH``: importing torch first (which
-      ``transcribe`` does) loads the ``nvidia-*`` wheels' libraries, and CTranslate2 then finds
-      them already resident. Tested cold on driver 580 / torch 2.8.0+cu128 / ctranslate2 4.8.3.
+    * The cuBLAS/cuDNN libraries need no ``LD_LIBRARY_PATH`` here: CTranslate2 4.8.3 loaded
+      large-v3 on driver 580 with ``LD_LIBRARY_PATH`` unset both on its own and after importing
+      torch 2.8.0+cu128 (the ``nvidia-*`` wheels in site-packages are found). ``transcribe``
+      imports torch first anyway.
     """
     env = os.environ if environ is None else environ
     changed: dict[str, str] = {}
@@ -159,9 +160,10 @@ def run_with_oom_backoff(
     """Run ``attempt(compute_type, batch_size)`` down the ladder until one does not OOM.
 
     Returns ``(result, compute_type, batch_size)`` of the successful attempt. Non-OOM errors
-    propagate. After an OOM ``cleanup(drop_model)`` is called (free GPU memory;
-    ``drop_model`` is True when the next step needs a different compute type, so the loaded model
-    must go), outside the ``except`` block so the failed attempt's tensors are really released.
+    propagate. After an OOM ``cleanup(drop_model)`` is called (free GPU memory) outside the
+    ``except`` block so the failed attempt's tensors are really released. ``drop_model`` is always
+    True: with a real CTranslate2 model, retrying on the same instance after an OOM failed with
+    ``cudaErrorInvalidDevice``, so the model is reloaded (about 6 s with a warm cache).
     """
     for i, (compute_type, batch) in enumerate(plan):
         failure: BaseException | None = None
@@ -181,7 +183,7 @@ def run_with_oom_backoff(
         if notes is not None:
             notes.append(msg)
         if cleanup is not None:
-            cleanup(nxt is None or nxt[0] != compute_type)
+            cleanup(True)
         if nxt is None:
             tried = ", ".join(f"{c}/{b}" for c, b in plan)
             raise OutOfMemoryExhausted(
@@ -348,6 +350,10 @@ def classify_hf_error(exc: BaseException) -> str | None:
     """``SKIP_GATED`` if ``exc`` looks like a Hugging Face 401/403/gated-repo refusal."""
     status = getattr(getattr(exc, "response", None), "status_code", None)
     if status in (401, 403):
+        return SKIP_GATED
+    # pyannote's Pipeline.from_pretrained returns None (instead of raising) when the Hugging Face
+    # download is refused, and WhisperX then calls .to(device) on it.
+    if isinstance(exc, AttributeError) and "nonetype" in str(exc).lower():
         return SKIP_GATED
     text = f"{type(exc).__name__} {exc}".lower()
     markers = ("gatedrepo", "gated repo", "401", "403", "unauthorized", "forbidden", "restricted")
