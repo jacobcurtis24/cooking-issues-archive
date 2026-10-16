@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from pathlib import Path
 from typing import Annotated
 
@@ -527,10 +528,217 @@ def _download_dry_run(cfg, rows, redownload: bool, verify: bool) -> None:
     )
 
 
-@app.command(context_settings=_STUB_CONTEXT)
-def transcribe() -> None:
-    """Transcribe episodes with WhisperX. (stub)"""
-    _stub("T5")
+def _fmt_mmss(seconds: float | None) -> str:
+    if seconds is None:
+        return "-"
+    s = int(round(seconds))
+    return (
+        f"{s // 3600}:{s % 3600 // 60:02d}:{s % 60:02d}" if s >= 3600 else f"{s // 60}:{s % 60:02d}"
+    )
+
+
+def _transcribe_detail(res) -> str:
+    """The numbers after a finished transcript: speed, words, speakers, per-stage times."""
+    t = res.transcript
+    if t is None:
+        return res.message
+    audio = t.audio_duration_s or t.duration_s
+    run = t.runtime_s or res.elapsed_s
+    speed = f"{audio / run:.1f}x realtime" if run else "-"
+    speakers = f"{t.num_speakers} speakers" if t.diarization else "no speakers"
+    stages = []
+    for st in t.stages:
+        if st.skipped:
+            stages.append(f"{st.name} skipped")
+        else:
+            vram = f" +{st.peak_vram_mb / 1024:.1f}G" if st.peak_vram_mb is not None else ""
+            stages.append(f"{st.name} {st.seconds:.0f}s{vram}")
+    return (
+        f"{_fmt_mmss(audio)} audio in {_fmt_mmss(run)} ({speed}), {len(t.words)} words, "
+        f"{speakers}, {t.compute_type} batch {t.batch_size} | " + ", ".join(stages)
+    )
+
+
+@app.command()
+def transcribe(
+    episode: Annotated[
+        list[str] | None, typer.Option("--episode", help="An episode id (repeatable).")
+    ] = None,
+    latest: Annotated[
+        int | None,
+        typer.Option("--latest", min=1, help="The N newest downloaded episodes."),
+    ] = None,
+    all_downloaded: Annotated[
+        bool,
+        typer.Option("--all-downloaded", help="Every downloaded episode (hours of GPU time!)."),
+    ] = False,
+    audio: Annotated[
+        Path | None,
+        typer.Option("--audio", help="Transcribe this file instead (needs --out; no state)."),
+    ] = None,
+    out: Annotated[
+        Path | None, typer.Option("--out", help="Where --audio writes its transcript.json.")
+    ] = None,
+    model: Annotated[
+        str | None, typer.Option("--model", help="ASR model (default: config asr.model).")
+    ] = None,
+    no_diarize: Annotated[
+        bool, typer.Option("--no-diarize", help="Skip speaker labels (no HF token needed).")
+    ] = False,
+    force: Annotated[
+        bool, typer.Option("--force", help="Redo even if the transcript is current.")
+    ] = False,
+    stale: Annotated[
+        bool, typer.Option("--stale", help="Also redo transcripts made by another model/version.")
+    ] = False,
+    dry_run: Annotated[
+        bool, typer.Option("--dry-run", help="Show what would run; load nothing, change nothing.")
+    ] = False,
+    verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Log at INFO.")] = False,
+) -> None:
+    """Transcribe downloaded episodes with WhisperX (local GPU), one at a time."""
+    import sys
+
+    from ciw import state
+    from ciw import transcribe as tx
+    from ciw.asr import get_transcriber
+    from ciw.asr.base import SKIP_DISABLED, diarization_hint
+
+    _setup_logging(verbose)
+    if (audio is None) != (out is None):
+        raise typer.BadParameter("--audio and --out go together", param_hint="--audio/--out")
+    if audio is not None and (episode or latest is not None or all_downloaded):
+        raise typer.BadParameter("--audio cannot be combined with episode selectors")
+    if audio is None and not episode and latest is None and not all_downloaded:
+        typer.echo(
+            "Nothing selected. Choose episodes with --episode ID, --latest N or --all-downloaded,\n"
+            "or a file with --audio PATH --out PATH (add --dry-run to preview).",
+            err=True,
+        )
+        raise typer.Exit(code=2)
+
+    cfg = load_config()
+    try:
+        tr = get_transcriber(cfg, model=model, diarize=False if no_diarize else None)
+    except ValueError as exc:
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(code=2) from None
+    typer.echo(f"backend: {tr.describe()} [{tr.version}]")
+
+    tty = sys.stderr.isatty()
+    last_tick: dict[str, tuple[str, int]] = {}
+
+    def progress(eid: str, stage: str, frac: float | None) -> None:
+        """A live ``stage NN%`` line, only on a TTY and only when the 5% step changes."""
+        tick = (stage, -1 if frac is None else int(frac * 20))
+        if tty and last_tick.get(eid) != tick:
+            last_tick[eid] = tick
+            pct = "" if frac is None else f" {frac * 100:3.0f}%"
+            typer.echo(f"\r  {eid[:24]:<24} {stage:<8}{pct}   ", nl=False, err=True)
+
+    hints: set[str] = set()
+
+    def show(label: str, name: str, res, extra: str = "") -> None:
+        if tty:
+            typer.echo("\r" + " " * 60 + "\r", nl=False, err=True)
+        detail = _transcribe_detail(res) if res.outcome == "transcribed" else res.message
+        typer.echo(
+            f"{label:<12} {name:<30} {extra}{detail}",
+            err=res.outcome in ("failed", "blocked"),
+        )
+        t = res.transcript
+        if t is not None and t.diarization_skipped and t.diarization_skipped != SKIP_DISABLED:
+            hints.add(diarization_hint(t.diarization_skipped, cfg.asr.diarization_model))
+
+    labels = {
+        "transcribed": "transcribed",
+        "skipped": "skipped",
+        "stale": "STALE",
+        "blocked": "BLOCKED",
+        "failed": "FAILED",
+    }
+    started = time.perf_counter()
+
+    if audio is not None:
+        assert out is not None
+        audio, out = audio.expanduser().resolve(), out.expanduser().resolve()
+        if not audio.is_file():
+            typer.echo(f"error: no such audio file: {audio}", err=True)
+            raise typer.Exit(code=1)
+        if dry_run:
+            plan = tx.plan_for_output(out, tr, force=force, stale=stale)
+            typer.echo(
+                f"would {plan.action:<12} {audio} -> {out}"
+                + (f"  [{plan.detail}]" if plan.detail else "")
+            )
+            return
+        try:
+            with tx.transcribe_lock(cfg):
+                res = tx.transcribe_file(
+                    audio, out, tr, force=force, stale=stale,
+                    progress=lambda stage, frac: progress("file", stage, frac),
+                )  # fmt: skip
+        except tx.TranscribeLocked as exc:
+            typer.echo(f"error: {exc}", err=True)
+            raise typer.Exit(code=3) from None
+        show(
+            labels[res.outcome],
+            audio.name,
+            res,
+            f"-> {out}  " if res.outcome == "transcribed" else "",
+        )
+        for hint in sorted(hints):
+            typer.echo(hint, err=True)
+        if res.outcome == "failed":
+            raise typer.Exit(code=1)
+        return
+
+    with state.connect(cfg.state_db) as conn:
+        rows, unknown = tx.select_episodes(
+            conn, latest=latest, episode_ids=tuple(episode or ()), all_downloaded=all_downloaded
+        )
+        for eid in unknown:
+            typer.echo(f"unknown episode id (not in state): {eid}", err=True)
+        if not rows:
+            typer.echo("nothing to do (no matching episodes)")
+            raise typer.Exit(code=1 if unknown else 0)
+        if dry_run:
+            for row in rows:
+                plan = tx.plan_episode(cfg, row, tr, force=force, stale=stale)
+                typer.echo(
+                    f"would {plan.action:<12} {row['episode_id']:<30} {row['pub_date'][:10]} "
+                    f"{_fmt_dur(row['audio_duration_s']):>8}  {row['title'][:40]}"
+                    + (f"  [{plan.detail}]" if plan.detail else "")
+                )
+            raise typer.Exit(code=1 if unknown else 0)
+        try:
+            summary = tx.transcribe_batch(
+                cfg, conn, rows, tr, force=force, stale=stale, progress=progress,
+                on_result=lambda row, res: show(
+                    labels[res.outcome], row["episode_id"], res, f"{row['pub_date'][:10]}  "
+                ),
+            )  # fmt: skip
+        except tx.TranscribeLocked as exc:
+            typer.echo(f"error: {exc}", err=True)
+            raise typer.Exit(code=3) from None
+
+    for hint in sorted(hints):
+        typer.echo(hint, err=True)
+    failed = summary.failed + len(unknown)
+    done = [r for r in summary.results if r.outcome == "transcribed" and r.transcript]
+    audio_s = sum(r.transcript.audio_duration_s or 0 for r in done)
+    wall = time.perf_counter() - started
+    typer.echo(
+        f"transcribed {summary.count('transcribed')}, skipped {summary.count('skipped')}, "
+        f"stale {summary.count('stale')}, failed {failed}"
+        + (
+            f"; {_fmt_mmss(audio_s)} of audio in {_fmt_mmss(wall)} ({audio_s / wall:.1f}x realtime)"
+            if done and wall
+            else ""
+        )
+    )
+    if failed:
+        raise typer.Exit(code=1)
 
 
 @app.command(context_settings=_STUB_CONTEXT)
