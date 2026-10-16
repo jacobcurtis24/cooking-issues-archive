@@ -71,6 +71,11 @@ class NotifyConfig(_Section):
     clip_threshold: int = Field(9, ge=0, le=10)
 
 
+class DownloadConfig(_Section):
+    # Refuse to start a download when the audio filesystem has less free space than this (GiB).
+    min_free_gb: float = Field(20.0, ge=0)
+
+
 class WebConfig(_Section):
     host: str = "127.0.0.1"
     port: int = Field(5000, ge=1, le=65535)
@@ -101,6 +106,7 @@ class Config(_Section):
     asr: AsrConfig = AsrConfig()
     llm: LlmConfig = LlmConfig()
     notify: NotifyConfig = NotifyConfig()
+    download: DownloadConfig = DownloadConfig()
     web: WebConfig = WebConfig()
     secrets: Secrets = Field(default_factory=Secrets, repr=False)
 

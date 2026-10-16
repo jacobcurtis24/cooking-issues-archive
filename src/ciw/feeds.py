@@ -84,7 +84,7 @@ class HttpClient:
         transport: httpx.BaseTransport | None = None,
         *,
         min_interval: float = MIN_REQUEST_INTERVAL_S,
-        timeout: float = TIMEOUT_S,
+        timeout: float | httpx.Timeout = TIMEOUT_S,
         retries: int = MAX_RETRIES,
         backoff: float = BACKOFF_S,
         sleep: Callable[[float], None] = time.sleep,
@@ -114,6 +114,9 @@ class HttpClient:
 
     def safe(self, text: object) -> str:
         return redact(text, self.secrets)
+
+    def sleep(self, seconds: float) -> None:
+        self._sleep(seconds)
 
     def throttle(self) -> None:
         wait = self.min_interval - (time.monotonic() - self._last)

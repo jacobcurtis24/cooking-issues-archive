@@ -26,6 +26,9 @@ notify:
   threshold: 7
   clip_threshold: 9
 
+download:
+  min_free_gb: 20   # refuse to start a download below this much free space on audio_dir's disk
+
 web:
   host: 127.0.0.1
   port: 5000
