@@ -409,3 +409,27 @@ def test_check_audio_reports_dead_links(tmp_cfg):
         rows = ingest.check_audio(tmp_cfg, client, "hrn", sample=1)
     assert rows and not any(r[3].ok for r in rows)
     assert rows[0][3].status == 404
+
+
+def test_repoll_never_regresses_a_downloaded_episode(tmp_cfg):
+    web = FakeWeb()
+    run_poll(tmp_cfg, web)
+    with state.connect(tmp_cfg.state_db) as conn:
+        state.mark_downloaded(
+            conn,
+            BISCUITS,
+            audio_path="/x/a.mp3",
+            audio_bytes=5,
+            audio_duration_s=1.0,
+            audio_sha256=None,
+            audio_downloaded_from="acast",
+        )
+        before = tuple(state.get_episode(conn, BISCUITS))
+    run_poll(tmp_cfg, web)  # 304 path
+    with state.connect(tmp_cfg.state_db) as conn:
+        conn.execute("UPDATE feeds SET etag = NULL, last_modified = NULL")
+    rep = run_poll(tmp_cfg, web)  # full re-fetch and re-parse
+    assert rep.feeds["acast"].new == 0 and rep.feeds["acast"].updated == 0
+    with state.connect(tmp_cfg.state_db) as conn:
+        assert tuple(state.get_episode(conn, BISCUITS)) == before
+        assert state.get_episode(conn, BISCUITS)["stage"] == "downloaded"

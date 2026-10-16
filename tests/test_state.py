@@ -100,3 +100,57 @@ def test_feeds_partial_update_and_delete_cascade(tmp_path):
         state.upsert_episode(conn, meta())
         state.delete_episode(conn, "a" * 24)
         assert conn.execute("SELECT COUNT(*) FROM episode_guids").fetchone()[0] == 0
+
+
+def test_migration_v2_upgrades_a_v1_database_in_place(tmp_path):
+    import sqlite3
+
+    db = tmp_path / "old.sqlite"
+    raw = sqlite3.connect(db)
+    raw.executescript(f"BEGIN;\n{state.MIGRATIONS[0]}\nPRAGMA user_version = 1;\nCOMMIT;")
+    raw.execute(
+        "INSERT INTO episodes (episode_id, source, title, pub_date, created_at, updated_at) "
+        "VALUES ('e1', 'acast', 'T', '2026-01-01T00:00:00Z', 'x', 'x')"
+    )
+    raw.execute("INSERT INTO feeds (name) VALUES ('acast')")
+    raw.commit()
+    raw.close()
+    with state.connect(db) as conn:
+        assert conn.execute("PRAGMA user_version").fetchone()[0] == len(state.MIGRATIONS) >= 2
+        row = state.get_episode(conn, "e1")
+        for col in (
+            "audio_path",
+            "audio_bytes",
+            "audio_sha256",
+            "audio_duration_s",
+            "downloaded_at",
+            "audio_downloaded_from",
+        ):
+            assert row[col] is None
+        assert row["stage"] == "discovered"
+        assert state.get_feed(conn, "acast")["alert_status"] is None
+
+
+def test_mark_downloaded_survives_upsert_and_list_filters_by_stage(tmp_path):
+    with state.connect(tmp_path / "s.sqlite") as conn:
+        state.upsert_episode(conn, meta())
+        state.upsert_episode(conn, meta(guid="b" * 24, guids={"acast": "b" * 24}, title="B"))
+        state.set_error(conn, "a" * 24, "boom")
+        state.mark_downloaded(
+            conn,
+            "a" * 24,
+            audio_path="/x/a.mp3",
+            audio_bytes=10,
+            audio_duration_s=1.5,
+            audio_sha256="ff",
+            audio_downloaded_from="acast",
+        )
+        state.upsert_episode(conn, meta(title="renamed", audio_source="patreon"))
+        row = state.get_episode(conn, "a" * 24)
+        assert (row["stage"], row["error"], row["audio_path"]) == ("downloaded", None, "/x/a.mp3")
+        assert row["audio_downloaded_from"] == "acast" and row["audio_source"] == "patreon"
+        done = state.list_episodes(conn, stage="downloaded")
+        todo = state.list_episodes(conn, stage="discovered")
+        assert [r["episode_id"] for r in done] == ["a" * 24]
+        assert [r["episode_id"] for r in todo] == ["b" * 24]
+        assert len(state.list_episodes(conn)) == 2

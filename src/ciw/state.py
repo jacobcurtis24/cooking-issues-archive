@@ -48,6 +48,17 @@ MIGRATIONS: list[str] = [
         item_count    INTEGER
     );
     """,
+    # 2: downloader columns (T4) and the last feed-health status an alert was sent for
+    """
+    ALTER TABLE episodes ADD COLUMN audio_path TEXT;
+    ALTER TABLE episodes ADD COLUMN audio_bytes INTEGER;
+    ALTER TABLE episodes ADD COLUMN audio_sha256 TEXT;
+    ALTER TABLE episodes ADD COLUMN audio_duration_s REAL;
+    ALTER TABLE episodes ADD COLUMN downloaded_at TEXT;
+    ALTER TABLE episodes ADD COLUMN audio_downloaded_from TEXT;
+    CREATE INDEX episodes_stage ON episodes(stage);
+    ALTER TABLE feeds ADD COLUMN alert_status TEXT;
+    """,
 ]
 
 
@@ -183,18 +194,81 @@ def delete_episode(conn: sqlite3.Connection, episode_id: str) -> None:
 
 
 def list_episodes(
-    conn: sqlite3.Connection, source: str | None = None, limit: int | None = None
+    conn: sqlite3.Connection,
+    source: str | None = None,
+    limit: int | None = None,
+    stage: str | None = None,
 ) -> list[sqlite3.Row]:
     sql = "SELECT * FROM episodes"
     args: list[object] = []
+    where = []
     if source:
-        sql += " WHERE source = ?"
+        where.append("source = ?")
         args.append(source)
+    if stage:
+        where.append("stage = ?")
+        args.append(stage)
+    if where:
+        sql += " WHERE " + " AND ".join(where)
     sql += " ORDER BY pub_date DESC, episode_id"
     if limit is not None:
         sql += " LIMIT ?"
         args.append(limit)
     return conn.execute(sql, args).fetchall()
+
+
+def checkpoint(conn: sqlite3.Connection) -> None:
+    """Commit what has been written so far and open a fresh transaction.
+
+    ``connect`` wraps everything in one transaction; long-running jobs (downloads) call this after
+    each state write so the write lock is not held while bytes are streaming."""
+    conn.execute("COMMIT")
+    conn.execute("BEGIN")
+
+
+def mark_downloaded(
+    conn: sqlite3.Connection,
+    episode_id: str,
+    *,
+    audio_path: str,
+    audio_bytes: int,
+    audio_duration_s: float | None,
+    audio_sha256: str | None,
+    audio_downloaded_from: str | None,
+) -> None:
+    """Record a verified audio file: stage ``downloaded``, error cleared."""
+    stamp = now_iso()
+    conn.execute(
+        "UPDATE episodes SET stage='downloaded', error=NULL, audio_path=?, audio_bytes=?, "
+        "audio_duration_s=?, audio_sha256=?, audio_downloaded_from=?, downloaded_at=?, "
+        "updated_at=? WHERE episode_id=?",
+        (
+            audio_path,
+            audio_bytes,
+            audio_duration_s,
+            audio_sha256,
+            audio_downloaded_from,
+            stamp,
+            stamp,
+            episode_id,
+        ),
+    )
+
+
+def set_error(
+    conn: sqlite3.Connection, episode_id: str, error: str | None, *, stage: str | None = None
+) -> None:
+    """Record (or clear) an episode's last error; optionally also move it to ``stage``."""
+    if stage is None:
+        conn.execute(
+            "UPDATE episodes SET error=?, updated_at=? WHERE episode_id=?",
+            (error, now_iso(), episode_id),
+        )
+    else:
+        conn.execute(
+            "UPDATE episodes SET error=?, stage=?, updated_at=? WHERE episode_id=?",
+            (error, stage, now_iso(), episode_id),
+        )
 
 
 def count_episodes(conn: sqlite3.Connection) -> dict[str, int]:
@@ -219,6 +293,7 @@ def save_feed(conn: sqlite3.Connection, name: str, **fields: object) -> None:
         "last_checked",
         "last_status",
         "item_count",
+        "alert_status",
     }
     bad = set(fields) - allowed
     if bad:
