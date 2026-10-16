@@ -36,7 +36,13 @@ Then open **http://localhost:5000**. Options: `--host`, `--port`, `--debug` (off
 | Primers | `/primers` | All 8 technical reference guides |
 | Browse | `/browse` | Full archive, 24 per page, filterable by tag |
 | Post | `/post/<id>` | Full post with prev/next navigation |
-| Search | `/search?q=…` | Full-text search with highlighted excerpts |
+| Search | `/search?q=…[&scope=all\|blog\|episodes]` | Full-text search with highlighted excerpts: blog posts plus, below them, transcript passages and show notes of episodes (each links to its timestamp) |
+| Episodes | `/episodes[?source=&year=&status=&q=&page=]` | All podcast episodes, newest first, 24 per page; filter by source (`acast`, `hrn`, `patreon`), year, status (`transcribed`, `downloaded`) or title/show-notes text |
+| Episode | `/episode/<id>[?q=term][#t=754]` | Sanitised show notes, audio player, click-to-seek transcript (follow-along highlight, find box, `?q=` highlights, `#t=` deep link), related blog posts |
+| Audio | `/audio/<id>` | The stored audio with HTTP Range support (path only ever taken from the state DB, inside `audio_dir`) |
+| Transcript | `/episode/<id>/transcript.txt` | Plain-text download of the rendered transcript |
+
+Transcript search uses a separate index (`search_db`, default `data/search.sqlite`): `ciw index [--episode ID] [--all] [--rebuild]`. It is incremental and `ciw transcribe` / `ciw vocab correct` refresh it for the episodes they change; the site still works (with a notice) before it exists.
 
 ## CLI search
 
@@ -176,9 +182,12 @@ cooking-issues-archive/
     ├── vocab.py           # mine candidate jargon, read vocabulary/aliases, build the prompt
     ├── correct.py         # conservative post-ASR correction against the vocabulary
     ├── quality.py         # term-recall report; cli_vocab.py holds the `ciw vocab` commands
+    ├── search_index.py    # data/search.sqlite: FTS5 over transcript utterances + show notes
+    ├── related.py         # related blog posts for an episode (vocabulary terms, tf-idf, bm25)
+    ├── htmlsafe.py        # allow-list sanitiser for feed show notes
     ├── asr/               # Transcriber interface + registry, WhisperX backend (lazy torch)
     ├── notify.py          # minimal ntfy sender (T10 extends)
     ├── health.py          # feed health alerts (deduped per status change)
     ├── blog/              # scrape.py, encoding.py, fix_encoding.py, compare.py
-    └── web/               # create_app() factory, blog blueprint, templates/
+    └── web/               # create_app() factory, blog + episodes blueprints, templates/, static/
 ```
