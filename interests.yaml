@@ -1,0 +1,25 @@
+# Interest profile for the segment scorer (draft from the design doc; edit freely).
+threshold: 7
+topics:
+  - name: carbonation and cocktail technique
+    weight: 1.0
+    examples: [home carbonation rigs, clarification, milk punch, clear ice, fat-washing]
+  - name: frozen desserts and stabilizers
+    weight: 1.0
+    examples: [Pacojet, sorbet and gelato formulation, hydrocolloids, polydextrose]
+  - name: low-temp cooking and food safety
+    weight: 0.9
+    examples: [sous vide, pasteurization curves, hot-holding, long brisket cooks]
+  - name: distillation and spirits
+    weight: 0.8
+    examples: [rotovap, tree-sap spirits, whiskey, high-ester rum, calvados]
+  - name: equipment hacking and control
+    weight: 0.8
+    examples: [thermostats, induction behaviour, oven sensor hacks, smoker fans]
+  - name: BBQ and live fire
+    weight: 0.7
+boost:
+  actionable: 1.5        # a spec you could go make
+down_weight:
+  - restaurant gossip and etiquette debates
+  - travel recaps without technique
