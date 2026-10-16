@@ -267,6 +267,9 @@ def feeds_check_audio(
         int,
         typer.Option("--sample", "-n", min=1, help="Episodes per bucket (newest/middle/oldest)."),
     ] = 3,
+    range_only: Annotated[
+        bool, typer.Option("--range", help="Skip HEAD; use a 1-byte Range GET (gives total size).")
+    ] = False,
     verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Log at INFO.")] = False,
 ) -> None:
     """Probe sampled enclosures with HEAD (or a 1-byte Range GET). Never downloads audio."""
@@ -277,7 +280,7 @@ def feeds_check_audio(
         raise typer.BadParameter("must be one of acast, hrn, patreon", param_hint="--source")
     cfg = load_config()
     with ingest.make_client(cfg) as client:
-        rows = ingest.check_audio(cfg, client, source, sample)  # type: ignore[arg-type]
+        rows = ingest.check_audio(cfg, client, source, sample, range_only=range_only)  # type: ignore[arg-type]
     if not rows:
         typer.echo(f"no {source} episodes in state; run `ciw poll` first")
         raise typer.Exit(code=1)

@@ -35,6 +35,7 @@ class FakeWeb:
         self.requests: list[httpx.Request] = []
         self.audio_status = 200
         self.head_status: int | None = None  # force a HEAD status (then GET Range is used)
+        self.head_stub = False  # HEAD answers 200 text/plain "OK" (what sphinx.acast.com does)
 
     def etag(self, url: str) -> str:
         return f'"etag-{hash(self.bodies[url]) & 0xFFFF:x}"'
@@ -59,6 +60,8 @@ class FakeWeb:
             return httpx.Response(200, content=self.bodies[url], headers={"etag": etag})
         # audio hosts
         if request.method == "HEAD":
+            if self.head_stub:
+                return httpx.Response(200, text="OK", headers={"content-type": "text/plain"})
             if self.head_status is not None:
                 return httpx.Response(self.head_status)
             return httpx.Response(

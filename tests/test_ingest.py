@@ -376,6 +376,26 @@ def test_check_audio_falls_back_to_one_byte_range_get(tmp_cfg):
     assert len(gets) == 3 and all(r.headers["range"] == "bytes=0-0" for r in gets)
 
 
+def test_check_audio_distrusts_a_text_plain_head_stub(tmp_cfg):
+    web = FakeWeb()
+    run_poll(tmp_cfg, web, ("acast",))
+    web.requests.clear()
+    web.head_stub = True
+    with web.client() as client:
+        rows = ingest.check_audio(tmp_cfg, client, "acast", sample=1)
+    res = rows[0][3]
+    assert res.method == "GET Range" and res.ok and res.content_type == "audio/mpeg"
+    assert [r.method for r in web.requests[:2]] == ["HEAD", "GET"]
+
+
+def test_probe_result_requires_audio_content_type():
+    assert not ingest.ProbeResult("HEAD", status=200, content_type="text/plain").ok
+    assert not ingest.ProbeResult("HEAD", status=200, content_type=None).ok
+    assert not ingest.ProbeResult("HEAD", status=404, content_type="audio/mpeg").ok
+    assert ingest.ProbeResult("HEAD", status=206, content_type="audio/mpeg").ok
+    assert ingest.ProbeResult("HEAD", status=200, content_type="application/octet-stream").ok
+
+
 def test_check_audio_reports_dead_links(tmp_cfg):
     web = FakeWeb()
     run_poll(tmp_cfg, web, ("hrn",))

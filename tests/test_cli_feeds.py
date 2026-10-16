@@ -128,3 +128,12 @@ def test_check_audio_command(tmp_cfg, web):
     assert "6/6 probes resolved to audio (hrn)" in result.output
     assert "rss.art19.com" in result.output and "audio/mpeg" in result.output
     assert runner.invoke(app, ["feeds", "check-audio", "--source", "nope"]).exit_code != 0
+
+
+def test_check_audio_range_flag_skips_head(tmp_cfg, web):
+    runner.invoke(app, ["poll", "--source", "hrn"])
+    web.requests.clear()
+    result = runner.invoke(app, ["feeds", "check-audio", "--sample", "1", "--range"])
+    assert result.exit_code == 0, result.output
+    assert "987654" in result.output and "GET Range" in result.output
+    assert web.count(method="HEAD") == 0

@@ -79,6 +79,18 @@ ciw blog fix-encoding --dry-run   # preview without changing anything
 
 This is applied automatically during scraping, so it's only needed if you're patching an existing database.
 
+## Podcast feeds
+
+```bash
+ciw poll                          # resolve + fetch Acast, HRN (and Patreon if configured), merge, record
+ciw poll --source hrn             # one feed (acast | hrn | patreon | all)
+ciw feeds diff                    # Patreon vs Acast, per episode (needs PATREON_FEED_URL in .env)
+ciw feeds check-audio --source hrn --sample 3 [--range]   # HEAD / 1-byte Range probes, never downloads
+ciw episodes list --source acast --limit 10
+```
+
+Episodes land in `data/state.sqlite` and `data/episodes/<episode_id>/meta.json` (git-ignored). A second `ciw poll` with unchanged feeds changes nothing.
+
 ## Configuration
 
 Non-secret settings live in `config.yaml` (paths, feed IDs, models, web host/port). Relative paths resolve against the project root, so commands work from any directory (override the root with `CIW_ROOT`). Secrets go only in `.env` (git-ignored); copy `.env.example`.
@@ -111,6 +123,10 @@ cooking-issues-archive/
     ├── cli.py             # `ciw` command line (typer)
     ├── config.py          # config.yaml + .env loader, redact()
     ├── models.py          # pydantic models for the podcast JSON files
+    ├── feeds.py           # Apple lookup, polite HTTP, feed parsing, episode ids
+    ├── matching.py        # Acast <-> Patreon matching rules
+    ├── ingest.py          # poll / diff / audio-probe orchestration
+    ├── state.py           # data/state.sqlite (versioned migrations)
     ├── blog/              # scrape.py, encoding.py, fix_encoding.py, compare.py
     └── web/               # create_app() factory, blog blueprint, templates/
 ```

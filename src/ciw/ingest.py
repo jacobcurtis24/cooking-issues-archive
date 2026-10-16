@@ -489,7 +489,13 @@ class ProbeResult:
 
     @property
     def ok(self) -> bool:
-        return self.status is not None and 200 <= self.status < 300
+        """2xx and an audio-looking content type (some hosts answer HEAD with a text/plain stub)."""
+        return self.status is not None and 200 <= self.status < 300 and _audioish(self.content_type)
+
+
+def _audioish(content_type: str | None) -> bool:
+    ct = (content_type or "").split(";")[0].strip().casefold()
+    return ct.startswith("audio/") or ct in ("application/octet-stream", "binary/octet-stream")
 
 
 def _length(resp: httpx.Response) -> int | None:
@@ -511,16 +517,18 @@ def _result(method: str, resp: httpx.Response) -> ProbeResult:
     )
 
 
-def probe_audio(client: HttpClient, url: str) -> ProbeResult:
+def probe_audio(client: HttpClient, url: str, *, range_only: bool = False) -> ProbeResult:
     """One HEAD request (redirects followed); on error/4xx/5xx fall back to a one-byte Range GET.
     Never reads a body. Only the final host is reported, never the URL."""
-    client.throttle()
-    try:
-        resp = client.http.head(url)
-        if resp.status_code < 400:
-            return _result("HEAD", resp)
-    except httpx.HTTPError:
-        pass
+    if not range_only:
+        client.throttle()
+        try:
+            resp = client.http.head(url)
+            probe = _result("HEAD", resp)
+            if probe.ok:
+                return probe
+        except httpx.HTTPError:
+            pass
     client.throttle()
     try:
         with client.http.stream("GET", url, headers={"Range": "bytes=0-0"}) as resp:
@@ -544,7 +552,7 @@ def pick_sample(rows: list[sqlite3.Row], n: int) -> list[tuple[str, sqlite3.Row]
 
 
 def check_audio(
-    cfg: Config, client: HttpClient, source: Source, sample: int = 3
+    cfg: Config, client: HttpClient, source: Source, sample: int = 3, *, range_only: bool = False
 ) -> list[tuple[str, str, str, ProbeResult]]:
     """Probe sampled enclosures of ``source``. Rows: (bucket, episode_id, title, result)."""
     with state.connect(cfg.state_db) as conn:
@@ -556,6 +564,11 @@ def check_audio(
         if item is None:
             continue
         out.append(
-            (bucket, row["episode_id"], row["title"], probe_audio(client, item.enclosure_url))
+            (
+                bucket,
+                row["episode_id"],
+                row["title"],
+                probe_audio(client, item.enclosure_url, range_only=range_only),
+            )
         )
     return out
