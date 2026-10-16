@@ -458,4 +458,6 @@ $P/ciw backfill run --yes --max-hours 14 2>&1 | tee -a /mnt/ssd0/ciw/backfill.ou
 - **Audio source:** a matched episode now downloads the Patreon copy (`audio_source=patreon`). Patreon files are ~147 MB per hour (about 320 kbps, stable size) against ~59 MB for the Acast copy, so the backfill's 38 GB estimate is low (the estimate uses bytes/s observed on Acast). Probed with `ciw feeds check-audio --source patreon --range`: 6/6 resolve. The 9 episodes already transcribed used the Acast copy.
 - Backfill default order is still `[acast, hrn]`, so the 8 Patreon-only episodes are not in `ciw backfill plan` (add `patreon` to `backfill.order` to include them).
 
+- Later the same day: re-downloaded the 7 matched episodes from the Patreon copy and re-transcribed all 9 transcribed episodes with speakers (23 min, 24.4x realtime, 0 failures; term recall 100% after correction). Measured speed with diarization is ~24.5x, so the full backfill is about 26 GPU h and ~58 GB of downloads, not 19 h and 38 GB.
+
 Next: T9 LLM segment + score (needs ANTHROPIC_API_KEY in .env; $25/month cap)
