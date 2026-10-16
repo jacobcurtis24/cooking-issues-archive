@@ -100,3 +100,55 @@ Next: T2 restructure into src/ciw
 - Use `ciw.config.load_config()` for paths/apple ids (`cfg.apple_ids.acast/hrn`, `cfg.state_db`, `cfg.episodes_dir`, `cfg.audio_dir`, `cfg.secrets.patreon_feed_url`), and `ciw.config.redact()` when logging feed URLs. Fill in the existing `poll` and `feeds diff` stubs in `src/ciw/cli.py` (remove `_STUB_CONTEXT` there). `EpisodeMeta` in `ciw/models.py` is the meta.json schema; extend it rather than adding a parallel one. Web tests assume cwd-independent DB resolution via `Config.blog_db`.
 
 Next: T3 feed parsing + state
+
+## 2026-10-15 - T3: feed parsing, matching, state, poll/diff (branch `m2-ingest`, from `m1-skeleton`)
+
+### What was built
+- `src/ciw/feeds.py`: `HttpClient` (httpx, 30 s timeout, User-Agent, >= 0.5 s between requests, retries with exponential backoff for timeouts/transport errors/429/5xx, injectable transport), `resolve_feed_url(apple_id)` (iTunes lookup -> `results[0].feedUrl`), `fetch_feed` (conditional GET), `parse_feed` (feedparser -> `FeedItem`, `audio/*` enclosures only, counts skipped non-audio), `parse_duration` (`H:MM:SS`, `MM:SS`, seconds), `html_to_text`, `normalize_title`, `episode_id_for`. Typed errors: `FeedLookupError`, `FeedFetchError`, `FeedAuthError(401/403)`, `FeedEmptyError` (zero audio items). The `httpx`/`httpcore` loggers are pinned to WARNING (httpx logs full URLs at INFO, which would leak the Patreon token); the Patreon URL is never logged at all, other URLs only via `redact()`.
+- `src/ciw/models.py`: new `FeedItem` (one feed's view of an item) and an extended `EpisodeMeta` (`guid` = episode_id, `guids`, `source` = identity, `audio_source`, `title_norm`, `description` (text), `description_html`, `duration_s`, `enclosure_url/type/length_hint`, `link`, `episode_number`, `items{source: FeedItem}`). `enclosure_length` was renamed `enclosure_length_hint` (only test_models used it).
+- `src/ciw/matching.py`: Acast<->Patreon matching. Constants at the top: `DATE_WINDOW_DAYS = 3` (inclusive), `DURATION_TOLERANCE_PCT = 0.10`, `DURATION_TOLERANCE_S = 120` (tolerance = max of the two; unknown duration never vetoes), `TITLE_SIMILARITY = 0.90` (only when numbers in the titles are identical; otherwise normalized titles must be equal). Only a mutual 1:1 candidate pair is matched; an item with 2+ candidates puts the whole connected group in `ambiguous` (logged, reported by `poll`/`diff`, everything stays unmatched/standalone). Pairs already recorded in state are "locked" and stay paired.
+- `src/ciw/state.py`: `data/state.sqlite`, WAL, `PRAGMA user_version` migrations (v1: `episodes`, `episode_guids`, `feeds`), `connect()` context manager (commit/rollback/close), idempotent `upsert_episode` (`updated_at` only moves on a real change; `stage`/`error` never touched).
+- `src/ciw/ingest.py`: `poll` (acquire each feed, match, merge, store), `diff_feeds`, `check_audio`/`probe_audio`. Raw feed bodies are cached in `data/feeds/<name>.xml` (mode 600) so a 304, or a feed not requested this run, still takes part in matching. A feed that fails keeps whatever state already has (never downgrades a matched episode). `meta.json` is rewritten only when its content changed.
+- CLI: `ciw poll [--source] [-v]`, `ciw feeds diff`, `ciw feeds check-audio [--source hrn|acast|patreon] [--sample N] [--range]`, `ciw episodes list [--source] [--limit]`. Other stubs unchanged. (`poll` and `feeds diff` removed from the stub tests.)
+
+### Decisions
+- episode_id: Acast-based episodes (Acast-only and Acast+Patreon) use the Acast guid (24 hex; three May-2021 Acast items have 8-digit guids, kept as is, they are path-safe; anything else would become `acast-<sha1[:16]>`); Patreon-only `patreon-<sha1(guid)[:16]>`; HRN `hrn-<guid>` for the ART19 UUID guids, else `hrn-<sha1(guid)[:16]>` (the 231 legacy guids are `http://s3.amazonaws.com/...mp3` URLs). IDs are STABLE once assigned: a Patreon-only episode whose Acast twin shows up later keeps its `patreon-...` id and gains the Acast guid (no rename; T4+ may already have audio under that folder). If two rows end up owning guids of one episode (a poll that could not see Acast), the Acast-id one wins and a still-`discovered` duplicate is deleted; a duplicate past `discovered` is left alone and counted as a conflict.
+- A matched episode: `source=acast`, `audio_source=patreon`, title/show notes/pub_date/link from Acast, `enclosure_*` and `duration_s` from Patreon; the Acast item stays under `items.acast` as fallback audio.
+- Patreon URL is kept out of sqlite (`feeds.feed_url` is NULL for patreon).
+- The plan said HRN is Simplecast; it is actually hosted on ART19 (`https://rss.art19.com/cooking-issues`). Nothing depends on it.
+- The public Acast feed embeds `<acast:importedFeed>https://www.patreon.com/rss/cookingissues?auth=<token>`, i.e. a Patreon feed auth token in a PUBLIC feed. It was NOT used, logged or committed (the fixture has it replaced by `auth=REDACTED`). The token is probably the show's own import feed, not the user's; worth knowing, but do not use it.
+
+### Verification (P=/home/jacob/miniconda3/envs/py312/bin/python)
+- `cd /home/jacob/cooking-issues-archive && $P -m pytest -q` -> `251 passed` (136 old + 115 new); same from `/tmp` (`$P -m pytest /home/jacob/cooking-issues-archive/tests -q`). `$P -m ruff check .` clean, `$P -m ruff format --check .` clean.
+- New tests (no network, `tests/fakeweb.py` = httpx.MockTransport; fixtures in `tests/fixtures/feeds/`: trimmed real `acast.xml` and `hrn.xml` (8 items each), synthetic `patreon.xml` with 2 matched items (different title/date/duration; one exactly +3 days), Patreon-only posts, a non-audio image post and an enclosure-less post, and an ambiguous pair): lookup parsing and error cases, duration parsing, audio filtering, normalization, id rules and filesystem safety, tolerance edges (date +-3 d exactly / +1 s, duration 10% / 120 s), ambiguity, locked pairs, retries/backoff/throttle, 401/403 and empty-feed typed errors, redaction (token absent from caplog, state db, errors, CLI output), idempotency (second poll = 0 new/0 updated, meta.json mtimes and state rows identical, also after a forced full re-download), later Patreon appearance, duplicate merge, CLI poll/diff/check-audio/episodes list via CliRunner.
+- Accidental discovery while building: `ciw poll` no longer a stub, so test_cli stub tests had to drop it (an earlier version hit the network from a test; fixed, the data/ it created was deleted before the real run).
+
+### Real run (network, `cd /tmp && ciw poll`; Patreon unset)
+```
+feed      status         items   new  updated   same  non-audio
+acast     ok               241   241        0      0          0
+hrn       ok               453   453        0      0          0
+patreon   skipped            0     0        0      0          0
+total                      694   694        0      0          0
+```
+Second run: `acast not-modified 241 same`, `hrn not-modified 453 same`, 0 new / 0 updated (HTTP 304 via ETag / Last-Modified). A third run after clearing the stored etags (full 200 re-download and re-parse): 0 new, 0 updated, all 694 `meta.json` mtimes identical.
+- Acast has 241 items, not ~230 (plan estimate): 2021-05-17 .. 2026-10-14, avg 61 min. HRN 453 items, 2010-06-29 .. 2021-04-30, durations 22-109 min, no missing dates/durations/enclosures, no duplicate guids or titles. HRN oddities: guids are UUIDs (222) or legacy `http://s3.amazonaws.com/hrn/audios/<n>/<name>.mp3` URLs (231), which is why they are hashed; pubDate offset is `-0000` (parsed as UTC); `itunes:summary` is double-escaped (we use `content:encoded`/description instead). Acast pubDates are exact; three early Acast items have 8-digit guids.
+- Test episode: `episode_id 69715223a6c658f1834fb3d6`, 'Biscuits, Bouillon and Beyond', pub 2026-01-24T08:00:00Z, `duration_s 3685.0`, stage `discovered`, `enclosure_length_hint 147403780` (as the feed says; the real file is 58960972).
+- Patreon skip path: `INFO patreon: no PATREON_FEED_URL configured` and `note: patreon skipped (PATREON_FEED_URL is not set)`, exit 0. `ciw feeds diff` without Patreon prints per-feed counts/date ranges and says it is not configured.
+- Feed `length` hints are unreliable on HRN/Acast generally: 1-5% below the real sizes (e.g. HRN ep 1 hint 47649018 vs real 48276655; Acast newest 58711980 vs 61609074).
+
+### HRN audio check (resolves the plan's open question): YES, HRN audio still resolves
+`ciw feeds check-audio --source hrn --sample 3` (3 newest, 3 middle, 3 oldest = 9 episodes, one request each; no bodies read):
+- HEAD: 9/9 `200 audio/mpeg`, 1 redirect, final host `rss.art19.com`, but NO content-length on HEAD.
+- `--range` (1-byte `Range: bytes=0-0` GET, 9/9 `206 audio/mpeg`, 2 redirects, final host `content.production.cdn.art19.com`, total size from Content-Range): newest 73029791 / 62961515 / 79804428 bytes; middle 54418575 / 46818815 / 43795722; oldest (Episodes 3, 2, 1) 48034647 / 44571434 / 48276655. So all of 2010-2021 is downloadable, 43-80 MB each; 453 episodes is roughly 25 GB.
+- Acast sample (`--source acast --sample 1`): `sphinx.acast.com` answers HEAD with a fake `200 text/plain` (2 bytes), so a HEAD "200" proves nothing there. `probe_audio` therefore accepts a HEAD only when the content type is audio-like (or octet-stream), otherwise falls back to the Range GET. With it: 3/3 `206 audio/mpeg`, 1 redirect to `stitcher2.acast.com`, 58-68 MB.
+
+### Open issues / notes for T4
+- Acast and ART19 enclosure URLs redirect (Acast to signed, expiring `stitcher2.acast.com` URLs): always start from the `meta.json` enclosure URL, follow redirects, and verify against the HTTP Content-Length / 206 Content-Range, not `enclosure_length_hint`. ART19 HEAD gives no Content-Length; use the Range GET (or the GET's own headers).
+- Patreon was never exercised for real (URL not available): the Patreon feed's actual shape (guid form, enclosure URL form, durations, non-audio post types, 401 vs 403 vs an HTML 200 on bad tokens) is only covered by the synthetic fixture. `ciw feeds diff` on the real feed is still to be run by the user, and matching constants may need tuning from its output (watch the ambiguity list).
+- T4 health check/ntfy alert hooks: `FeedReport.status` is `auth` / `empty` / `error`; the reason is also in `feeds.last_status` (`auth_error:403`, `empty`, `error: ...`). `poll` prints the warning to stderr; no notification yet.
+- If an episode gets Patreon audio after an Acast download already exists, `meta.json` flips `audio_source` to patreon; T4 should decide whether to re-download. `meta.audio_file` is preserved across polls.
+- A feed item that disappears from its feed is never deleted from state.
+- `.env` is not read by `ciw poll` unless `PATREON_FEED_URL` is in `.env` or the environment (via `load_config`); nothing else needed.
+
+Next: T4 downloader
