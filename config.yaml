@@ -1,0 +1,32 @@
+# Non-secret settings. Relative paths resolve against the project root (or $CIW_ROOT).
+# Secrets (PATREON_FEED_URL, HF_TOKEN, ANTHROPIC_API_KEY, NTFY_TOPIC) live only in .env.
+blog_db: cooking_issues.db
+data_dir: data
+audio_dir: /mnt/ssd0/ciw/audio
+clips_dir: /mnt/ssd0/ciw/clips
+state_db: data/state.sqlite
+
+apple_ids:
+  acast: 1572356745
+  hrn: 380317598
+poll_interval_hours: 6
+
+asr:
+  backend: whisperx
+  model: large-v3
+  batch_size: 8
+
+llm:
+  model: claude-sonnet-5-5
+  monthly_budget_usd: 25
+
+notify:
+  server: https://ntfy.sh
+  topic_env: NTFY_TOPIC   # the topic is a secret: read from this environment variable
+  threshold: 7
+  clip_threshold: 9
+
+web:
+  host: 127.0.0.1
+  port: 5000
+  debug: false
