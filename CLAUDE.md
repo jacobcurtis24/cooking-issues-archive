@@ -19,7 +19,7 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 ## Podcast ingest (T3)
 
 - `ciw poll [--source acast|hrn|patreon|all]`, `ciw feeds diff`, `ciw feeds check-audio`, `ciw episodes list`. State: `data/state.sqlite`; per-episode `data/episodes/<episode_id>/meta.json`; raw feed cache `data/feeds/<name>.xml` (mode 600).
-- `episode_id` is stable once assigned: Acast guid (Acast-based, including Acast+Patreon matches), `patreon-<sha1[:16]>`, `hrn-<uuid>` or `hrn-<sha1[:16]>`. Matching constants live at the top of `ciw/matching.py`.
+- `episode_id` is stable once assigned: Acast guid (Acast-based, including Acast+Patreon matches), `patreon-<sha1[:16]>`, `hrn-<uuid>` or `hrn-<sha1[:16]>`. Matching constants live at the top of `ciw/matching.py`: Patreon is early access, so it may precede its Acast twin by up to 21 days (`PATREON_LEAD_DAYS`); recurring titles are resolved by near-identical durations (`TIGHT_DURATION_S`). A matched episode downloads the Patreon copy (`audio_source=patreon`).
 - Feed `enclosure length` is unreliable (stored as `enclosure_length_hint`); verify downloads against the HTTP Content-Length. Never log a feed URL except through `redact()`; the Patreon URL is not logged at all. Feed tests use `tests/fakeweb.py` (httpx.MockTransport) and `tests/fixtures/feeds/`.
 
 ## Downloader (T4)
