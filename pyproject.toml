@@ -48,7 +48,7 @@ ciw = "ciw.cli:app"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"ciw.web" = ["templates/*.html"]
+"ciw.web" = ["templates/*.html", "static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

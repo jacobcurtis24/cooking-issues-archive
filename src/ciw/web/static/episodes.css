@@ -1,0 +1,232 @@
+/* Episode browser (list, episode page, transcript, search sections). Uses the variables that
+   base.html defines on :root. */
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: .12rem .5rem;
+  border-radius: .25rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.badge.src-acast  { background: #eef3fb; border-color: #cfdcf2; color: #2f5d9e; }
+.badge.src-hrn    { background: #f3eefb; border-color: #dccff2; color: #6a3fa0; }
+.badge.src-patreon{ background: #fbeeee; border-color: #f2cfcf; color: #a03f3f; }
+.badge.stage-transcribed { background: #eaf5ec; border-color: #bfdcc4; color: #2c7a3f; }
+.badge.stage-audio       { background: #fff6e3; border-color: #f0dcae; color: #8a6414; }
+.badge.stage-notes       { background: var(--bg); color: var(--muted); }
+
+/* ── List ── */
+.ep-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: 1.1rem;
+  align-items: center;
+}
+.ep-filters select, .ep-filters input[type=search] {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .45rem .7rem;
+  font-size: .88rem;
+  background: var(--surface);
+  color: var(--text);
+}
+.ep-filters input[type=search] { min-width: 220px; }
+.ep-filters button, .ep-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: .47rem 1rem;
+  font-size: .88rem;
+  cursor: pointer;
+}
+.ep-filters a.clear { font-size: .83rem; color: var(--muted); }
+.ep-notice { margin-top: 1rem; font-size: .85rem; color: var(--muted); }
+.episodes-grid { display: flex; flex-direction: column; gap: .8rem; margin-top: 1.5rem; }
+.episode-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.4rem;
+  transition: box-shadow .15s;
+}
+.episode-card:hover { box-shadow: var(--shadow-md); }
+.ep-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  font-size: .78rem;
+  color: var(--muted);
+  margin-bottom: .4rem;
+}
+.episode-card h3 { font-family: var(--font-body); font-size: 1.05rem; margin-bottom: .3rem; }
+.episode-card h3 a { color: var(--text); }
+.episode-card h3 a:hover { color: var(--accent); text-decoration: none; }
+.episode-card p { font-size: .85rem; color: var(--muted); line-height: 1.55; }
+
+/* ── Episode page ── */
+.ep-header { padding: 2.5rem 0 1rem; }
+.ep-header h1 {
+  font-family: var(--font-body);
+  font-weight: normal;
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  line-height: 1.25;
+  margin: .5rem 0 .6rem;
+}
+.ep-links { font-size: .83rem; display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .5rem; }
+.ep-columns { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 2rem; align-items: start; }
+.ep-side { position: sticky; top: 4.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.ep-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  font-size: .88rem;
+}
+.ep-box h2 { font-family: var(--font-body); font-weight: normal; font-size: 1.05rem; margin-bottom: .6rem; }
+.ep-box ul { list-style: none; display: flex; flex-direction: column; gap: .8rem; }
+.ep-box li .muted, .ep-box .muted { color: var(--muted); font-size: .78rem; }
+.ep-box .excerpt { font-size: .82rem; color: #444; line-height: 1.5; }
+.player-bar {
+  position: sticky;
+  top: 3.6rem;
+  z-index: 50;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .6rem .8rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1rem;
+}
+.player-bar audio { width: 100%; display: block; }
+.notice-box {
+  background: var(--accent-light);
+  border: 1px solid #f0cabb;
+  border-radius: var(--radius);
+  padding: .8rem 1rem;
+  font-size: .88rem;
+  margin-bottom: 1rem;
+}
+.notice-box code { background: #fff; padding: .1em .35em; border-radius: 3px; }
+.show-notes {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  overflow-wrap: anywhere;
+}
+.show-notes p { margin-bottom: 1em; }
+.show-notes ul, .show-notes ol { margin: 0 0 1em 1.6em; }
+.show-notes h2, .show-notes h3, .show-notes h4 { margin: 1.2em 0 .5em; }
+.show-notes blockquote {
+  border-left: 3px solid var(--accent); padding: .2em 1em; margin: 1em 0; color: var(--muted);
+}
+
+/* ── Transcript ── */
+.tr-head { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font-size: .78rem; color: var(--muted); margin-bottom: .8rem; }
+.tr-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .9rem;
+  align-items: center;
+  font-size: .85rem;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: .6rem;
+}
+.tr-toolbar input[type=search] {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .35rem .7rem;
+  font-size: .88rem;
+  min-width: 200px;
+  background: var(--surface);
+  color: var(--text);
+}
+.tr-toolbar button {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: .3rem .65rem;
+  cursor: pointer;
+  font-size: .85rem;
+  color: var(--text);
+}
+.tr-toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+.tr-count { color: var(--muted); font-size: .8rem; }
+#transcript { display: flex; flex-direction: column; gap: .15rem; }
+.utt {
+  display: grid;
+  grid-template-columns: 4.2rem minmax(0, 1fr);
+  gap: .6rem;
+  padding: .35rem .6rem;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  line-height: 1.6;
+  scroll-margin: 9rem;
+}
+.utt:hover { background: #f3f0ea; }
+.utt.current { background: var(--accent-light); border-left-color: var(--accent); }
+.utt .ts {
+  font-variant-numeric: tabular-nums;
+  font-size: .8rem;
+  color: var(--muted);
+  padding-top: .15rem;
+  text-align: right;
+}
+.utt .ts:hover { color: var(--accent); text-decoration: none; }
+.utt .spk { font-weight: 600; font-size: .78rem; color: var(--muted); margin-right: .4rem; }
+.utt-text { font-family: var(--font-body); font-size: 1.02rem; overflow-wrap: anywhere; }
+.corr { border-bottom: 1px dotted var(--accent); cursor: help; }
+mark.hit { background: var(--mark-bg); }
+mark.flt { background: #cfe8ff; }
+mark.cur { outline: 2px solid var(--accent); }
+.gap-marker {
+  margin: .4rem 0;
+  padding: .35rem .8rem;
+  border: 1px dashed #d9b36a;
+  background: #fff9ec;
+  color: #8a6414;
+  border-radius: 6px;
+  font-size: .82rem;
+}
+.gap-marker a { color: inherit; font-weight: 600; }
+
+/* ── Search page: episode section ── */
+.scope-tabs { display: flex; gap: .5rem; margin: 1.2rem 0 0; font-size: .85rem; flex-wrap: wrap; }
+.scope-tabs a, .scope-tabs span {
+  padding: .25rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  background: var(--surface);
+  color: var(--muted);
+}
+.scope-tabs .active { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+.search-section-title { font-family: var(--font-body); font-weight: normal; font-size: 1.25rem; margin: 2rem 0 .3rem; }
+.ep-hit-list { display: flex; flex-direction: column; gap: 1rem; }
+.ep-hit { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.3rem; }
+.ep-hit h3 { font-family: var(--font-body); font-size: 1.05rem; margin-bottom: .25rem; }
+.ep-hit h3 a { color: var(--text); }
+.ep-hit h3 a:hover { color: var(--accent); text-decoration: none; }
+.ep-hit .notes-snip { font-size: .85rem; color: #444; margin: .4rem 0; }
+.ep-hit ul { list-style: none; display: flex; flex-direction: column; gap: .45rem; margin-top: .5rem; }
+.ep-hit li { display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: .6rem; font-size: .9rem; }
+.ep-hit li a.ts { font-variant-numeric: tabular-nums; color: var(--accent); font-size: .82rem; padding-top: .1rem; }
+.ep-hit .more { font-size: .8rem; color: var(--muted); margin-top: .4rem; }
+.mention-box { max-width: var(--read-w); margin: 0 auto 2rem; padding: 0 1.5rem; }
+.mention-box .ep-box ul { gap: .55rem; }
+
+@media (max-width: 900px) {
+  .ep-columns { grid-template-columns: minmax(0, 1fr); }
+  .ep-side { position: static; }
+  .utt { grid-template-columns: 3.4rem minmax(0, 1fr); }
+}

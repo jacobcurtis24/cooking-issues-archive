@@ -9,7 +9,7 @@ from ciw.config import Config, load_config
 
 def create_app(config: Config | None = None) -> Flask:
     """Build the Flask app. ``config`` defaults to :func:`ciw.config.load_config`."""
-    from ciw.web import blog
+    from ciw.web import blog, episodes
 
     cfg = config if config is not None else load_config()
     app = Flask(__name__)
@@ -19,4 +19,6 @@ def create_app(config: Config | None = None) -> Flask:
     app.add_template_filter(blog.fmt_date, "fmt_date")
     app.add_template_filter(blog.short_excerpt, "short_excerpt")
     app.register_blueprint(blog.bp)
+    app.register_blueprint(episodes.bp)
+    app.add_template_filter(episodes.fmt_clock, "clock")
     return app

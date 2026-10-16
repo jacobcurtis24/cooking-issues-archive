@@ -622,6 +622,7 @@ mark { background: var(--mark-bg); color: inherit; border-radius: 2px; padding: 
   .hero-form button { border-radius: 0 0 var(--radius) var(--radius); }
 }
 </style>
+{% block head %}{% endblock %}
 </head>
 <body>
 
@@ -632,6 +633,7 @@ mark { background: var(--mark-bg); color: inherit; border-radius: 2px; padding: 
       <a href="/" {% if request.endpoint == 'blog.index' %}class="active"{% endif %}>Home</a>
       <a href="/primers" {% if request.endpoint == 'blog.primers' %}class="active"{% endif %}>Primers</a>
       <a href="/browse" {% if request.endpoint == 'blog.browse' %}class="active"{% endif %}>All Posts</a>
+      <a href="/episodes" {% if request.endpoint and request.endpoint.startswith('episodes.') %}class="active"{% endif %}>Episodes</a>
     </nav>
     <form class="header-search" action="/search" method="get">
       <input name="q" type="search" placeholder="Search 224 posts…"

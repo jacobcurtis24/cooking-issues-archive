@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Episodes — Cooking Issues{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='episodes.css') }}">{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="container">
+    <h1>Episodes</h1>
+    <p>
+      {% if filters %}{{ total }} of {{ grand_total }} episode{% if grand_total != 1 %}s{% endif %}
+      — <a href="/episodes">Clear filters</a>
+      {% else %}{{ total }} episode{% if total != 1 %}s{% endif %}{% endif %}
+    </p>
+    <form class="ep-filters" action="/episodes" method="get">
+      <input name="q" type="search" value="{{ q }}" placeholder="Title or show notes…" autocomplete="off">
+      <select name="source" aria-label="Source">
+        <option value="">All sources</option>
+        {% for key, label in sources.items() %}
+        <option value="{{ key }}" {% if key == source %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <select name="year" aria-label="Year">
+        <option value="">All years</option>
+        {% for y in years %}
+        <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+      </select>
+      <select name="status" aria-label="Status">
+        <option value="all" {% if status == 'all' %}selected{% endif %}>Any status</option>
+        <option value="transcribed" {% if status == 'transcribed' %}selected{% endif %}>Transcribed</option>
+        <option value="downloaded" {% if status == 'downloaded' %}selected{% endif %}>Has audio</option>
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+    {% if notice %}<p class="ep-notice">{{ notice }}</p>{% endif %}
+  </div>
+</div>
+
+<div class="container">
+  {% if no_state %}
+  <p class="ep-notice" style="margin-top:2rem">No episodes recorded yet. Run <code>ciw poll</code> to read the podcast feeds.</p>
+  {% elif not cards %}
+  <p class="ep-notice" style="margin-top:2rem">No episodes match these filters.</p>
+  {% endif %}
+  <div class="episodes-grid">
+    {% for c in cards %}
+    <article class="episode-card" data-episode-id="{{ c.id }}">
+      <div class="ep-meta">
+        <span class="badge src-{{ c.source }}">{{ c.source_label }}</span>
+        <span>{{ c.date | fmt_date }}</span>
+        {% if c.duration %}<span>{{ c.duration }}</span>{% endif %}
+        <span class="badge stage-{{ c.stage }}">{{ c.stage_label }}</span>
+      </div>
+      <h3><a href="/episode/{{ c.id }}">{{ c.title }}</a></h3>
+      {% if c.excerpt %}<p>{{ c.excerpt }}</p>{% endif %}
+    </article>
+    {% endfor %}
+  </div>
+
+  {% if total_pages > 1 %}
+  <div class="pagination">
+    {% if page > 1 %}<a href="{{ url_for('episodes.index', page=page - 1, **filters) }}">‹ Prev</a>{% endif %}
+    {% set start = [1, page - 3] | max %}
+    {% set end   = [total_pages, page + 3] | min %}
+    {% if start > 1 %}
+    <a href="{{ url_for('episodes.index', page=1, **filters) }}">1</a>
+    {% if start > 2 %}<span class="ellipsis">…</span>{% endif %}
+    {% endif %}
+    {% for n in range(start, end + 1) %}
+    {% if n == page %}<span class="current">{{ n }}</span>
+    {% else %}<a href="{{ url_for('episodes.index', page=n, **filters) }}">{{ n }}</a>{% endif %}
+    {% endfor %}
+    {% if end < total_pages %}
+    {% if end < total_pages - 1 %}<span class="ellipsis">…</span>{% endif %}
+    <a href="{{ url_for('episodes.index', page=total_pages, **filters) }}">{{ total_pages }}</a>
+    {% endif %}
+    {% if page < total_pages %}<a href="{{ url_for('episodes.index', page=page + 1, **filters) }}">Next ›</a>{% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
