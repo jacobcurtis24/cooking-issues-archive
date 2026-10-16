@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 from ciw import ingest, notify, state
 from ciw.cli import app
-from ciw.config import Secrets
+from ciw.config import Secrets, load_config
 
 runner = CliRunner()
 TOPIC = "ciw-test-topic-abc123"
@@ -147,13 +147,7 @@ def test_auth_failure_alerts_once_and_names_the_fallback(env):
     poll()  # same status again (6 hours later): silent
     poll()
     assert len(ntfy.requests) == 1
-    with (
-        state.connect(ingest.make_client.__globals__["state"].connect.__defaults__ or None)
-        if False
-        else state.connect(
-            __import__("ciw.config", fromlist=["load_config"]).load_config().state_db
-        ) as conn
-    ):
+    with state.connect(load_config().state_db) as conn:
         assert state.get_feed(conn, "patreon")["alert_status"] == "auth"
 
 
