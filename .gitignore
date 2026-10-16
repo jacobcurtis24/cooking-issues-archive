@@ -1,0 +1,9 @@
+data/
+.env
+*.sqlite
+__pycache__/
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+cooking_issues_compare.db
