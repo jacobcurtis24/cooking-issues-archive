@@ -86,7 +86,23 @@
     </div>
 
     <aside class="ep-side">
-      {% block side %}{% endblock %}
+      {% if related and related.posts %}
+      <section class="ep-box" id="related-posts">
+        <h2>Related blog posts</h2>
+        <ul>
+          {% for p in related.posts %}
+          <li data-post-id="{{ p.id }}">
+            <a href="/post/{{ p.id }}">{{ p.title }}</a>
+            <div class="muted">{% if p.post_type == 'primer' %}Primer{% else %}{{ p.date | fmt_date }}{% endif %}{% if p.terms %} · matched: {{ p.terms | join(', ') }}{% endif %}</div>
+            <div class="excerpt">{{ p.snippet | safe }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+        <p class="muted" style="margin-top:.7rem">Key terms: {% for k in related.terms %}{{ k.term }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+      </section>
+      {% elif related is not none %}
+      <section class="ep-box" id="related-posts"><h2>Related blog posts</h2><p class="muted">No related posts found.</p></section>
+      {% endif %}
     </aside>
   </div>
 </div>

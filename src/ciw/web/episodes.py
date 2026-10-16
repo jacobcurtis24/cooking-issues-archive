@@ -27,8 +27,10 @@ from flask import (
 )
 from markupsafe import Markup, escape
 
+from ciw import related as related_mod
 from ciw import search_index as si
 from ciw import state
+from ciw import vocab as vocab_mod
 from ciw.config import Config
 from ciw.htmlsafe import plain_to_html, sanitize_html
 from ciw.models import EpisodeMeta, Transcript
@@ -36,6 +38,7 @@ from ciw.transcript import GAP_S, UTTERANCE_MAX_WORDS, format_timestamp, split_u
 from ciw.web import blog
 
 bp = Blueprint("episodes", __name__)
+log = logging.getLogger("ciw.web.episodes")
 
 PER_PAGE = 24
 SOURCES = {"acast": "Acast", "hrn": "HRN", "patreon": "Patreon"}
@@ -416,6 +419,93 @@ def transcript_status(row: sqlite3.Row) -> str:
     )
 
 
+_RELATED_CACHE: dict[tuple, related_mod.Related] = {}
+
+
+def _mtime(path: Path | None) -> int:
+    try:
+        return path.stat().st_mtime_ns if path else 0
+    except OSError:
+        return 0
+
+
+def related_for(
+    episode_id: str, title: str, notes: str, transcript: Transcript | None
+) -> related_mod.Related | None:
+    """Related blog posts (``ciw.related``), cached per transcript/notes/vocabulary/blog DB state.
+    Best effort: any failure just means no box on the page."""
+    c = cfg()
+    key = (
+        episode_id,
+        hash((title, notes)),
+        _mtime(c.episodes_dir / episode_id / "transcript.json"),
+        _mtime(c.asr.vocabulary_file),
+        _mtime(c.blog_db),
+        _mtime(c.search_db),
+    )
+    if key in _RELATED_CACHE:
+        return _RELATED_CACHE[key]
+    try:
+        vocabulary = vocab_mod.read_terms(c.asr.vocabulary_file)
+        with index_conn() as ic:
+            skip = related_mod.show_boilerplate(ic) if ic is not None else None
+            result = related_mod.related_posts(
+                c.blog_db,
+                title=title,
+                notes=notes,
+                transcript_text=transcript.text() if transcript else None,
+                vocabulary=vocabulary,
+                skip=skip,
+            )
+    except Exception:
+        log.exception("related posts failed for %s", episode_id)
+        return None
+    if len(_RELATED_CACHE) >= 64:
+        _RELATED_CACHE.clear()
+    _RELATED_CACHE[key] = result
+    return result
+
+
+def mentions_for_post(post) -> list[dict]:
+    """Episodes that mention a blog post's topic (vocabulary terms in its title/tags), for the
+    'Mentioned in episodes' box. [] when there is no index, no topic term or no match."""
+    c = cfg()
+    try:
+        vocabulary = vocab_mod.read_terms(c.asr.vocabulary_file)
+        terms = related_mod.post_terms(
+            post["title"] or "", post["tags"] or "", post["categories"] or "", vocabulary
+        )
+        if not terms:
+            return []
+        with index_conn() as ic:
+            if ic is None:
+                return []
+            found = related_mod.episodes_mentioning(ic, terms)
+        out = []
+        with state_conn() as conn:
+            if conn is None:
+                return []
+            for m in found:
+                row = state.get_episode(conn, m.episode_id)
+                if row is not None:
+                    out.append(
+                        {
+                            "id": m.episode_id,
+                            "title": row["title"],
+                            "date": row["pub_date"],
+                            "mentions": m.mentions,
+                            "in_notes": m.in_notes,
+                            "href": url_for(
+                                "episodes.episode", episode_id=m.episode_id, q=terms[0]
+                            ),
+                        }
+                    )
+        return out
+    except Exception:
+        log.exception("episode mentions failed for post %s", post["id"])
+        return []
+
+
 @bp.route("/episode/<episode_id>")
 def episode(episode_id: str):
     row = episode_row(episode_id)
@@ -467,6 +557,7 @@ def episode(episode_id: str):
         q=q,
         hits=hits,
         correction_count=len(transcript.corrections) if transcript else 0,
+        related=related_for(episode_id, row["title"], show_notes_text(episode_id), transcript),
     )
 
 
@@ -504,7 +595,6 @@ def transcript_txt(episode_id: str):
 
 # ------------------------------------------------------------------ unified search (episodes)
 
-log = logging.getLogger("ciw.web.episodes")
 SNIPPETS_PER_EPISODE = 3
 MAX_EPISODE_GROUPS = 20
 

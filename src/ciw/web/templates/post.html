@@ -42,7 +42,25 @@
   <div class="post-body">
     {{ post.body_html | safe }}
   </div>
-</article>
+</article>{% if mentions %}
+<section class="mention-box" id="episode-mentions">
+  <style>
+    .mention-box { max-width: var(--read-w); margin: 0 auto 2rem; padding: 0 1.5rem; }
+    .mention-box .ep-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; font-size: .9rem; }
+    .mention-box h2 { font-family: var(--font-body); font-weight: normal; font-size: 1.05rem; margin-bottom: .6rem; }
+    .mention-box ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+    .mention-box .muted { color: var(--muted); font-size: .78rem; display: block; }
+  </style>
+  <div class="ep-box">
+    <h2>Mentioned in episodes</h2>
+    <ul>
+      {% for m in mentions %}
+      <li><a href="{{ m.href }}">{{ m.title }}</a>
+        <span class="muted">{{ m.date | fmt_date }}{% if m.mentions %} · {{ m.mentions }} passage{% if m.mentions != 1 %}s{% endif %} in the transcript{% endif %}{% if m.in_notes %} · show notes{% endif %}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>{% endif %}
 
 <!-- Prev / Next -->
 <nav class="post-nav">

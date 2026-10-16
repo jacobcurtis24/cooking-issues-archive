@@ -67,7 +67,15 @@ def post(post_id: int):
         (p["post_type"], p["date"]),
     ).fetchone()
     db.close()
-    return render_template("post.html", post=p, prev_post=prev_p, next_post=next_p)
+    from ciw.web import episodes
+
+    return render_template(
+        "post.html",
+        post=p,
+        prev_post=prev_p,
+        next_post=next_p,
+        mentions=episodes.mentions_for_post(p),
+    )
 
 
 @bp.route("/search")
