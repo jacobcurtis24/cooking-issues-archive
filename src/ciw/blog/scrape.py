@@ -11,12 +11,10 @@ Usage:
 import argparse
 import re
 import sqlite3
-import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -46,6 +44,7 @@ PRIMER_URLS = [
 # ---------------------------------------------------------------------------
 # Database setup
 # ---------------------------------------------------------------------------
+
 
 def init_db(conn: sqlite3.Connection) -> None:
     conn.executescript("""
@@ -80,9 +79,10 @@ def init_db(conn: sqlite3.Connection) -> None:
 
 
 def index_page_done(conn: sqlite3.Connection, url: str) -> bool:
-    return conn.execute(
-        "SELECT 1 FROM scraped_index_pages WHERE url = ?", (url,)
-    ).fetchone() is not None
+    return (
+        conn.execute("SELECT 1 FROM scraped_index_pages WHERE url = ?", (url,)).fetchone()
+        is not None
+    )
 
 
 def mark_index_page_done(conn: sqlite3.Connection, url: str) -> None:
@@ -91,23 +91,26 @@ def mark_index_page_done(conn: sqlite3.Connection, url: str) -> None:
 
 
 def post_exists(conn: sqlite3.Connection, url: str) -> bool:
-    return conn.execute(
-        "SELECT 1 FROM posts WHERE url = ?", (url,)
-    ).fetchone() is not None
+    return conn.execute("SELECT 1 FROM posts WHERE url = ?", (url,)).fetchone() is not None
 
 
 def insert_post(conn: sqlite3.Connection, post: dict) -> None:
-    conn.execute("""
+    conn.execute(
+        """
         INSERT OR REPLACE INTO posts
             (url, title, date, author, categories, tags, body_html, body_text, post_type, scraped_at)
         VALUES
             (:url, :title, :date, :author, :categories, :tags, :body_html, :body_text, :post_type, :scraped_at)
-    """, post)
+    """,
+        post,
+    )
     # Rebuild FTS index for this row
     row = conn.execute("SELECT id FROM posts WHERE url = ?", (post["url"],)).fetchone()
     if row:
-        conn.execute("INSERT OR REPLACE INTO posts_fts(rowid, title, body_text, categories, tags) VALUES (?, ?, ?, ?, ?)",
-                     (row[0], post["title"], post["body_text"], post["categories"], post["tags"]))
+        conn.execute(
+            "INSERT OR REPLACE INTO posts_fts(rowid, title, body_text, categories, tags) VALUES (?, ?, ?, ?, ?)",
+            (row[0], post["title"], post["body_text"], post["categories"], post["tags"]),
+        )
     conn.commit()
 
 
@@ -119,7 +122,7 @@ session = requests.Session()
 session.headers.update(HEADERS)
 
 
-def fetch(url: str) -> Optional[BeautifulSoup]:
+def fetch(url: str) -> BeautifulSoup | None:
     try:
         resp = session.get(url, timeout=20)
         if resp.status_code == 404:
@@ -136,6 +139,7 @@ def fetch(url: str) -> Optional[BeautifulSoup]:
 # ---------------------------------------------------------------------------
 # Parsers
 # ---------------------------------------------------------------------------
+
 
 def extract_post_links(soup: BeautifulSoup) -> list[str]:
     """Pull all individual post URLs from an archive/index page."""
@@ -185,13 +189,9 @@ def parse_post(soup: BeautifulSoup, url: str, post_type: str = "post") -> dict:
 
     # Categories & tags
     categories = ", ".join(
-        a.get_text(strip=True)
-        for a in soup.select(".cat-links a, .entry-categories a")
+        a.get_text(strip=True) for a in soup.select(".cat-links a, .entry-categories a")
     )
-    tags = ", ".join(
-        a.get_text(strip=True)
-        for a in soup.select(".tags-links a, .entry-tags a")
-    )
+    tags = ", ".join(a.get_text(strip=True) for a in soup.select(".tags-links a, .entry-tags a"))
 
     # Body — prefer .entry-content, fall back to .post-content / article
     body_el = (
@@ -219,6 +219,7 @@ def parse_post(soup: BeautifulSoup, url: str, post_type: str = "post") -> dict:
 # ---------------------------------------------------------------------------
 # Scraping logic
 # ---------------------------------------------------------------------------
+
 
 def scrape_post(conn: sqlite3.Connection, url: str, post_type: str = "post") -> bool:
     """Fetch and store a single post. Returns True if newly scraped."""
@@ -282,8 +283,10 @@ def scrape_primers(conn: sqlite3.Connection) -> None:
 # Search
 # ---------------------------------------------------------------------------
 
+
 def search(conn: sqlite3.Connection, query: str, limit: int = 10) -> None:
-    rows = conn.execute("""
+    rows = conn.execute(
+        """
         SELECT p.title, p.url, p.date, p.categories, p.tags,
                snippet(posts_fts, 1, '[', ']', '...', 32) AS excerpt
         FROM posts_fts
@@ -291,14 +294,16 @@ def search(conn: sqlite3.Connection, query: str, limit: int = 10) -> None:
         WHERE posts_fts MATCH ?
         ORDER BY rank
         LIMIT ?
-    """, (query, limit)).fetchall()
+    """,
+        (query, limit),
+    ).fetchall()
 
     if not rows:
         print("No results found.")
         return
 
     for i, (title, url, date, cats, tags, excerpt) in enumerate(rows, 1):
-        print(f"\n{'='*70}")
+        print(f"\n{'=' * 70}")
         print(f"{i}. {title}")
         print(f"   {url}")
         if date:
@@ -309,13 +314,14 @@ def search(conn: sqlite3.Connection, query: str, limit: int = 10) -> None:
             print(f"   Tags: {tags}")
         print(f"\n   {excerpt}")
 
-    print(f"\n{'='*70}")
+    print(f"\n{'=' * 70}")
     print(f"{len(rows)} result(s) for '{query}'")
 
 
 # ---------------------------------------------------------------------------
 # Stats
 # ---------------------------------------------------------------------------
+
 
 def print_stats(conn: sqlite3.Connection, db_path: Path | None = None) -> None:
     total = conn.execute("SELECT COUNT(*) FROM posts").fetchone()[0]
@@ -329,6 +335,7 @@ def print_stats(conn: sqlite3.Connection, db_path: Path | None = None) -> None:
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+
 
 def run_stats(db_path: Path | None = None) -> None:
     db_path = db_path or DB_PATH
@@ -361,7 +368,9 @@ def run_scrape(db_path: Path | None = None) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Cooking Issues scraper & search")
     parser.add_argument("--search", "-s", metavar="QUERY", help="Full-text search query")
-    parser.add_argument("--limit", "-n", type=int, default=10, help="Max search results (default 10)")
+    parser.add_argument(
+        "--limit", "-n", type=int, default=10, help="Max search results (default 10)"
+    )
     parser.add_argument("--stats", action="store_true", help="Show database stats")
     args = parser.parse_args()
 

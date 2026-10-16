@@ -9,15 +9,15 @@ from ciw.blog import encoding, scrape
 @pytest.mark.parametrize(
     "broken, fixed",
     [
-        ("donâ€™t", "don’t"),            # right single quote / apostrophe
+        ("donâ€™t", "don’t"),  # right single quote / apostrophe
         ("â€œhelloâ€\x9d", "“hello”"),  # curly double quotes (0x9d is undefined in cp1252)
-        ("â€“", "–"),                      # en dash
-        ("x â€” y", "x — y"),               # em dash
-        ("waitâ€¦", "wait…"),               # ellipsis
-        ("cafÃ©", "café"),                 # 2-byte sequence (e-acute)
-        ("Â°", "°"),                       # degree sign
+        ("â€“", "–"),  # en dash
+        ("x â€” y", "x — y"),  # em dash
+        ("waitâ€¦", "wait…"),  # ellipsis
+        ("cafÃ©", "café"),  # 2-byte sequence (e-acute)
+        ("Â°", "°"),  # degree sign
         ("200Â°C", "200°C"),
-        ("Â\xa0x", "\xa0x"),                    # mojibake of NBSP
+        ("Â\xa0x", "\xa0x"),  # mojibake of NBSP
     ],
 )
 def test_fix_mojibake_known_cases(broken, fixed):

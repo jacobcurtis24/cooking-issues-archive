@@ -14,7 +14,7 @@ for _b in range(256):
     try:
         _char = bytes([_b]).decode("cp1252")
     except UnicodeDecodeError:
-        _char = chr(_b)          # undefined byte → Latin-1 equivalent char
+        _char = chr(_b)  # undefined byte → Latin-1 equivalent char
     _CP1252_REVERSE[_char] = _b
 
 

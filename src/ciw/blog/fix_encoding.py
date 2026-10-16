@@ -25,6 +25,7 @@ from ciw.config import project_root
 DB_PATH = project_root() / "cooking_issues.db"
 FIELDS = ["title", "author", "categories", "tags", "body_text", "body_html"]
 
+
 def run(db_path: Path | None = None, dry_run: bool = False) -> None:
     """Repair mojibake in ``db_path`` (default: the repo blog DB); ``dry_run`` writes nothing."""
     conn = sqlite3.connect(db_path or DB_PATH)
@@ -58,7 +59,7 @@ def run(db_path: Path | None = None, dry_run: bool = False) -> None:
         orig_text = row[sample_field]
         fixed_text = updates[sample_field]
         # Find first differing position and show surrounding context
-        for i, (a, b) in enumerate(zip(orig_text, fixed_text)):
+        for i, (a, b) in enumerate(zip(orig_text, fixed_text, strict=False)):
             if a != b:
                 start = max(0, i - 20)
                 end = min(len(orig_text), i + 40)
@@ -74,7 +75,7 @@ def run(db_path: Path | None = None, dry_run: bool = False) -> None:
             conn.execute(f"UPDATE posts SET {set_clause} WHERE id = ?", values)
 
     if not dry_run and changed_posts > 0:
-        print(f"\nRebuilding FTS index…")
+        print("\nRebuilding FTS index…")
         conn.execute("INSERT INTO posts_fts(posts_fts) VALUES('rebuild')")
         conn.commit()
 
@@ -89,8 +90,9 @@ def run(db_path: Path | None = None, dry_run: bool = False) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Fix cp1252 mojibake in cooking_issues.db")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Show what would change without writing to DB")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show what would change without writing to DB"
+    )
     args = parser.parse_args()
     run(DB_PATH, args.dry_run)
 

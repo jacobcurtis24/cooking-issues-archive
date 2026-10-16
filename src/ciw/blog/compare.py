@@ -15,18 +15,17 @@ from ciw.blog import scrape
 from ciw.config import project_root
 
 EXISTING_DB = scrape.DB_PATH
-TEMP_DB     = project_root() / "cooking_issues_compare.db"
-DELAY       = 0.5  # faster than production — this is a test run
+TEMP_DB = project_root() / "cooking_issues_compare.db"
+DELAY = 0.5  # faster than production — this is a test run
 
 scrape.DELAY = DELAY
+
 
 def sample_urls(conn: sqlite3.Connection, n: int = 20) -> list[tuple[int, str, str]]:
     """Return (id, url, post_type) spread evenly across the archive."""
     total = conn.execute("SELECT COUNT(*) FROM posts").fetchone()[0]
-    step  = max(1, total // n)
-    rows  = conn.execute(
-        "SELECT id, url, post_type FROM posts ORDER BY id"
-    ).fetchall()
+    step = max(1, total // n)
+    rows = conn.execute("SELECT id, url, post_type FROM posts ORDER BY id").fetchall()
     sampled = rows[::step][:n]
     # Also include a few posts known to have had encoding issues
     known_bad = conn.execute(
@@ -50,7 +49,7 @@ def scrape_sample(urls: list[tuple[int, str, str]]) -> sqlite3.Connection:
         print(f"  Fetching: {url}")
         soup = scrape.fetch(url)
         if soup is None:
-            print(f"    WARN: could not fetch")
+            print("    WARN: could not fetch")
             continue
         post = scrape.parse_post(soup, url, post_type)
         scrape.insert_post(conn, post)
@@ -62,15 +61,13 @@ def scrape_sample(urls: list[tuple[int, str, str]]) -> sqlite3.Connection:
 def compare(existing: sqlite3.Connection, fresh: sqlite3.Connection) -> int:
     """Diff each freshly scraped post against the existing DB. Returns issue count."""
     existing.row_factory = sqlite3.Row
-    fresh.row_factory    = sqlite3.Row
+    fresh.row_factory = sqlite3.Row
 
     fresh_rows = fresh.execute("SELECT * FROM posts ORDER BY url").fetchall()
     issues = 0
 
     for fr in fresh_rows:
-        ex = existing.execute(
-            "SELECT * FROM posts WHERE url = ?", (fr["url"],)
-        ).fetchone()
+        ex = existing.execute("SELECT * FROM posts WHERE url = ?", (fr["url"],)).fetchone()
         if ex is None:
             print(f"\n  NEW (not in existing DB): {fr['url']}")
             issues += 1
@@ -85,7 +82,7 @@ def compare(existing: sqlite3.Connection, fresh: sqlite3.Connection) -> int:
         # Body text: compare length and check for residual mojibake
         ex_len, fr_len = len(ex["body_text"] or ""), len(fr["body_text"] or "")
         len_diff = abs(ex_len - fr_len)
-        if len_diff > 50:          # allow minor whitespace variation
+        if len_diff > 50:  # allow minor whitespace variation
             diffs.append(("body_text_len", str(ex_len), str(fr_len)))
 
         # Mojibake check: flag if either version still contains â€
@@ -101,8 +98,10 @@ def compare(existing: sqlite3.Connection, fresh: sqlite3.Connection) -> int:
             print(f"\n  Post {ex['id']:3d}: {ex['title'][:55]}")
             for field, ev, fv in diffs:
                 print(f"    [{field}]")
-                if ev: print(f"      existing: {repr(ev[:120])}")
-                if fv: print(f"      fresh:    {repr(fv[:120])}")
+                if ev:
+                    print(f"      existing: {repr(ev[:120])}")
+                if fv:
+                    print(f"      fresh:    {repr(fv[:120])}")
         else:
             print(f"  Post {ex['id']:3d}: OK  {ex['title'][:55]}")
 
@@ -119,11 +118,11 @@ def main() -> None:
     print("Re-scraping from live site…")
     fresh = scrape_sample(sample)
 
-    print(f"\n{'─'*60}")
+    print(f"\n{'─' * 60}")
     print("Comparison results:")
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
     issues = compare(existing, fresh)
-    print(f"\n{'─'*60}")
+    print(f"\n{'─' * 60}")
 
     fresh.close()
     existing.close()

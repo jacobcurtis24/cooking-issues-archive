@@ -36,8 +36,7 @@ def project_root() -> Path:
         if (parent / "pyproject.toml").is_file():
             return parent
     raise RuntimeError(
-        f"Cannot locate the project root (no pyproject.toml above {__file__}); "
-        f"set {ROOT_ENV_VAR}."
+        f"Cannot locate the project root (no pyproject.toml above {__file__}); set {ROOT_ENV_VAR}."
     )
 
 

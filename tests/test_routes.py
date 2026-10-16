@@ -29,6 +29,7 @@ def browse_ids(text: str) -> list[int]:
 
 # --- index ------------------------------------------------------------------
 
+
 def test_index(client):
     r = client.get("/")
     assert r.status_code == 200
@@ -45,6 +46,7 @@ def test_index(client):
 
 
 # --- browse -----------------------------------------------------------------
+
 
 def test_browse_page_one(client):
     r = client.get("/browse")
@@ -118,6 +120,7 @@ def test_browse_non_integer_page_is_a_500_known_bug(flask_app):
 
 # --- post -------------------------------------------------------------------
 
+
 def test_post_found(client):
     r = client.get(f"/post/{SOME_POST_ID}")
     assert r.status_code == 200
@@ -148,6 +151,7 @@ def test_post_non_integer_id_is_404(client):
 
 
 # --- search -----------------------------------------------------------------
+
 
 def test_search_hit(client):
     r = client.get("/search?q=carbonation")
@@ -190,6 +194,7 @@ def test_search_punctuation_only_shows_error_not_500(client):
 
 
 # --- primers ----------------------------------------------------------------
+
 
 def test_primers_listing(client):
     r = client.get("/primers")

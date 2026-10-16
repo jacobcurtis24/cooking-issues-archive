@@ -15,21 +15,23 @@ def test_post_counts(db):
 
 
 def test_post_date_range(db):
-    lo, hi = db.execute(
-        "SELECT MIN(date), MAX(date) FROM posts WHERE post_type='post'"
-    ).fetchone()
+    lo, hi = db.execute("SELECT MIN(date), MAX(date) FROM posts WHERE post_type='post'").fetchone()
     assert lo.startswith("2009-04-30")
     assert hi.startswith("2013-11-29")
 
 
-@pytest.mark.parametrize("column", ["title", "body_text", "body_html", "tags", "categories", "author"])
+@pytest.mark.parametrize(
+    "column", ["title", "body_text", "body_html", "tags", "categories", "author"]
+)
 def test_no_mojibake_marker(db, column):
     n = db.execute(f"SELECT COUNT(*) FROM posts WHERE {column} LIKE '%â€%'").fetchone()[0]
     assert n == 0
 
 
 def test_fts_index_answers_queries(db):
-    n = db.execute("SELECT COUNT(*) FROM posts_fts WHERE posts_fts MATCH 'carbonation'").fetchone()[0]
+    n = db.execute("SELECT COUNT(*) FROM posts_fts WHERE posts_fts MATCH 'carbonation'").fetchone()[
+        0
+    ]
     assert n == 9
 
 

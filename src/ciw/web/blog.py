@@ -140,6 +140,10 @@ def browse():
     total_pages = max(1, (total + per_page - 1) // per_page)
     return render_template(
         "browse.html",
-        posts=posts, page=page, total_pages=total_pages, total=total,
-        tag=tag, all_tags=sorted(all_tags),
+        posts=posts,
+        page=page,
+        total_pages=total_pages,
+        total=total,
+        tag=tag,
+        all_tags=sorted(all_tags),
     )
