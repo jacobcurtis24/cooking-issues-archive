@@ -8,17 +8,21 @@ from __future__ import annotations
 
 import re
 import sqlite3
+import unicodedata
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, Response, abort, current_app, render_template, request, send_file
+from markupsafe import Markup, escape
 
 from ciw import search_index as si
 from ciw import state
 from ciw.config import Config
-from ciw.models import EpisodeMeta
+from ciw.htmlsafe import plain_to_html, sanitize_html
+from ciw.models import EpisodeMeta, Transcript
+from ciw.transcript import GAP_S, UTTERANCE_MAX_WORDS, format_timestamp, split_utterances
 from ciw.web import blog
 
 bp = Blueprint("episodes", __name__)
@@ -27,6 +31,16 @@ PER_PAGE = 24
 SOURCES = {"acast": "Acast", "hrn": "HRN", "patreon": "Patreon"}
 STATUSES = ("all", "transcribed", "downloaded")
 TRANSCRIBED_STAGES = ("transcribed", "segmented", "scored")
+AUDIO_TYPES = {
+    ".mp3": "audio/mpeg",
+    ".m4a": "audio/mp4",
+    ".mp4": "audio/mp4",
+    ".aac": "audio/aac",
+    ".ogg": "audio/ogg",
+    ".opus": "audio/ogg",
+    ".wav": "audio/wav",
+    ".flac": "audio/flac",
+}
 
 
 def cfg() -> Config:
@@ -125,14 +139,6 @@ def fmt_duration(seconds: float | None) -> str:
         return ""
     minutes = int(round(seconds / 60))
     return f"{minutes // 60} h {minutes % 60:02d} min" if minutes >= 60 else f"{minutes} min"
-
-
-def fmt_clock(seconds: float) -> str:
-    """``12:34`` or ``1:02:03``."""
-    s = max(int(seconds), 0)
-    return (
-        f"{s // 3600}:{s % 3600 // 60:02d}:{s % 60:02d}" if s >= 3600 else f"{s // 60}:{s % 60:02d}"
-    )
 
 
 @dataclass
@@ -278,3 +284,208 @@ def audio_file_for(row: sqlite3.Row) -> Path | None:
     if not path.is_file() or not path.is_relative_to(root):
         return None
     return path
+
+
+# ------------------------------------------------------------------- transcript display
+
+
+@dataclass
+class UttView:
+    idx: int
+    start: float
+    end: float
+    speaker: str
+    html: Markup
+
+
+@dataclass
+class GapView:
+    start: float
+    end: float
+    seconds: int
+
+
+_TRANSCRIPT_CACHE: dict[str, tuple[tuple[int, int], Transcript]] = {}
+
+
+def load_transcript(episode_id: str) -> Transcript | None:
+    """transcript.json of an episode (cached by size+mtime); None if absent. Raises ValueError
+    if the file exists but is unreadable."""
+    path = cfg().episodes_dir / episode_id / "transcript.json"
+    try:
+        st = path.stat()
+    except OSError:
+        return None
+    sig = (st.st_size, st.st_mtime_ns)
+    cached = _TRANSCRIPT_CACHE.get(str(path))
+    if cached and cached[0] == sig:
+        return cached[1]
+    try:
+        transcript = Transcript.load(path)
+    except OSError as exc:
+        raise ValueError(f"cannot read transcript: {exc.strerror}") from exc
+    if len(_TRANSCRIPT_CACHE) >= 6:
+        _TRANSCRIPT_CACHE.clear()
+    _TRANSCRIPT_CACHE[str(path)] = (sig, transcript)
+    return transcript
+
+
+def _fold(text: str) -> str:
+    """Lower-case with diacritics removed (matches the index's unicode61 folding)."""
+    decomposed = unicodedata.normalize("NFKD", text.casefold())
+    return "".join(c for c in decomposed if not unicodedata.combining(c))
+
+
+def query_tokens(q: str) -> list[str]:
+    return [t for t in re.findall(r"\w+", _fold(q))][:8]
+
+
+def word_matches(word: str, tokens: list[str]) -> bool:
+    """True if any alphanumeric piece of ``word`` starts with a query token (FTS prefix rule)."""
+    if not tokens:
+        return False
+    return any(piece.startswith(t) for piece in re.findall(r"\w+", _fold(word)) for t in tokens)
+
+
+def transcript_views(
+    transcript: Transcript, q: str = ""
+) -> tuple[list[UttView | GapView], int, int]:
+    """Display items (utterances and untranscribed-gap markers), the number of utterances and
+    the number of highlighted words for ``q``."""
+    tokens = query_tokens(q)
+    items: list[UttView | GapView] = []
+    hits = n_utts = 0
+    prev_end: float | None = None
+    for i, utt in enumerate(split_utterances(transcript.words, max_words=UTTERANCE_MAX_WORDS)):
+        if prev_end is not None and utt.start - prev_end >= GAP_S:
+            items.append(GapView(prev_end, utt.start, int(round(utt.start - prev_end))))
+        prev_end = utt.end
+        parts = []
+        for w in utt.words:
+            piece = escape(w.w)
+            if word_matches(w.w, tokens):
+                piece = Markup('<mark class="hit">{}</mark>').format(piece)
+                hits += 1
+            if w.orig:
+                piece = Markup('<span class="corr" title="{}">{}</span>').format(
+                    f"heard: {w.orig}", piece
+                )
+            parts.append(piece)
+        items.append(UttView(i, utt.start, utt.end, utt.speaker or "", Markup(" ").join(parts)))
+        n_utts += 1
+    return items, n_utts, hits
+
+
+def clock(seconds: float) -> str:
+    return format_timestamp(seconds)
+
+
+def episode_row(episode_id: str) -> sqlite3.Row | None:
+    with state_conn() as conn:
+        return state.get_episode(conn, episode_id) if conn is not None else None
+
+
+def transcript_status(row: sqlite3.Row) -> str:
+    """The one-line explanation shown when an episode has no transcript yet."""
+    eid = row["episode_id"]
+    stage = stage_of(row)
+    if stage == "transcribed":
+        return (
+            "This episode is marked transcribed but its transcript file is missing or unreadable. "
+            f"Run `ciw transcribe --episode {eid} --force`."
+        )
+    if stage == "audio":
+        return (
+            "The audio is downloaded but not transcribed yet. "
+            f"Run `ciw transcribe --episode {eid}`."
+        )
+    return (
+        "Only the show notes are available: the audio has not been downloaded. "
+        f"Run `ciw download --episode {eid}` and then `ciw transcribe --episode {eid}`."
+    )
+
+
+@bp.route("/episode/<episode_id>")
+def episode(episode_id: str):
+    row = episode_row(episode_id)
+    if row is None:
+        abort(404)
+    meta = load_meta(episode_id)
+    notes_html = ""
+    if meta is not None:
+        notes_html = sanitize_html(meta.description_html) or plain_to_html(meta.description)
+    q = request.args.get("q", "").strip()[:200]
+
+    audio = audio_file_for(row)
+    audio_problem = ""
+    if row["audio_path"] and audio is None:
+        audio_problem = (
+            "The audio file recorded for this episode is missing or outside the audio folder. "
+            f"Run `ciw download --episode {episode_id} --redownload`."
+        )
+
+    transcript: Transcript | None = None
+    transcript_error = ""
+    try:
+        transcript = load_transcript(episode_id)
+    except ValueError as exc:
+        transcript_error = f"The transcript could not be read ({exc})."
+    items: list[UttView | GapView] = []
+    n_utts = hits = 0
+    if transcript is not None:
+        items, n_utts, hits = transcript_views(transcript, q)
+
+    stage = stage_of(row)
+    return render_template(
+        "episode.html",
+        ep=row,
+        meta=meta,
+        source_label=SOURCES.get(row["source"], row["source"]),
+        stage=stage,
+        stage_label=STAGE_LABELS[stage],
+        duration=fmt_duration(duration_of(row)),
+        notes_html=Markup(notes_html),
+        has_audio=audio is not None,
+        audio_problem=audio_problem,
+        transcript=transcript,
+        transcript_error=transcript_error,
+        status_note="" if transcript is not None else transcript_status(row),
+        items=items,
+        n_utts=n_utts,
+        gap_count=sum(isinstance(i, GapView) for i in items),
+        q=q,
+        hits=hits,
+        correction_count=len(transcript.corrections) if transcript else 0,
+    )
+
+
+@bp.route("/audio/<episode_id>")
+def audio(episode_id: str):
+    row = episode_row(episode_id)
+    path = audio_file_for(row) if row is not None else None
+    if path is None:
+        abort(404)
+    mimetype = AUDIO_TYPES.get(path.suffix.lower(), "application/octet-stream")
+    resp = send_file(path, mimetype=mimetype, conditional=True, max_age=0)
+    resp.headers["Cache-Control"] = "private, no-cache"
+    resp.headers["Accept-Ranges"] = "bytes"
+    resp.headers["X-Content-Type-Options"] = "nosniff"
+    return resp
+
+
+@bp.route("/episode/<episode_id>/transcript.txt")
+def transcript_txt(episode_id: str):
+    row = episode_row(episode_id)
+    if row is None:
+        abort(404)
+    try:
+        transcript = load_transcript(episode_id)
+    except ValueError:
+        abort(404)
+    if transcript is None:
+        abort(404)
+    resp = Response(transcript.render() + "\n", mimetype="text/plain")
+    resp.headers["Content-Type"] = "text/plain; charset=utf-8"
+    resp.headers["Content-Disposition"] = f'attachment; filename="{episode_id}.txt"'
+    resp.headers["Cache-Control"] = "private, no-cache"
+    return resp

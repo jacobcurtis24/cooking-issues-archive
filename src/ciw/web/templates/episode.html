@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}{{ ep.title }} — Cooking Issues{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='episodes.css') }}">{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="ep-header">
+    <div class="ep-meta">
+      <span class="badge src-{{ ep.source }}">{{ source_label }}</span>
+      <span>{{ ep.pub_date | fmt_date }}</span>
+      {% if duration %}<span>{{ duration }}</span>{% endif %}
+      <span class="badge stage-{{ stage }}">{{ stage_label }}</span>
+    </div>
+    <h1>{{ ep.title }}</h1>
+    <div class="ep-links">
+      <a href="/episodes">‹ All episodes</a>
+      {% if meta and meta.link and meta.link.startswith(('http://', 'https://')) %}
+      <a href="{{ meta.link }}" target="_blank" rel="noopener nofollow noreferrer">Original page ↗</a>
+      {% endif %}
+      {% if transcript %}<a href="/episode/{{ ep.episode_id }}/transcript.txt" download>Transcript (.txt)</a>{% endif %}
+    </div>
+  </div>
+
+  <div class="ep-columns">
+    <div class="ep-main">
+      {% if has_audio %}
+      <div class="player-bar">
+        <audio id="player" controls preload="metadata" src="/audio/{{ ep.episode_id }}"></audio>
+      </div>
+      {% endif %}
+      {% if audio_problem %}<div class="notice-box" id="audio-problem">{{ audio_problem }}</div>{% endif %}
+
+      <section id="show-notes">
+        {% if notes_html %}
+        <h2 class="search-section-title" style="margin-top:.5rem">Show notes</h2>
+        <div class="show-notes">{{ notes_html }}</div>
+        {% else %}
+        <p class="ep-notice">No show notes were recorded for this episode.</p>
+        {% endif %}
+      </section>
+
+      <section id="transcript-section">
+        {% if transcript %}
+        <h2 class="search-section-title" style="margin-top:1rem">Transcript</h2>
+        <div class="tr-head" id="transcript-info">
+          <span>ASR: {{ transcript.asr_model }}</span>
+          {% if transcript.runtime_s %}<span>transcribed in {{ transcript.runtime_s | round | int }} s</span>{% endif %}
+          <span>{{ transcript.words | length }} words</span>
+          <span>{{ correction_count }} vocabulary correction{% if correction_count != 1 %}s{% endif %}</span>
+          <span>
+            {% if transcript.diarization %}speakers: {{ transcript.num_speakers or '?' }}
+            {% else %}no speaker labels{% if transcript.diarization_skipped %} ({{ transcript.diarization_skipped }}){% endif %}{% endif %}
+          </span>
+          {% if gap_count %}<span>{{ gap_count }} untranscribed gap{% if gap_count != 1 %}s{% endif %}</span>{% endif %}
+        </div>
+        <div class="tr-toolbar">
+          <label><input type="checkbox" id="follow" checked> Follow playback</label>
+          <input type="search" id="find" placeholder="Find in transcript…" value="{{ q }}" autocomplete="off">
+          <button type="button" id="find-prev" title="Previous match (Shift+Enter)">‹</button>
+          <button type="button" id="find-next" title="Next match (Enter)">›</button>
+          <span class="tr-count" id="find-count" data-server-hits="{{ hits }}" aria-live="polite">
+            {% if q %}{{ hits }} match{% if hits != 1 %}es{% endif %}{% endif %}
+          </span>
+        </div>
+        <div id="transcript" data-episode="{{ ep.episode_id }}" data-has-audio="{{ 1 if has_audio else 0 }}">
+          {% for it in items %}
+          {% if it.__class__.__name__ == 'GapView' %}
+          <div class="gap-marker" data-gap-start="{{ it.start }}" data-gap-end="{{ it.end }}" role="note">
+            Untranscribed gap, {{ it.start | clock }}–{{ it.end | clock }} ({{ it.seconds }} s): no speech was recognised here, the audio may have been dropped.
+            <a href="#t={{ it.start | int }}" class="gap-seek" data-seek="{{ it.start }}">Listen</a>
+          </div>
+          {% else %}
+          <div class="utt" id="u{{ it.idx }}" data-start="{{ it.start }}" data-end="{{ it.end }}">
+            <a class="ts" href="#t={{ it.start | int }}">[{{ it.start | clock }}]</a>
+            <div class="utt-text">{% if it.speaker %}<span class="spk">{{ it.speaker }}</span>{% endif %}{{ it.html }}</div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="notice-box" id="transcript-status">
+          {% if transcript_error %}{{ transcript_error }}{% else %}{{ status_note }}{% endif %}
+        </div>
+        {% endif %}
+      </section>
+    </div>
+
+    <aside class="ep-side">
+      {% block side %}{% endblock %}
+    </aside>
+  </div>
+</div>
+{% if transcript %}<script src="{{ url_for('static', filename='episode.js') }}" defer></script>{% endif %}
+{% endblock %}

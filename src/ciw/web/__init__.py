@@ -20,5 +20,5 @@ def create_app(config: Config | None = None) -> Flask:
     app.add_template_filter(blog.short_excerpt, "short_excerpt")
     app.register_blueprint(blog.bp)
     app.register_blueprint(episodes.bp)
-    app.add_template_filter(episodes.fmt_clock, "clock")
+    app.add_template_filter(episodes.clock, "clock")
     return app
