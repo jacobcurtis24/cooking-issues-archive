@@ -235,6 +235,7 @@ def status_cmd() -> None:
     cfg = load_config()
     tr = _transcriber(cfg)
     with state.connect(cfg.state_db) as conn:
+        bf.fill_gap_stats(cfg, conn)  # transcripts from before the gap statistics existed
         st = bf.gather_status(cfg, conn, tr)
     typer.echo(bf.format_status(cfg, st))
 

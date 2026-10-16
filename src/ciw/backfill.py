@@ -972,6 +972,9 @@ class Backfill:
             + (f", max {self.max_hours:g} h" if self.max_hours else "")
             + f"; log {self.events.path_for(datetime.now(UTC).strftime('%Y%m%d'))}"
         )
+        with state.connect(cfg.state_db) as conn:
+            if filled := fill_gap_stats(cfg, conn):
+                self.events.write("gap-stats-filled", episodes=filled)
         if plan.index_only and self.mode != "download-only":
             from ciw import search_index as si
 
@@ -1156,6 +1159,35 @@ def lock_holder(path: Path) -> str | None:
         return None
     finally:
         os.close(fd)
+
+
+def fill_gap_stats(cfg: Config, conn: sqlite3.Connection) -> int:
+    """Compute the silent-gap statistics of transcripts made before they were recorded (T8).
+
+    Idempotent and cheap (only rows whose ``asr_gap_s`` is NULL are read). Returns the number
+    of rows filled; an unreadable transcript is skipped."""
+    from ciw.models import Transcript
+
+    rows = conn.execute(
+        "SELECT episode_id, audio_duration_s FROM episodes "
+        "WHERE asr_gap_s IS NULL AND transcribed_at IS NOT NULL"
+    ).fetchall()
+    filled = 0
+    for r in rows:
+        try:
+            transcript = Transcript.load(tx.transcript_path(cfg, r["episode_id"]))
+        except (OSError, ValueError):
+            continue
+        stats = gap_stats(transcript, r["audio_duration_s"], cfg.backfill.suspect_gap_pct)
+        state.set_gap_stats(
+            conn,
+            r["episode_id"],
+            asr_gap_s=stats.gap_s,
+            asr_gap_count=stats.count,
+            suspect=stats.suspect,
+        )
+        filled += 1
+    return filled
 
 
 def retry_failed(conn: sqlite3.Connection, episode_ids: list[str] | None = None) -> int:

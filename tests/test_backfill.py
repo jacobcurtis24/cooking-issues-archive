@@ -668,6 +668,20 @@ def test_suspect_episode_is_flagged_in_state_log_and_report(env):
     assert row(env.cfg, C)["suspect"] == 0
 
 
+def test_old_transcripts_get_their_gap_statistics_filled(env):
+    add(env.cfg, A)
+    env.downloads.duration = 100.0
+    gaps = [(0, 10), (22, 40), (51, 60)]
+    env.tr.words = [Word(w=f"w{i}", start=a, end=b) for i, (a, b) in enumerate(gaps)]
+    finish(env, A)
+    with state.connect(env.cfg.state_db) as conn:  # a row from before migration 5
+        conn.execute("UPDATE episodes SET asr_gap_s=NULL, asr_gap_count=NULL, suspect=0")
+        assert bf.fill_gap_stats(env.cfg, conn) == 1
+        assert bf.fill_gap_stats(env.cfg, conn) == 0  # idempotent
+        r = state.get_episode(conn, A)
+    assert (r["asr_gap_count"], r["asr_gap_s"], r["suspect"]) == (2, 23.0, 1)
+
+
 # ============================================================================== event log
 
 
