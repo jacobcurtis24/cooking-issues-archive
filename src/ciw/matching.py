@@ -24,6 +24,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import timedelta
 from difflib import SequenceMatcher
+from pathlib import Path
 
 from ciw.models import FeedItem
 
@@ -76,6 +77,24 @@ def is_candidate(acast: FeedItem, patreon: FeedItem) -> bool:
         and dates_match(acast, patreon)
         and durations_match(acast, patreon)
     )
+
+
+def read_pins(path: Path | None) -> list[tuple[str, str]]:
+    """Read ``feeds/pins.txt``: one ``<acast guid> <patreon guid>`` pair per line, ``#`` starts a
+    comment. A missing file means no pins. These pairs are applied as ``locked`` pairs, so they
+    hold whatever the rules say; a pin naming a guid that is not in the feeds is ignored."""
+    if path is None or not path.is_file():
+        return []
+    pins: list[tuple[str, str]] = []
+    for n, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw.split("#", 1)[0].strip()
+        if not line:
+            continue
+        parts = line.split()
+        if len(parts) != 2:
+            raise ValueError(f"{path}:{n}: expected '<acast guid> <patreon guid>', got {raw!r}")
+        pins.append((parts[0], parts[1]))
+    return pins
 
 
 @dataclass

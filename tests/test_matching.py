@@ -190,3 +190,40 @@ def test_synthetic_fixture_end_to_end():
     assert {i.guid for i in r.ambiguous[0].patreon} == {"134000006", "134000007"}
     assert {i.guid for i in r.patreon_only} == {"134000003", "134000006", "134000007", "134000008"}
     assert "6acfbb58e65da00825c0f2e7" in {i.guid for i in r.acast_only}
+
+
+# ------------------------------------------------------------------------------ pins
+
+
+def test_read_pins_parses_comments_and_blank_lines(tmp_path):
+    f = tmp_path / "pins.txt"
+    f.write_text("# header\n\na1 p1  # first\n  a2\tp2\n", encoding="utf-8")
+    assert matching.read_pins(f) == [("a1", "p1"), ("a2", "p2")]
+
+
+def test_read_pins_missing_file_or_none_means_no_pins(tmp_path):
+    assert matching.read_pins(tmp_path / "nope.txt") == []
+    assert matching.read_pins(None) == []
+
+
+@pytest.mark.parametrize("line", ["onlyone", "a b c"])
+def test_read_pins_rejects_malformed_lines_with_line_number(tmp_path, line):
+    f = tmp_path / "pins.txt"
+    f.write_text(f"a1 p1\n{line}\n", encoding="utf-8")
+    with pytest.raises(ValueError, match=r"pins.txt:2"):
+        matching.read_pins(f)
+
+
+def test_pinned_pair_matches_despite_different_titles_and_dates():
+    a, p = acast(title="Long Acast title about Kevin"), patreon(title="Kevin", days=40)
+    assert not match_feeds([a], [p]).pairs
+    r = match_feeds([a], [p], locked=[("a1", "p1")])
+    assert [(x.guid, y.guid) for x, y in r.pairs] == [("a1", "p1")]
+
+
+def test_repository_pins_file_is_well_formed():
+    from pathlib import Path
+
+    pins = matching.read_pins(Path(__file__).resolve().parents[1] / "feeds" / "pins.txt")
+    assert len(pins) == len(set(pins)) == 6
+    assert len({a for a, _ in pins}) == 6 and len({p for _, p in pins}) == 6

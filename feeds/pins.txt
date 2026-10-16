@@ -1,0 +1,10 @@
+# Acast <-> Patreon pairs that `ciw poll` cannot match by title. One pair per line:
+#   <acast guid> <patreon guid>   # note
+# Pins win over the matching rules (ciw/matching.py). Found with `ciw feeds diff`: same episode,
+# different title in the two feeds, durations within 2 s, a single candidate on each side.
+662824e4178a94001255bb78 102667330  # Kevin Jeung (2024-04-19 / 04-23), Acast title is much longer
+65a855be67941d0018e285f1 95835806   # "No Tangent New Year Tuesday" / "No Tangent Tuesday" (2024-01-03 / 04)
+6513662115bfb400129eb0d3 89892081   # Quinn's Return (identical title; Acast came 4 days BEFORE Patreon)
+6491c8d03152750011a35fb1 84532349   # "Quinine, Free Beer & Leftover Solids" / "Bad Burgers, Quinine & Free Beer" (2023-06)
+632a540c2802cd00136a358c 71950707   # Jorge Gaviria on Masa (2022-09)
+6172f3a00f603700140541a1 57611866   # Eric Warheim / "Eric Warheim (NSFW)" (2021-10)

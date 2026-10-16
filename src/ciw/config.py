@@ -205,6 +205,8 @@ class Config(_Section):
     state_db: Path = Path("data/state.sqlite")
     # Transcript + show-notes full-text index (ciw.search_index); separate from the blog database.
     search_db: Path = Path("data/search.sqlite")
+    # Hand-kept Acast <-> Patreon pairs the title rules cannot find (ciw.matching.read_pins).
+    pins_file: Path = Path("feeds/pins.txt")
     apple_ids: AppleIds = AppleIds()
     poll_interval_hours: float = Field(6, gt=0)
     asr: AsrConfig = AsrConfig()
@@ -230,7 +232,15 @@ class Config(_Section):
         """Return a copy with every relative path made absolute against ``root``."""
         updates = {
             name: self.root / getattr(self, name)
-            for name in ("blog_db", "data_dir", "audio_dir", "clips_dir", "state_db", "search_db")
+            for name in (
+                "blog_db",
+                "data_dir",
+                "audio_dir",
+                "clips_dir",
+                "state_db",
+                "search_db",
+                "pins_file",
+            )
             if not getattr(self, name).is_absolute()
         }
         cfg = self.model_copy(update=updates)

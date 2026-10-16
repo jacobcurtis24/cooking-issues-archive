@@ -433,3 +433,53 @@ def test_repoll_never_regresses_a_downloaded_episode(tmp_cfg):
     with state.connect(tmp_cfg.state_db) as conn:
         assert tuple(state.get_episode(conn, BISCUITS)) == before
         assert state.get_episode(conn, BISCUITS)["stage"] == "downloaded"
+
+
+# -------------------------------------------------------------------------- pinned pairs
+
+
+def _pinned_cfg(cfg, tmp_path, lines):
+    pins = tmp_path / "pins.txt"
+    pins.write_text(lines, encoding="utf-8")
+    return cfg.model_copy(update={"pins_file": pins})
+
+
+def test_pin_resolves_a_pair_the_rules_leave_ambiguous(with_patreon, tmp_path):
+    cfg, web = with_patreon, FakeWeb()
+    rep = run_poll(cfg, web)
+    assert len(rep.ambiguous) == 1
+    amb = rep.ambiguous[0]
+    a, p = amb.acast[0], amb.patreon[0]
+    pinned = _pinned_cfg(cfg, tmp_path, f"{a.guid} {p.guid}  # test pin\n")
+    rep = run_poll(pinned, web)
+    assert rep.matched == 3
+    meta = load_meta(pinned, a.guid) if (pinned.episodes_dir / a.guid).exists() else None
+    with state.connect(pinned.state_db) as conn:
+        assert state.guid_owner(conn, "patreon", p.guid) == state.guid_owner(conn, "acast", a.guid)
+    assert meta is None or meta.guids["patreon"] == p.guid
+    # idempotent, and the pair stays (locked in state) even if the pins file goes away
+    assert run_poll(pinned, web).absorbed == 0
+    unpinned = cfg
+    run_poll(unpinned, web)
+    with state.connect(unpinned.state_db) as conn:
+        assert state.guid_owner(conn, "patreon", p.guid) == state.guid_owner(conn, "acast", a.guid)
+
+
+def test_unapplied_pin_is_warned_about(with_patreon, tmp_path, caplog):
+    cfg, web = with_patreon, FakeWeb()
+    pinned = _pinned_cfg(cfg, tmp_path, "nosuchacast nosuchpatreon\n")
+    with caplog.at_level(logging.WARNING):
+        run_poll(pinned, web)
+    assert "was not applied" in caplog.text
+
+
+def test_diff_honours_pins(with_patreon, tmp_path):
+    cfg, web = with_patreon, FakeWeb()
+    rep = run_poll(cfg, web)
+    amb = rep.ambiguous[0]
+    a, p = amb.acast[0], amb.patreon[0]
+    pinned = _pinned_cfg(cfg, tmp_path, f"{a.guid} {p.guid}\n")
+    with web.client(secrets=cfg.secrets.secret_values()) as client:
+        base = ingest.diff_feeds(cfg, client)
+        out = ingest.diff_feeds(pinned, client)
+    assert len(out.pairs) == len(base.pairs) + 1

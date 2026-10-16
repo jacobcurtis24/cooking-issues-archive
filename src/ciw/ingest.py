@@ -32,7 +32,7 @@ from ciw.feeds import (
     parse_feed,
     resolve_feed_url,
 )
-from ciw.matching import Ambiguity, MatchResult, match_feeds
+from ciw.matching import Ambiguity, MatchResult, match_feeds, read_pins
 from ciw.models import EpisodeMeta, FeedItem, Source
 
 log = logging.getLogger(__name__)
@@ -350,7 +350,15 @@ def poll(
     patreon = parsed["patreon"].items if "patreon" in parsed else []
     units: list[dict[str, FeedItem]] = []
     if "acast" in parsed or "patreon" in parsed:
-        match = match_feeds(acast, patreon, state.locked_pairs(conn))
+        pins = read_pins(cfg.pins_file)
+        match = match_feeds(acast, patreon, state.locked_pairs(conn) + pins)
+        if "acast" in parsed and "patreon" in parsed:
+            paired = {(a.guid, p.guid) for a, p in match.pairs}
+            for pin in pins:
+                if pin not in paired:
+                    log.warning(
+                        "pinned pair %s / %s was not applied (guid not in the feeds?)", *pin
+                    )
         report.matched = len(match.pairs)
         report.ambiguous = match.ambiguous
         for amb in match.ambiguous:
@@ -448,7 +456,7 @@ def diff_feeds(cfg: Config, client: HttpClient) -> DiffReport:
             n: acquire(cfg, conn, client, n, reports[n], record=False)
             for n in ("acast", "hrn", "patreon")
         }
-        locked = state.locked_pairs(conn)
+        locked = state.locked_pairs(conn) + read_pins(cfg.pins_file)
     out = DiffReport(
         patreon_configured=cfg.secrets.patreon_feed_url is not None,
         patreon_error=reports["patreon"].error if reports["patreon"].failed else None,
