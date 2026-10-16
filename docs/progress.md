@@ -61,3 +61,42 @@ Added `pytest.ini` (`testpaths = tests`, silences scrape.py's `datetime.utcnow` 
 - Test expectations rely on stable HTML hooks (class names `primer-card`, `post-card`, `primer-full-card`, `result-item`, `result-count`, `pagination`, `current`, `site-nav`, `post-nav`) and strings in templates; moving templates unchanged keeps them valid.
 
 Next: T2 restructure into src/ciw
+
+## 2026-10-15 - T2: restructure into `src/ciw` + skeleton (branch `m1-skeleton`)
+
+### What moved where (`git mv`, history follows)
+- `app.py` -> `src/ciw/web/blog.py` (a `blog` Blueprint; routes `/`, `/browse`, `/post/<id>`, `/search`, `/primers` unchanged) plus `src/ciw/web/__init__.py` with `create_app(config=None)`. The factory sets `BLOG_DB` from config and registers the `fmt_date` / `short_excerpt` filters on the app (`add_template_filter`).
+- `templates/` -> `src/ciw/web/templates/` (content unchanged except 3 nav lines, see Deviations).
+- `scrape.py`, `fix_encoding.py`, `compare.py` -> `src/ciw/blog/`. `fix_mojibake`, `_fix_chunk`, `_CP1252_REVERSE` now live only in `src/ciw/blog/encoding.py` (AST-compared against both old copies first: identical code). `compare.py` imports `from ciw.blog import scrape` (the `sys.argv` hack was dropped, it was unneeded since `main()` is guarded).
+- `scrape.py` / `fix_encoding.py` gained `run_scrape/run_search/run_stats` and `run(db_path, dry_run)` so the typer CLI can wrap them; their argparse `main()` still works (`python -m ciw.blog.scrape --stats`). Default DB path is now `<project root>/cooking_issues.db` instead of cwd-relative.
+- Removed top-level `app.py`, `scrape.py`, `fix_encoding.py`, `compare.py`, `templates/`, `pytest.ini` (no shims). README and summary.md paths/run commands updated.
+- New: `pyproject.toml` (package `ciw`, src layout, console script `ciw = ciw.cli:app`, ruff + pytest config), `config.yaml`, `.env.example`, `interests.yaml`, `CLAUDE.md`, `src/ciw/{__init__,__main__,cli,config,models}.py`, tests `test_config.py`, `test_models.py`, `test_cli.py`, `test_web_app.py`.
+- Editable install: `/home/jacob/miniconda3/envs/py312/bin/python -m pip install -e .`.
+
+### Design notes
+- Config: pydantic models, `load_config(root=None)`. Root = `$CIW_ROOT` else nearest ancestor of the package with `pyproject.toml`. Relative paths in `config.yaml` resolve against root; absolute paths (`/mnt/ssd0/ciw/...`) are kept. Unknown keys are rejected. `.env` is parsed by a small built-in loader (no new dependency) and never overrides real env vars. Secrets live in `Config.secrets` as `SecretStr` (masked in repr). The ntfy topic is read from `NTFY_TOPIC` (`notify.topic_env`), exposed as `Config.ntfy_topic`. `ciw.config.redact(text, secrets=None)` masks known secret env values, any literals passed in, and `token=/key=/auth=/secret=/password=` URL params.
+- Models (`ciw.models`): `EpisodeMeta`, `Word`, `Transcript`, `Segment`, `Segments`, `Score`, `Scores`, `InterestProfile`/`Topic`. All `extra="forbid"`, with `save(path)` (atomic) / `load(path)` / `to_json` / `from_json`. `Segments` and `Scores` are wrapper objects (guid, model, prompt_hash, created_at, list), since the design doc puts model + prompt hash on the file. Validators: word end >= start, segment end > start, segment ids unique and non-overlapping/ordered, `check_contiguous(tolerance, total)` for gaps (a helper, not enforced on load because LLM output may need a retry rather than a hard failure), score 0-10, unique score `segment_id`, `Scores.check_matches(segments)`.
+- CLI: `ciw web [--host --port --debug]` (debug off by default), `ciw blog scrape|search|stats|fix-encoding`, `ciw feeds diff`, and stubs `poll` (T3), `feeds diff` (T3), `download` (T4), `transcribe` (T5), `vocab` (T6), `score` (T9), `eval` (T11), `notify` (T10), `run` (T12). Stubs print `not implemented yet (task Tn)` on stdout, exit 2, and accept/ignore extra args.
+
+### Verification (P=/home/jacob/miniconda3/envs/py312/bin)
+- `cd /home/jacob/cooking-issues-archive && $P/python -m pytest -q` -> `136 passed in 1.14s` (76 T1 + 60 new).
+- `cd /tmp && $P/python -m pytest /home/jacob/cooking-issues-archive/tests -q` -> `136 passed in 1.15s`.
+- `$P/python -m ruff check .` -> All checks passed. `$P/python -m ruff format --check .` -> 21 files already formatted.
+- `$P/ciw --help` lists web, poll, download, transcribe, vocab, score, eval, notify, run, blog, feeds. `ciw blog stats` -> 224 posts (8 primers), 44 index pages.
+- Old-vs-new HTML identity: rendered 15 URLs (`/`, `/browse`, page 2, tag filter, `/post/1`, `/217`, `/25`, `/0`, several `/search?q=`, `/primers`, `/browse?page=abc`) through the old `app.py` (from git HEAD~) and the new factory; status codes and SHA-256 of every body were identical (one-off script, not committed).
+- Web smoke: `ciw web --port 5057` from `/tmp`: `/`, `/browse`, `/post/1`, `/search?q=carbonation`, `/primers` -> all 200; server stopped.
+- `git diff --stat -- cooking_issues.db` empty; the session-wide DB-hash test passes.
+
+### Deviations / notes
+- Blueprint endpoints are `blog.index` etc. `base.html` compared `request.endpoint == 'index'|'primers'|'browse'` for the active nav class, so those 3 comparisons became `'blog.index'|'blog.primers'|'blog.browse'`. Rendered HTML is byte-identical (verified above; `test_web_app.py` also asserts the active class). All template links are hard-coded paths, no `url_for`.
+- `ruff format` rewrote code blocks inside `summary.md` (ruff 0.17 formats markdown); reverted and `*.md` excluded in `[tool.ruff.format]`.
+- `per-file-ignores` E501 for `src/ciw/blog/scrape.py` (long SQL strings kept verbatim). `zip(..., strict=False)` added in `fix_encoding.py` for B905 (same behavior). Moved code was otherwise ruff-formatted (separate commit).
+- `ciw web` calls `Flask.run` (dev server) as before; no production server yet.
+- README mentions the plan by name only; the Plan .md is untracked and was not copied into the repo.
+- The oddities from T1 are still present and unfixed (page=abc 500, `!!!` search error, stray `Â`, empty post 25, `utcnow` warning).
+- `ciw blog stats/search` and `scrape` still run `init_db` (CREATE IF NOT EXISTS) as before; it does not alter the existing DB (hash test passes).
+
+### For T3
+- Use `ciw.config.load_config()` for paths/apple ids (`cfg.apple_ids.acast/hrn`, `cfg.state_db`, `cfg.episodes_dir`, `cfg.audio_dir`, `cfg.secrets.patreon_feed_url`), and `ciw.config.redact()` when logging feed URLs. Fill in the existing `poll` and `feeds diff` stubs in `src/ciw/cli.py` (remove `_STUB_CONTEXT` there). `EpisodeMeta` in `ciw/models.py` is the meta.json schema; extend it rather than adding a parallel one. Web tests assume cwd-independent DB resolution via `Config.blog_db`.
+
+Next: T3 feed parsing + state
