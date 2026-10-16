@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import Annotated
 
@@ -113,19 +114,212 @@ def fix_encoding(
     fixer.run(Path(load_config().blog_db), dry_run)
 
 
-# ------------------------------------------------------------- podcast (stubs)
+# ---------------------------------------------------------------------- podcast
+
+SourceOpt = Annotated[
+    str, typer.Option("--source", help="acast, hrn, patreon or all.", show_default=True)
+]
 
 
-@app.command(context_settings=_STUB_CONTEXT)
-def poll() -> None:
-    """Poll feeds and record new episodes. (stub)"""
-    _stub("T3")
+def _setup_logging(verbose: bool) -> None:
+    logging.basicConfig(
+        level=logging.INFO if verbose else logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
 
 
-@feeds_app.command("diff", context_settings=_STUB_CONTEXT)
-def feeds_diff() -> None:
-    """Compare the Patreon and public feeds. (stub)"""
-    _stub("T3")
+def _sources(value: str) -> tuple[str, ...]:
+    value = value.lower()
+    if value == "all":
+        return ("acast", "hrn", "patreon")
+    if value not in ("acast", "hrn", "patreon"):
+        raise typer.BadParameter("must be one of acast, hrn, patreon, all", param_hint="--source")
+    return (value,)
+
+
+def _fmt_dur(seconds: float | None) -> str:
+    if seconds is None:
+        return "-"
+    s = int(round(seconds))
+    return f"{s // 3600}:{s % 3600 // 60:02d}:{s % 60:02d}"
+
+
+@app.command()
+def poll(
+    source: SourceOpt = "all",
+    verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Log at INFO.")] = False,
+) -> None:
+    """Resolve, fetch and merge the feeds, and record episodes in state."""
+    from ciw import ingest
+
+    _setup_logging(verbose)
+    cfg = load_config()
+    sources = _sources(source)
+    with ingest.make_client(cfg) as client:
+        report = ingest.poll(cfg, client, sources)  # type: ignore[arg-type]
+
+    typer.echo(
+        f"{'feed':<9} {'status':<13} {'items':>6} {'new':>5} {'updated':>8} "
+        f"{'same':>6} {'non-audio':>10}"
+    )
+    tot = dict(items=0, new=0, updated=0, unchanged=0, skipped_non_audio=0)
+    for rep in report.feeds.values():
+        typer.echo(
+            f"{rep.name:<9} {rep.status:<13} {rep.items:>6} {rep.new:>5} {rep.updated:>8} "
+            f"{rep.unchanged:>6} {rep.skipped_non_audio:>10}"
+        )
+        for key in tot:
+            tot[key] += getattr(rep, key)
+    typer.echo(
+        f"{'total':<9} {'':<13} {tot['items']:>6} {tot['new']:>5} {tot['updated']:>8} "
+        f"{tot['unchanged']:>6} {tot['skipped_non_audio']:>10}"
+    )
+    typer.echo(
+        f"matched Acast<->Patreon: {report.matched}; ambiguous: {len(report.ambiguous)}; "
+        f"merged duplicates: {report.absorbed}; conflicts: {report.conflicts}"
+    )
+    for amb in report.ambiguous:
+        typer.echo(f"AMBIGUOUS (left unmatched): {amb.describe()}")
+    for rep in report.feeds.values():
+        if rep.status == "skipped" and rep.name == "patreon" and rep.error:
+            typer.echo(f"note: patreon skipped ({rep.error})")
+        elif rep.failed:
+            kind = {"auth": "authorisation failed", "empty": "no audio items"}.get(
+                rep.status, "error"
+            )
+            typer.echo(f"WARNING: {rep.name} feed: {kind}: {rep.error}", err=True)
+    if report.all_failed:
+        raise typer.Exit(code=1)
+
+
+@feeds_app.command("diff")
+def feeds_diff(
+    verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Log at INFO.")] = False,
+) -> None:
+    """Compare the Patreon feed with the public Acast feed, episode by episode."""
+    from ciw import ingest
+
+    _setup_logging(verbose)
+    cfg = load_config()
+    with ingest.make_client(cfg) as client:
+        rep = ingest.diff_feeds(cfg, client)
+
+    typer.echo("Feeds")
+    for name in ("acast", "hrn", "patreon"):
+        if name in rep.counts:
+            lo, hi = rep.ranges.get(name, ("-", "-"))
+            typer.echo(f"  {name:<8} {rep.counts[name]:>4} audio items, {lo} .. {hi}")
+        else:
+            typer.echo(f"  {name:<8} not available")
+    if not rep.patreon_configured:
+        typer.echo(
+            "\nPatreon feed not configured (PATREON_FEED_URL is unset in .env): "
+            "no comparison possible."
+        )
+        return
+    if "patreon" not in rep.counts:
+        typer.echo(f"\nPatreon feed unavailable: {rep.patreon_error}")
+        return
+    if "acast" not in rep.counts:
+        typer.echo("\nAcast feed unavailable: no comparison possible.")
+        return
+
+    typer.echo(f"\nMatched pairs ({len(rep.pairs)})")
+    typer.echo(
+        f"  {'date':<10} {'acast':>8} {'patreon':>8} {'delta s':>8} {'delta %':>8}"
+        "  type (length hint a/p)  title"
+    )
+    for d in rep.pairs:
+        ds, dp = d.delta_s, d.delta_pct
+        typer.echo(
+            f"  {d.acast.pub_date:%Y-%m-%d} {_fmt_dur(d.acast.duration_s):>8} "
+            f"{_fmt_dur(d.patreon.duration_s):>8} "
+            f"{'-' if ds is None else f'{ds:+.0f}':>8} {'-' if dp is None else f'{dp:+.1f}':>8}  "
+            f"{d.acast.enclosure_type}/{d.patreon.enclosure_type} "
+            f"({d.acast.enclosure_length_hint}/{d.patreon.enclosure_length_hint})  {d.acast.title}"
+        )
+    typer.echo(f"\nPatreon-only posts ({len(rep.patreon_only)})")
+    for i in rep.patreon_only:
+        typer.echo(f"  {i.pub_date:%Y-%m-%d} {_fmt_dur(i.duration_s):>8}  {i.title}")
+    typer.echo(f"\nAcast-only items inside the Patreon date range ({len(rep.acast_only_in_range)})")
+    for i in rep.acast_only_in_range:
+        typer.echo(f"  {i.pub_date:%Y-%m-%d} {_fmt_dur(i.duration_s):>8}  {i.title}")
+    if rep.ambiguous:
+        typer.echo(f"\nAmbiguous (left unmatched) ({len(rep.ambiguous)})")
+        for amb in rep.ambiguous:
+            typer.echo(f"  {amb.describe()}")
+    typer.echo("\nSummary")
+    typer.echo(
+        f"  matched {len(rep.pairs)}, patreon-only {len(rep.patreon_only)}, "
+        f"acast-only in range {len(rep.acast_only_in_range)}, ambiguous {len(rep.ambiguous)}, "
+        f"non-audio skipped {rep.skipped_non_audio}"
+    )
+    md, mp = rep.median_delta_s, rep.median_delta_pct
+    if md is not None and mp is not None:
+        typer.echo(f"  median duration delta (patreon - acast): {md:+.0f} s ({mp:+.1f}%)")
+    typer.echo(f"  hint: {rep.hint()}")
+
+
+@feeds_app.command("check-audio")
+def feeds_check_audio(
+    source: Annotated[str, typer.Option("--source", help="hrn, acast or patreon.")] = "hrn",
+    sample: Annotated[
+        int,
+        typer.Option("--sample", "-n", min=1, help="Episodes per bucket (newest/middle/oldest)."),
+    ] = 3,
+    verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Log at INFO.")] = False,
+) -> None:
+    """Probe sampled enclosures with HEAD (or a 1-byte Range GET). Never downloads audio."""
+    from ciw import ingest
+
+    _setup_logging(verbose)
+    if source not in ("acast", "hrn", "patreon"):
+        raise typer.BadParameter("must be one of acast, hrn, patreon", param_hint="--source")
+    cfg = load_config()
+    with ingest.make_client(cfg) as client:
+        rows = ingest.check_audio(cfg, client, source, sample)  # type: ignore[arg-type]
+    if not rows:
+        typer.echo(f"no {source} episodes in state; run `ciw poll` first")
+        raise typer.Exit(code=1)
+    typer.echo(
+        f"{'bucket':<7} {'status':>6} {'method':<9} {'type':<14} {'bytes':>11} "
+        f"{'redir':>5}  final host / episode"
+    )
+    ok = 0
+    for bucket, episode_id, title, res in rows:
+        ok += res.ok
+        size = res.content_length if res.content_length is not None else "-"
+        typer.echo(
+            f"{bucket:<7} {res.status if res.status is not None else 'ERR':>6} {res.method:<9} "
+            f"{(res.content_type or '-')[:14]:<14} {size:>11} "
+            f"{res.redirects:>5}  {res.final_host or res.error or '-'}  [{episode_id}] {title[:40]}"
+        )
+    typer.echo(f"{ok}/{len(rows)} probes resolved to audio ({source})")
+
+
+episodes_app = typer.Typer(help="Inspect recorded episodes.", no_args_is_help=True)
+app.add_typer(episodes_app, name="episodes")
+
+
+@episodes_app.command("list")
+def episodes_list(
+    source: Annotated[str | None, typer.Option("--source", help="acast, hrn or patreon.")] = None,
+    limit: Annotated[int, typer.Option("--limit", "-n", help="Max rows.")] = 20,
+) -> None:
+    """List episodes in state, newest first."""
+    from ciw import state
+
+    cfg = load_config()
+    with state.connect(cfg.state_db) as conn:
+        rows = state.list_episodes(conn, source, limit)
+        counts = state.count_episodes(conn)
+    for r in rows:
+        typer.echo(
+            f"{r['episode_id']:<42} {r['source']:<8} {r['pub_date'][:10]} "
+            f"{_fmt_dur(r['duration_s']):>8} {r['stage']:<11} {r['title'][:60]}"
+        )
+    summary = ", ".join(f"{k} {v}" for k, v in sorted(counts.items())) or "none"
+    typer.echo(f"({len(rows)} shown; in state: {summary})")
 
 
 @app.command(context_settings=_STUB_CONTEXT)

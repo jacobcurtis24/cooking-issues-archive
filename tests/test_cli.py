@@ -16,8 +16,6 @@ TOP_LEVEL = [
 ]  # fmt: skip
 
 STUBS = [
-    (["poll"], "T3"),
-    (["feeds", "diff"], "T3"),
     (["download"], "T4"),
     (["transcribe"], "T5"),
     (["vocab"], "T6"),

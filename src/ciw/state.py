@@ -227,3 +227,22 @@ def save_feed(conn: sqlite3.Connection, name: str, **fields: object) -> None:
     if fields:
         sets = ", ".join(f"{k} = ?" for k in fields)
         conn.execute(f"UPDATE feeds SET {sets} WHERE name = ?", (*fields.values(), name))
+
+
+def locked_pairs(conn: sqlite3.Connection) -> list[tuple[str, str]]:
+    """(acast_guid, patreon_guid) of episodes that already own both guids."""
+    rows = conn.execute(
+        "SELECT a.guid AS a, p.guid AS p FROM episode_guids a "
+        "JOIN episode_guids p ON a.episode_id = p.episode_id "
+        "WHERE a.source = 'acast' AND p.source = 'patreon'"
+    )
+    return [(r["a"], r["p"]) for r in rows]
+
+
+def episodes_with_guid_source(conn: sqlite3.Connection, source: str) -> list[sqlite3.Row]:
+    """Episodes that carry a guid from ``source`` (newest first)."""
+    return conn.execute(
+        "SELECT e.* FROM episodes e JOIN episode_guids g USING (episode_id) "
+        "WHERE g.source = ? ORDER BY e.pub_date DESC, e.episode_id",
+        (source,),
+    ).fetchall()

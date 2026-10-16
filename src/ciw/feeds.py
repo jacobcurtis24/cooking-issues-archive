@@ -257,7 +257,8 @@ def html_to_text(html: str) -> str:
         li.insert(0, NavigableString("- "))
     for tag in soup.find_all(_BLOCK_TAGS):
         tag.insert_before(NavigableString("\n"))
-        tag.insert_after(NavigableString("\n"))
+        if tag.name != "li":  # items stack tightly; the enclosing ul/ol closes the block
+            tag.insert_after(NavigableString("\n"))
     text = soup.get_text().replace("\xa0", " ")
     lines = [re.sub(r"[ \t]+", " ", ln).strip() for ln in text.splitlines()]
     lines = [ln for ln in lines if not _BOILERPLATE.match(ln)]
