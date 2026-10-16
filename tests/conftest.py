@@ -58,3 +58,26 @@ def db():
         yield conn
     finally:
         conn.close()
+
+
+@pytest.fixture
+def tmp_cfg(tmp_path, monkeypatch):
+    """A Config rooted in tmp_path (data/ lives there); no Patreon secret."""
+    from ciw.config import load_config
+
+    for var in ("PATREON_FEED_URL", "HF_TOKEN", "ANTHROPIC_API_KEY", "NTFY_TOPIC"):
+        monkeypatch.delenv(var, raising=False)
+    monkeypatch.setenv("CIW_ROOT", str(tmp_path))
+    return load_config(tmp_path, use_dotenv=False)
+
+
+@pytest.fixture
+def with_patreon(tmp_cfg, monkeypatch):
+    """Same config, with the synthetic Patreon URL configured."""
+    from fakeweb import PATREON_URL
+
+    from ciw.config import Secrets
+
+    monkeypatch.setenv("PATREON_FEED_URL", PATREON_URL)
+    secrets = Secrets(patreon_feed_url=PATREON_URL)
+    return tmp_cfg.model_copy(update={"secrets": secrets})

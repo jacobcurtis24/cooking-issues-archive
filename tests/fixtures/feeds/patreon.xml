@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Cooking Issues (synthetic Patreon feed for tests)</title>
+    <link>https://www.patreon.com/cookingissues</link>
+    <description>Synthetic test fixture</description>
+    <item>
+      <title>Cooking Issues: Biscuits, Bouillon &amp; Beyond [Patreon]</title>
+      <guid isPermaLink="false">134000001</guid>
+      <pubDate>Fri, 23 Jan 2026 20:00:00 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000001</link>
+      <description><![CDATA[<p>Home carbonation, <em>compensator taps</em> and a carbonated French 75. Patron cut.</p>]]></description>
+      <itunes:duration>1:05:40</itunes:duration>
+      <enclosure url="https://www.patreon.com/file?h=134000001&amp;m=900001&amp;auth=ENCLTOKEN987" length="61000000" type="audio/mpeg"/>
+    </item>
+    <item>
+      <title>Dryads – Spirits of the Trees with Brian Höfling</title>
+      <guid isPermaLink="false">134000002</guid>
+      <pubDate>Sat, 17 Oct 2026 17:25:32 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000002</link>
+      <description><![CDATA[<p>Tree spirits.</p>]]></description>
+      <itunes:duration>3594</itunes:duration>
+      <enclosure url="https://www.patreon.com/file?h=134000002&amp;m=900002&amp;auth=ENCLTOKEN987" length="57000000" type="audio/mpeg"/>
+    </item>
+    <item>
+      <title>Patron Bonus: Ask Dave Anything</title>
+      <guid isPermaLink="false">134000003</guid>
+      <pubDate>Mon, 05 Oct 2026 15:00:00 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000003</link>
+      <description><![CDATA[<p>Patrons only Q&amp;A.</p>]]></description>
+      <itunes:duration>25:10</itunes:duration>
+      <enclosure url="https://www.patreon.com/file?h=134000003&amp;m=900003&amp;auth=ENCLTOKEN987" length="24000000" type="audio/x-m4a"/>
+    </item>
+    <item>
+      <title>Behind the scenes: the new lab</title>
+      <guid isPermaLink="false">134000004</guid>
+      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000004</link>
+      <description><![CDATA[<p>Photos only.</p>]]></description>
+      <enclosure url="https://www.patreon.com/file?h=134000004&amp;m=900004&amp;auth=ENCLTOKEN987" length="350000" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>Poll: what should we cover next?</title>
+      <guid isPermaLink="false">134000005</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000005</link>
+      <description><![CDATA[<p>Vote in the comments.</p>]]></description>
+    </item>
+    <item>
+      <title>NTT: The Outdoor Kitchen</title>
+      <guid isPermaLink="false">134000006</guid>
+      <pubDate>Wed, 14 Oct 2026 18:00:00 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000006</link>
+      <description><![CDATA[<p>Cut A.</p>]]></description>
+      <itunes:duration>1:02:00</itunes:duration>
+      <enclosure url="https://www.patreon.com/file?h=134000006&amp;m=900006&amp;auth=ENCLTOKEN987" length="59000000" type="audio/mpeg"/>
+    </item>
+    <item>
+      <title>NTT: The Outdoor Kitchen (Ad-Free)</title>
+      <guid isPermaLink="false">134000007</guid>
+      <pubDate>Thu, 15 Oct 2026 09:00:00 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000007</link>
+      <description><![CDATA[<p>Cut B.</p>]]></description>
+      <itunes:duration>1:03:00</itunes:duration>
+      <enclosure url="https://www.patreon.com/file?h=134000007&amp;m=900007&amp;auth=ENCLTOKEN987" length="60000000" type="audio/mpeg"/>
+    </item>
+    <item>
+      <title>Tiny Trash Trucks: OG Crew NTT</title>
+      <guid isPermaLink="false">134000008</guid>
+      <pubDate>Sat, 26 Sep 2026 18:00:00 GMT</pubDate>
+      <link>https://www.patreon.com/posts/134000008</link>
+      <description><![CDATA[<p>Different post, too far from the Acast date to match.</p>]]></description>
+      <itunes:duration>57:06</itunes:duration>
+      <enclosure url="https://www.patreon.com/file?h=134000008&amp;m=900008&amp;auth=ENCLTOKEN987" length="55000000" type="audio/mpeg"/>
+    </item>
+  </channel>
+</rss>

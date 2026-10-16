@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/global/feed/rss.xslt" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podaccess="https://access.acast.com/schema/1.0/" xmlns:acast="https://schema.acast.com/1.0/">
+   <script src="https://feeds.acast.com/global/feed/xslt-polyfill.min.js" xmlns="http://www.w3.org/1999/xhtml"></script>
+    <channel>
+		<ttl>60</ttl>
+		<generator>acast.com</generator>
+		<title>Cooking Issues with Dave Arnold</title>
+		<link>https://www.patreon.com/cookingissues</link>
+		<atom:link href="https://feeds.acast.com/public/shows/60ad324ac26dcb0019ac8e4f" rel="self" type="application/rss+xml"/>
+		<language>en</language>
+		<copyright>Cooking Issues</copyright>
+		<itunes:keywords/>
+		<itunes:author>Cooking Issues</itunes:author>
+		<itunes:subtitle>on Patreon</itunes:subtitle>
+		<itunes:summary><![CDATA[The new home for Dave Arnold's weekly show "Cooking Issues", where he tackles listener questions on anything food and cooking related.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		<description><![CDATA[The new home for Dave Arnold's weekly show "Cooking Issues", where he tackles listener questions on anything food and cooking related.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+		<itunes:explicit>false</itunes:explicit>
+		<itunes:owner>
+			<itunes:name>Cooking Issues</itunes:name>
+			<itunes:email>cookingissuespodcast@gmail.com</itunes:email>
+		</itunes:owner>
+		<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+		<acast:showUrl>cooking-issues-with-dave-arnold</acast:showUrl>
+        <acast:network id="60ad324ac26dcb0019ac8e50" slug="cooking-issues"><![CDATA[Cooking Issues]]></acast:network>
+		<acast:importedFeed>https://www.patreon.com/rss/cookingissues?auth=REDACTED</acast:importedFeed>
+		<itunes:type>episodic</itunes:type>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<image>
+				<url>https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg</url>
+				<link>https://www.patreon.com/cookingissues</link>
+				<title>Cooking Issues with Dave Arnold</title>
+			</image>
+			<itunes:new-feed-url>https://feeds.acast.com/public/shows/60ad324ac26dcb0019ac8e4f</itunes:new-feed-url>
+		<item>
+			<title>NTT: The Outdoor Kitchen</title>
+			<itunes:title>NTT: The Outdoor Kitchen</itunes:title>
+			<pubDate>Wed, 14 Oct 2026 17:26:48 GMT</pubDate>
+			<itunes:duration>1:01:09</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/6acfbb58e65da00825c0f2e7/media.mp3" length="58711980" type="audio/mpeg"/>
+			<guid isPermaLink="false">6acfbb58e65da00825c0f2e7</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/ntt-the-outdoor-kitchen</link>
+			<acast:episodeId>6acfbb58e65da00825c0f2e7</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<acast:episodeUrl>ntt-the-outdoor-kitchen</acast:episodeUrl>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<description><![CDATA[Dave gets into Ashmead’s Kernel apples, acidity, and why terroir makes fruit data unreliable before laying out plans for his ultimate outdoor cooking setup: tandoor, Roman-style hearth, masonry oven, commercial deep fryer, wok burner, and a whole lot of propane. Plus: the return of paper-bag cooking, dairy-free mashed potatoes, what to do with a country ham bone, male vs. female rabbit, getting pu-erh tea flavor into baked goods, browning breakfast sausage, low-temperature pasteurization, blood bread, cucumber cocktails, and the pursuit of better home seltzer.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[Dave gets into Ashmead’s Kernel apples, acidity, and why terroir makes fruit data unreliable before laying out plans for his ultimate outdoor cooking setup: tandoor, Roman-style hearth, masonry oven, commercial deep fryer, wok burner, and a whole lot of propane. Plus: the return of paper-bag cooking, dairy-free mashed potatoes, what to do with a country ham bone, male vs. female rabbit, getting pu-erh tea flavor into baked goods, browning breakfast sausage, low-temperature pasteurization, blood bread, cucumber cocktails, and the pursuit of better home seltzer.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+		<item>
+			<title>Dryads: Spirits of the Trees with Brian Hoefling</title>
+			<itunes:title>Dryads: Spirits of the Trees with Brian Hoefling</itunes:title>
+			<pubDate>Wed, 14 Oct 2026 17:25:32 GMT</pubDate>
+			<itunes:duration>59:54</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/6acfbad2253c13a8980d51bd/media.mp3" length="57518289" type="audio/mpeg"/>
+			<guid isPermaLink="false">6acfbad2253c13a8980d51bd</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/title-dryads-spirits-of-the-trees-with-brian-hoefling</link>
+			<acast:episodeId>6acfbad2253c13a8980d51bd</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<acast:episodeUrl>title-dryads-spirits-of-the-trees-with-brian-hoefling</acast:episodeUrl>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<description><![CDATA[<p>Author Brian Hoefling joins Dave and the crew to explore <em>Dryads: Spirits of the Trees</em>, his deep dive into distilled spirits made from tree sap and other tree-derived sugars. They get into Sri Lankan arrack, Filipino lambanog, maple spirits, wild fermentation, palm sugar, garum, Roman cooking, and the surprising range of things humans have figured out how to ferment and distill.</p><br><p>Along the way, Nastassia reports from the road on bus-made pickled eggs, pot roast, and a newly delivered Searzall Pro; Dave recaps eating and drinking his way through Houston; Quinn experiments with sesame focaccia; and the group considers the theoretical possibilities of chicken-poop vodka. Plus: maple syrup grades, why fresh sap and cooked sugar produce radically different spirits, ancient methods of concentrating maple sap, and Dave’s ongoing war against bad culinary terminology.</p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[<p>Author Brian Hoefling joins Dave and the crew to explore <em>Dryads: Spirits of the Trees</em>, his deep dive into distilled spirits made from tree sap and other tree-derived sugars. They get into Sri Lankan arrack, Filipino lambanog, maple spirits, wild fermentation, palm sugar, garum, Roman cooking, and the surprising range of things humans have figured out how to ferment and distill.</p><br><p>Along the way, Nastassia reports from the road on bus-made pickled eggs, pot roast, and a newly delivered Searzall Pro; Dave recaps eating and drinking his way through Houston; Quinn experiments with sesame focaccia; and the group considers the theoretical possibilities of chicken-poop vodka. Plus: maple syrup grades, why fresh sap and cooked sugar produce radically different spirits, ancient methods of concentrating maple sap, and Dave’s ongoing war against bad culinary terminology.</p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+		<item>
+			<title>NTT: Rules are Meant to Be Broken</title>
+			<itunes:title>NTT: Rules are Meant to Be Broken</itunes:title>
+			<pubDate>Sun, 27 Sep 2026 07:00:00 GMT</pubDate>
+			<itunes:duration>1:00:09</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/6ab45277864264ef3e651cdf/media.mp3" length="57751928" type="audio/mpeg"/>
+			<guid isPermaLink="false">6ab45277864264ef3e651cdf</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/ntt-rules-are-meant-to-be-broken</link>
+			<acast:episodeId>6ab45277864264ef3e651cdf</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<acast:episodeUrl>ntt-rules-are-meant-to-be-broken</acast:episodeUrl>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<description><![CDATA[<p>It’s an All-Tangent Tuesday as Dave and the crew debate the unwritten rules of restaurants: bringing your own crushed red pepper, sneaking food into movie theaters, why some places refuse perfectly reasonable off-menu requests, and whether chimichurri disqualifies steak frites from being steak frites.</p><br><p>Then things get technical with grilled lobster, birthday steaks, blood cocktails, yeast percentages, and a deep dive into getting the perfect glossy mahogany crust on homemade pretzels. Plus, Dave lays out his dream outdoor kitchen—from a tandoor and raised hearth to a bread oven, deep fryer, and an outdoor Searzall setup—and previews an upcoming exploration of tree-sap spirits and fish sauce.</p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[<p>It’s an All-Tangent Tuesday as Dave and the crew debate the unwritten rules of restaurants: bringing your own crushed red pepper, sneaking food into movie theaters, why some places refuse perfectly reasonable off-menu requests, and whether chimichurri disqualifies steak frites from being steak frites.</p><br><p>Then things get technical with grilled lobster, birthday steaks, blood cocktails, yeast percentages, and a deep dive into getting the perfect glossy mahogany crust on homemade pretzels. Plus, Dave lays out his dream outdoor kitchen—from a tandoor and raised hearth to a bread oven, deep fryer, and an outdoor Searzall setup—and previews an upcoming exploration of tree-sap spirits and fish sauce.</p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+		<item>
+			<title>Tiny Trash Trucks: OG Crew NTT</title>
+			<itunes:title>Tiny Trash Trucks: OG Crew NTT</itunes:title>
+			<pubDate>Tue, 22 Sep 2026 02:05:43 GMT</pubDate>
+			<itunes:duration>57:06</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/6ab1e27735231e4f55e430e2/media.mp3" length="54829557" type="audio/mpeg"/>
+			<guid isPermaLink="false">6ab1e27735231e4f55e430e2</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/tiny-trash-trucks-og-crew-ntt</link>
+			<acast:episodeId>6ab1e27735231e4f55e430e2</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<acast:episodeUrl>tiny-trash-trucks-og-crew-ntt</acast:episodeUrl>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<description><![CDATA[Dave Arnold is joined by Nastassia and Jack for an old-school Cooking Issues episode covering the etiquette of dining alone, phone calls at restaurants, and what guests should—or absolutely should not—bring to a dinner party. The crew gets into garlic fermented in honey and food-safety concerns, the right way to cool and store leftovers, fresh versus dried yeast, and Dave’s plans for an elaborate Peruvian-style rotisserie. Plus: cocktail texture, LA’s chaotic hillside architecture, Majordomo, upcoming travels to Houston and Paris, and the only universally acceptable answer to “What can I bring?”: wine.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[Dave Arnold is joined by Nastassia and Jack for an old-school Cooking Issues episode covering the etiquette of dining alone, phone calls at restaurants, and what guests should—or absolutely should not—bring to a dinner party. The crew gets into garlic fermented in honey and food-safety concerns, the right way to cool and store leftovers, fresh versus dried yeast, and Dave’s plans for an elaborate Peruvian-style rotisserie. Plus: cocktail texture, LA’s chaotic hillside architecture, Majordomo, upcoming travels to Houston and Paris, and the only universally acceptable answer to “What can I bring?”: wine.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+		<item>
+			<title>NTT: Back from Lima</title>
+			<itunes:title>NTT: Back from Lima</itunes:title>
+			<pubDate>Tue, 15 Sep 2026 18:53:02 GMT</pubDate>
+			<itunes:duration>1:01:13</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/6aa9940ebf7eb386d361b8c3/media.mp3" length="58774674" type="audio/mpeg"/>
+			<guid isPermaLink="false">6aa9940ebf7eb386d361b8c3</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/ntt-back-from-lima</link>
+			<acast:episodeId>6aa9940ebf7eb386d361b8c3</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<acast:episodeUrl>ntt-back-from-lima</acast:episodeUrl>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<description><![CDATA[Dave Arnold is back at Rockefeller Center with the crew, and Nastassia kicks things off with a beer can chicken experiment that went spectacularly wrong: green chicken, burning skin, emergency Popeyes, and a last-minute rescue by Daniel Patterson.&nbsp;Dave also reports back from Lima, with thoughts on Peruvian chicken, ceviche, pisco sours, ancient adobe cities, cocktail bars, and the city’s formidable traffic. Then it’s on to listener questions: getting Flavacol to stick to air-popped popcorn, the limits of long low-temperature brisket cooks, red versus white clam pizza, and more.&nbsp;Plus: undercooked eggplant, broken glass disasters, mushroom versus butterfly popcorn, New Haven clam pies, and the deep-fried-self art project that thankfully never happened.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[Dave Arnold is back at Rockefeller Center with the crew, and Nastassia kicks things off with a beer can chicken experiment that went spectacularly wrong: green chicken, burning skin, emergency Popeyes, and a last-minute rescue by Daniel Patterson.&nbsp;Dave also reports back from Lima, with thoughts on Peruvian chicken, ceviche, pisco sours, ancient adobe cities, cocktail bars, and the city’s formidable traffic. Then it’s on to listener questions: getting Flavacol to stick to air-popped popcorn, the limits of long low-temperature brisket cooks, red versus white clam pizza, and more.&nbsp;Plus: undercooked eggplant, broken glass disasters, mushroom versus butterfly popcorn, New Haven clam pies, and the deep-fried-self art project that thankfully never happened.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+		<item>
+			<title>Biscuits, Bouillon and Beyond</title>
+			<itunes:title>Biscuits, Bouillon and Beyond</itunes:title>
+			<pubDate>Sat, 24 Jan 2026 08:00:00 GMT</pubDate>
+			<itunes:duration>1:01:25</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/69715223a6c658f1834fb3d6/media.mp3" length="147403780" type="audio/mpeg"/>
+			<guid isPermaLink="false">69715223a6c658f1834fb3d6</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/biscuits-bouillon-and-beyond</link>
+			<acast:episodeId>69715223a6c658f1834fb3d6</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<acast:episodeUrl>biscuits-bouillon-and-beyond</acast:episodeUrl>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<description><![CDATA[This week is a rapid-fire run of Cooking Issues staples: why most store carrots are trash (and why frozen veg is usually the correct move for pot pie), biscuit technique tweaks (including grating frozen butter), and a pie-crust method that splits the fat for a “medium” flake. From there it’s gear-and-systems nerdery: a Seattle Ultrasonics knife test, pro home-kitchen “hacks” (deli containers, tape/Sharpie, restaurant-supply pans, freezing bases), and a long, detailed breakdown of home carbonation—carbonators, cold plates vs. chillers, line materials, compensator taps, and why soda guns lose CO₂. The back half hits listener questions on Soxhlet extraction, nitro vs. nitrous, red-hot poker construction, oat-milk eggnog separation, and a precise carbonated French 75 base spec to close.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[This week is a rapid-fire run of Cooking Issues staples: why most store carrots are trash (and why frozen veg is usually the correct move for pot pie), biscuit technique tweaks (including grating frozen butter), and a pie-crust method that splits the fat for a “medium” flake. From there it’s gear-and-systems nerdery: a Seattle Ultrasonics knife test, pro home-kitchen “hacks” (deli containers, tape/Sharpie, restaurant-supply pans, freezing bases), and a long, detailed breakdown of home carbonation—carbonators, cold plates vs. chillers, line materials, compensator taps, and why soda guns lose CO₂. The back half hits listener questions on Soxhlet extraction, nitro vs. nitrous, red-hot poker construction, oat-milk eggnog separation, and a precise carbonated French 75 base spec to close.<hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+		<item>
+			<title>No Tangent Tuesday: Full Boat</title>
+			<itunes:title>No Tangent Tuesday: Full Boat</itunes:title>
+			<pubDate>Sat, 17 Jan 2026 08:00:00 GMT</pubDate>
+			<itunes:duration>1:01:04</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/6966b21c023744df1116ad9c/media.mp3" length="146591894" type="audio/mpeg"/>
+			<guid isPermaLink="false">6966b21c023744df1116ad9c</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/no-tangent-tuesday-full-boat</link>
+			<acast:episodeId>6966b21c023744df1116ad9c</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<acast:episodeUrl>no-tangent-tuesday-full-boat</acast:episodeUrl>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623712070785-7204023ea4204d05510b52bc40321596.jpeg"/>
+			<description><![CDATA[<p>The crew checks in live from Rockefeller Center and quickly veers from Patreon housekeeping into Polymarket absurdities, restaurant closures, and the grim mechanics of auctioning off a closed kitchen. Jean details liquidating equipment (including a Rationale), while Dave unloads on bureaucracy, safety grounds left floating inside a brand-new Bosch oven, and the&nbsp;<em>theoretical</em>&nbsp;physics of jacking oven temps via PT1000 resistance sensors—plus reversible home steam-injection hacks that don’t involve drilling holes.</p><p>Quinn talks risotto-style oats and fresh milling, and Dave breaks down grain texture, grinder damage myths, and why oats are mushy compared to rice. Listener questions round things out with astringency in drinks beyond tannins (bitters, resins, aromatics), blood-sausage preferences across styles, and how phosphoric acid can anchor a cola-like, carbonated amaro build.</p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[<p>The crew checks in live from Rockefeller Center and quickly veers from Patreon housekeeping into Polymarket absurdities, restaurant closures, and the grim mechanics of auctioning off a closed kitchen. Jean details liquidating equipment (including a Rationale), while Dave unloads on bureaucracy, safety grounds left floating inside a brand-new Bosch oven, and the&nbsp;<em>theoretical</em>&nbsp;physics of jacking oven temps via PT1000 resistance sensors—plus reversible home steam-injection hacks that don’t involve drilling holes.</p><p>Quinn talks risotto-style oats and fresh milling, and Dave breaks down grain texture, grinder damage myths, and why oats are mushy compared to rice. Listener questions round things out with astringency in drinks beyond tannins (bitters, resins, aromatics), blood-sausage preferences across styles, and how phosphoric acid can anchor a cola-like, carbonated amaro build.</p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+		<item>
+			<title><![CDATA[LIVE FROM NEW YORK, IT'S COOKING ISSUES! (at Rockefeller Center)]]></title>
+			<itunes:title><![CDATA[LIVE FROM NEW YORK, IT'S COOKING ISSUES! (at Rockefeller Center)]]></itunes:title>
+			<pubDate>Mon, 17 May 2021 17:53:02 GMT</pubDate>
+			<itunes:duration>1:08:39</itunes:duration>
+			<enclosure url="https://sphinx.acast.com/p/open/s/60ad324ac26dcb0019ac8e4f/e/51368124/media.mp3" length="131816802" type="audio/mpeg"/>
+			<guid isPermaLink="false">51368124</guid>
+			<itunes:explicit>false</itunes:explicit>
+			<link>https://shows.acast.com/cooking-issues-with-dave-arnold/episodes/60ad324ec601400019adea84</link>
+			<acast:episodeId>60ad324ec601400019adea84</acast:episodeId>
+			<acast:showId>60ad324ac26dcb0019ac8e4f</acast:showId>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:image href="https://assets.pippa.io/shows/60ad324ac26dcb0019ac8e4f/1623254612583-acd99efb2330f0339767c7f6b31a17de.jpeg"/>
+			<description><![CDATA[<p>Cooking Issues has a new home! On the debut episode at Newstand Studios at Rockefeller Center, the team is back in full vaxed force in the same room at the same time. Listen in as they get comfy in the new space and talk about everything from parties in LA to massages in Chinatown. Dave announces breaks down burgers, french onion soup and more.&nbsp;</p><br><p>PS: Buy a Searzall here: <a href="http://www.searzall.com/" rel="nofollow noopener" target="_blank">www.searzall.com</a></p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></description>
+			<itunes:summary><![CDATA[<p>Cooking Issues has a new home! On the debut episode at Newstand Studios at Rockefeller Center, the team is back in full vaxed force in the same room at the same time. Listen in as they get comfy in the new space and talk about everything from parties in LA to massages in Chinatown. Dave announces breaks down burgers, french onion soup and more.&nbsp;</p><br><p>PS: Buy a Searzall here: <a href="http://www.searzall.com/" rel="nofollow noopener" target="_blank">www.searzall.com</a></p><hr><p style='color:grey; font-size:0.75em;'> Hosted on Acast. See <a style='color:grey;' target='_blank' rel='noopener noreferrer' href='https://acast.com/privacy'>acast.com/privacy</a> for more information.</p>]]></itunes:summary>
+		</item>
+    	<itunes:category text="Arts"/>
+		<itunes:category text="Arts">
+			<itunes:category text="Food"/>
+		</itunes:category>
+    </channel>
+</rss>
