@@ -1,0 +1,20 @@
+# Terms from the design doc ("Why jargon matters more than WER") and the show's regulars.
+# `ciw vocab build` marks these as seeds in candidates.csv even if the corpus never mentions them.
+Searzall
+Spinzall
+polydextrose
+methylcellulose
+kansui
+Flavacol
+Pacojet
+Soxhlet
+rotovap
+hydrocolloids
+compensator
+sous vide
+Dave Arnold
+Nastassia
+Quinn
+Jack
+Heritage Radio Network
+Cooking Issues

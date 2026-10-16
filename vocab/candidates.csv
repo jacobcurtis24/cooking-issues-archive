@@ -1,0 +1,2501 @@
+term,variants,count,doc_freq,sources,score,zipf,flags
+Nastassia,Nastassia,448,377,acast:19;blog:60;hrn:298,46.732,0.00,cap rare seed
+rotovap,rotovap|Rotovap,163,42,acast:2;blog:36;hrn:4,39.486,0.00,cap label rare seed
+Searzall,Searzall|searzall,27,22,acast:6;blog:2;hrn:14,34.581,0.00,cap label rare seed
+sous vide,sous-vide|sous vide|Sous-Vide|Sous Vide,141,69,acast:4;blog:28;hrn:37,28.312,2.94,cap caprun hyphen label ngram seed
+MOFAD,MOFAD|MoFAD|MoFaD,30,24,acast:3;blog:1;hrn:20,25.235,0.00,acronym camel cap rare
+Dave Arnold,Dave Arnold|dave arnold,308,284,acast:17;blog:130;hrn:137,23.725,4.00,caprun label ngram seed
+Spinzall,Spinzall|spinzall,22,19,acast:4;hrn:15,23.484,0.00,cap rare seed
+hydrocolloids,hydrocolloids|Hydrocolloids|HYDROCOLLOIDS,92,17,blog:14;hrn:3,22.395,1.45,cap label rare seed
+Dave Nastassia,Dave Nastassia,59,59,acast:1;blog:2;hrn:56,21.962,0.00,caprun ngram
+Cooking Issues,Cooking Issues|cooking issues|COOKING ISSUES|Cooking issues,605,473,acast:102;blog:46;hrn:325,21.440,4.45,caprun ngram seed
+Pacojet,Pacojet|PacoJet,6,4,blog:2;hrn:2,20.142,0.00,camel cap label seed
+Pectinex,Pectinex|pectinex,52,18,acast:1;blog:15;hrn:2,18.224,0.00,cap rare
+Nastassia Lopez,Nastassia Lopez,91,90,blog:29;hrn:61,17.597,0.00,caprun ngram
+methylcellulose,methylcellulose|Methylcellulose,9,4,acast:1;blog:1;hrn:2,16.021,1.43,rare seed
+Jack,Jack,31,27,acast:11;blog:1;hrn:15,14.759,4.82,cap seed
+Heritage Radio Network,Heritage Radio Network,26,26,blog:18;hrn:8,14.451,4.36,caprun ngram seed
+McGee,McGee|Mcgee,102,46,acast:2;blog:27;hrn:17,14.143,3.37,camel cap label
+Ike Jime,Ike Jime|Ike-Jime|ike jime|ike-jime,89,17,blog:16;hrn:1,13.762,1.43,cap caprun hyphen label ngram
+Lvoff,Lvoff,26,25,blog:24;hrn:1,12.710,0.00,cap
+Mindy Lvoff,Mindy Lvoff,25,24,blog:23;hrn:1,12.557,0.00,caprun ngram
+Polyscience,Polyscience|PolyScience,8,8,blog:6;hrn:2,12.528,0.00,camel cap rare
+polydextrose,polydextrose,2,2,acast:2,12.473,0.00,rare seed
+Cooking,Cooking|cooking,645,486,acast:103;blog:62;hrn:321,12.374,4.45,cap label
+Quinn,Quinn,21,15,acast:15,12.340,3.90,cap seed
+ice cream,ice cream|Ice Cream|ice-cream|Ice cream,158,56,acast:12;blog:18;hrn:26,12.127,4.62,cap caprun hyphen label ngram
+nixtamalization,nixtamalization|Nixtamalization,28,6,acast:2;blog:1;hrn:3,12.044,0.00,cap rare
+Flavacol,Flavacol,1,1,acast:1,11.690,0.00,cap seed
+kansui,kansui,1,1,acast:1,11.560,0.00,rare seed
+Soxhlet,Soxhlet,1,1,acast:1,11.392,1.03,cap seed
+Angela Garbacz,Angela Garbacz,6,4,acast:1;blog:1;hrn:2,11.289,0.00,caprun label ngram
+CVap,CVap|Cvap|CVAP,22,4,acast:1;blog:2;hrn:1,11.289,0.00,acronym cap
+Jeffrey Steingarten,Jeffrey Steingarten,11,8,blog:6;hrn:2,11.209,0.00,caprun label ngram
+Harold McGee,Harold McGee|Harold Mcgee|harold mcgee,62,41,acast:1;blog:24;hrn:16,11.114,3.37,caprun label ngram
+xanthan,xanthan|Xanthan|XANTHAN,26,13,acast:4;blog:6;hrn:3,10.973,1.92,cap rare
+FCI,FCI,82,58,acast:2;blog:56,10.893,2.13,acronym
+StarChefs,StarChefs|Starchefs,7,7,blog:6;hrn:1,10.608,0.00,camel cap
+Momofuku,Momofuku,16,16,acast:3;blog:7;hrn:6,10.599,1.77,cap
+Transglutaminase,Transglutaminase|transglutaminase,28,11,blog:9;hrn:2,10.511,1.51,cap label rare
+low temperature,low temperature|low-temperature|Low-Temperature|Low Temperature,99,50,acast:3;blog:27;hrn:20,10.108,4.64,cap hyphen label ngram
+centrifuge,centrifuge|Centrifuge,19,15,acast:2;blog:12;hrn:1,10.106,2.81,cap label
+low-temp,low-temp|low temp|Low-Temp|Low-temp,54,24,acast:1;blog:13;hrn:10,10.012,3.75,cap hyphen label ngram
+compensator,compensator,0,0,,10.000,2.24,seed
+Kombu,Kombu|kombu,135,11,blog:7;hrn:4,9.978,1.73,cap label rare
+Steingarten,Steingarten,17,8,blog:6;hrn:2,9.890,0.00,cap rare
+immersion circulator,immersion circulator|Immersion Circulator,25,19,blog:12;hrn:7,9.640,2.16,caprun label ngram
+circulators,circulators|Circulators,28,20,blog:6;hrn:14,9.628,1.74,cap rare
+meat glue,meat glue|Meat Glue|Meat glue|Meat-glue,81,22,acast:1;blog:11;hrn:10,9.521,3.80,caprun hyphen label ngram
+deep fryer,deep fryer|Deep Fryer|deep-fryer,17,15,acast:3;blog:6;hrn:6,9.508,2.99,caprun hyphen ngram
+Dave,Dave,1168,685,acast:107;blog:185;hrn:393,9.328,4.44,cap
+Dax,Dax,40,37,acast:2;blog:3;hrn:32,9.239,3.08,cap
+pressure cooker,pressure cooker|Pressure Cooker|pressure-cooker|Pressure cooker,56,17,acast:1;blog:9;hrn:7,9.211,3.34,hyphen label ngram
+pumpernickel,pumpernickel|Pumpernickel,16,8,acast:3;blog:4;hrn:1,9.205,1.89,cap rare
+cocktails,cocktails|Cocktails,32,28,acast:3;blog:23;hrn:2,9.084,3.60,cap label
+Arielle,Arielle,23,15,acast:5;blog:1;hrn:9,8.974,2.32,cap
+Arielle Johnson,Arielle Johnson,22,15,acast:5;blog:1;hrn:9,8.974,2.32,caprun ngram
+tandoor,tandoor|Tandoor,7,7,acast:2;blog:1;hrn:4,8.932,1.79,cap rare
+Issues,Issues,653,516,acast:104;blog:47;hrn:365,8.924,5.19,cap
+Issues Dave Nastassia,Issues Dave Nastassia,37,37,hrn:37,8.869,0.00,caprun ngram
+Methocel,Methocel|methocel|METHOCEL,15,6,blog:3;hrn:3,8.759,0.00,cap rare
+Palkovics,Palkovics,7,6,acast:1;hrn:5,8.759,0.00,cap rare
+skoal,skoal|Skoal,72,33,blog:33,8.657,1.82,cap label rare
+ChefSteps,ChefSteps|Chefsteps,16,14,hrn:14,8.634,0.00,camel cap
+Garbacz,Garbacz,6,4,acast:1;blog:1;hrn:2,8.633,0.00,cap
+New York,New York|new york,42,34,acast:9;blog:16;hrn:9,8.633,5.37,caprun label
+Nils,Nils,182,68,blog:66;hrn:2,8.583,2.81,cap
+Dave Wondrich,Dave Wondrich,10,6,acast:2;blog:3;hrn:1,8.546,1.06,caprun ngram
+Wondrich,Wondrich,12,6,acast:2;blog:3;hrn:1,8.546,1.06,cap
+Modernist,Modernist,42,33,acast:2;blog:3;hrn:28,8.536,3.21,cap
+overcooking,overcooking|Overcooking,11,11,acast:1;blog:8;hrn:2,8.476,1.82,rare
+Del Posto,Del Posto,12,9,acast:1;blog:4;hrn:4,8.445,1.85,caprun ngram
+Posto,Posto,12,9,acast:1;blog:4;hrn:4,8.445,1.85,cap
+liquid nitrogen,liquid nitrogen|Liquid Nitrogen|Liquid nitrogen|liquid-nitrogen,113,40,blog:29;hrn:11,8.361,3.76,caprun hyphen label ngram
+pressure cooking,pressure cooking|Pressure cooking|pressure-cooking|Pressure Cooking,26,24,acast:2;blog:11;hrn:11,8.275,4.45,hyphen label ngram
+Daniel Gritzer,Daniel Gritzer|daniel gritzer,4,4,blog:1;hrn:3,8.210,0.00,caprun label ngram
+Jime,Jime,78,15,blog:14;hrn:1,8.172,1.43,cap
+Culinary,Culinary,55,47,acast:6;blog:19;hrn:22,8.128,3.56,cap
+Arnold,Arnold,317,287,acast:17;blog:129;hrn:141,8.088,4.00,cap
+Matt Sartwell,Matt Sartwell,19,11,acast:8;hrn:3,7.970,1.04,caprun ngram
+Sartwell,Sartwell,19,11,acast:8;hrn:3,7.970,1.04,cap
+Booker,Booker,49,42,acast:2;blog:3;hrn:37,7.932,3.55,cap
+The,The,600,254,acast:21;blog:130;hrn:103,7.914,7.73,cap
+Nils Noren,Nils Noren|nils noren,8,8,blog:7;hrn:1,7.779,1.79,caprun label ngram
+Mokume-Gane,Mokume-Gane|Mokume Gane|mokume gane|mokume-gane,19,6,blog:6,7.664,0.00,cap caprun hyphen label ngram
+ISI,ISI|iSi|Isi,20,12,blog:6;hrn:6,7.598,3.10,acronym camel cap label
+pressure cookers,pressure cookers|Pressure cookers|Pressure Cookers,45,22,acast:1;blog:5;hrn:16,7.254,2.57,ngram
+Cooking Issues Dave,Cooking Issues Dave|Cooking issues Dave,194,194,acast:36;hrn:158,7.120,4.44,caprun ngram
+Vita Prep,Vita Prep|Vita-Prep|vita-prep|Vita-prep,24,16,blog:15;hrn:1,7.111,3.52,cap caprun hyphen label ngram
+vacuum infusion,vacuum infusion|Vacuum-infusion|Vacuum Infusion|vacuum-infusion,17,19,blog:18;hrn:1,7.081,3.29,hyphen label ngram
+Novoshape,Novoshape|NovoShape,7,3,blog:2;hrn:1,7.072,0.00,camel cap
+Noma,Noma,16,9,acast:6;blog:1;hrn:2,7.052,2.51,cap
+olive oil,olive oil|Olive Oil|Olive oil|olive-oil,46,17,acast:9;blog:5;hrn:3,7.018,4.09,caprun hyphen ngram
+pre-gelatinized,pre-gelatinized,4,4,acast:2;blog:1;hrn:1,6.945,1.48,hyphen
+Molecular Gastronomy,Molecular Gastronomy|molecular gastronomy,12,5,acast:1;blog:2;hrn:2,6.896,2.64,caprun label ngram
+carbonating,carbonating|Carbonating,6,5,acast:1;blog:3;hrn:1,6.839,1.34,rare
+food safety,food safety|Food Safety|food-safety,17,15,acast:2;blog:4;hrn:9,6.732,4.97,caprun hyphen ngram
+crisping,crisping|Crisping,5,5,acast:1;blog:3;hrn:1,6.718,1.42,rare
+Meats,Meats,25,21,acast:1;blog:9;hrn:11,6.717,3.48,cap
+New,New,153,106,acast:23;blog:54;hrn:29,6.674,6.25,cap
+Mindy,Mindy,37,36,blog:35;hrn:1,6.622,3.10,cap
+Fish,Fish|fish,32,26,acast:1;blog:14;hrn:11,6.590,4.90,cap label
+blanching,blanching|Blanching,30,6,acast:2;blog:3;hrn:1,6.473,1.92,rare
+Food,Food,138,90,acast:17;blog:29;hrn:44,6.443,5.40,cap
+Maillard Reaction,Maillard Reaction|Maillard reaction|Maillard-reaction,7,6,blog:4;hrn:2,6.431,2.06,cap caprun hyphen ngram
+non-alcoholic,non-alcoholic|Non-Alcoholic,13,13,acast:5;blog:3;hrn:5,6.408,3.91,cap hyphen
+ABV,ABV,32,8,acast:1;blog:6;hrn:1,6.292,2.95,acronym
+Lopez,Lopez,97,96,blog:29;hrn:67,6.284,3.79,cap
+Maillard,Maillard,20,11,blog:8;hrn:3,6.280,2.06,cap
+Gritzer,Gritzer,4,4,blog:1;hrn:3,6.278,0.00,cap
+Rebecca Palkovics,Rebecca Palkovics,5,4,acast:1;hrn:3,6.278,0.00,caprun ngram
+Whole,Whole|whole,24,22,acast:1;blog:4;hrn:17,6.270,5.46,cap label
+Carbonation,Carbonation|carbonation,10,7,blog:6;hrn:1,6.256,2.40,cap label
+Flavorama,Flavorama|FLAVORAMA,4,3,acast:2;hrn:1,6.240,0.00,cap rare
+Salumeria,Salumeria|salumeria,3,3,blog:2;hrn:1,6.240,0.00,cap rare
+Wipop,Wipop,3,3,blog:2;hrn:1,6.240,0.00,cap rare
+Cuisine,Cuisine,32,27,acast:3;blog:12;hrn:12,6.233,3.81,cap
+cast iron,cast iron|cast-iron|Cast Iron|Cast iron,65,12,acast:2;blog:4;hrn:6,6.228,4.74,caprun hyphen ngram
+HRN,HRN,24,19,hrn:19,6.225,1.22,acronym
+York,York,107,77,acast:16;blog:38;hrn:23,6.223,5.37,cap
+Pectin,Pectin|PECTIN,10,7,blog:4;hrn:3,6.220,2.42,acronym cap
+Cocktail,Cocktail,52,27,acast:4;blog:16;hrn:7,6.187,3.89,cap
+custards,custards,5,5,acast:3;blog:1;hrn:1,6.172,1.78,rare
+Vide,Vide,10,9,acast:1;blog:6;hrn:2,6.144,2.94,cap
+low temperature cooking,low temperature cooking|Low-Temperature Cooking|low-temperature cooking|Low Temperature Cooking,129,31,blog:18;hrn:13,6.120,4.45,caprun label ngram
+Pectinex Smash,Pectinex Smash|pectinex smash,21,11,blog:11,6.059,0.00,caprun ngram
+foie gras,foie gras|Foie Gras,9,7,acast:1;blog:4;hrn:2,6.044,2.68,caprun ngram
+Lye,Lye|lye,7,4,acast:1;blog:2;hrn:1,6.040,2.72,cap label
+Sous,Sous,10,10,acast:2;blog:6;hrn:2,6.024,3.11,cap
+dewars,dewars|Dewars,19,5,blog:4;hrn:1,5.970,1.52,cap rare
+carrageenan,carrageenan|Carrageenan|CARRAGEENAN,25,6,blog:2;hrn:4,5.959,1.87,cap rare
+rotovaps,rotovaps|Rotovaps,19,7,blog:7,5.850,0.00,cap rare
+deBary,deBary|Debary,5,3,acast:1;hrn:2,5.837,1.53,camel cap rare
+Red Hot Poker,Red Hot Poker|red-hot poker|red hot poker,20,10,acast:1;blog:8;hrn:1,5.822,3.97,caprun label ngram
+braises,braises|Braises,4,4,acast:2;blog:2,5.808,1.16,cap rare
+Modernist Cuisine,Modernist Cuisine,15,10,acast:2;blog:4;hrn:4,5.804,3.21,caprun ngram
+katsuobushi,katsuobushi,5,4,blog:2;hrn:2,5.796,0.00,rare
+spherification,spherification,4,4,blog:2;hrn:2,5.796,0.00,rare
+Ladner,Ladner,17,9,blog:6;hrn:3,5.789,2.08,cap
+Mark Ladner,Mark Ladner,17,9,blog:6;hrn:3,5.789,2.08,caprun ngram
+Chef,Chef,97,56,acast:12;blog:32;hrn:12,5.775,4.23,cap
+xanthan gum,xanthan gum|XANTHAN GUM,13,7,acast:1;blog:4;hrn:2,5.764,1.92,ngram
+Issues Dave,Issues Dave|issues Dave,235,235,acast:36;hrn:199,5.676,4.44,ngram
+Oil,Oil|oil,20,16,acast:9;blog:4;hrn:3,5.665,5.10,cap label
+Dufresne,Dufresne,14,10,acast:3;blog:7,5.645,2.32,cap
+Noren,Noren,8,7,blog:6;hrn:1,5.630,1.79,cap
+Foods,Foods,55,50,acast:3;blog:10;hrn:37,5.616,4.41,cap
+Fabian Von Hauske,Fabian Von Hauske|Fabian von Hauske,3,2,blog:1;hrn:1,5.604,0.00,caprun label
+Ultra-Sperse,Ultra-Sperse,4,2,blog:1;hrn:1,5.604,0.00,cap hyphen
+scrapple,scrapple,9,4,acast:1;blog:1;hrn:2,5.571,1.76,rare
+Chicken,Chicken|chicken,17,15,acast:4;blog:5;hrn:6,5.544,4.63,cap label
+Culinary Institute,Culinary Institute,13,13,acast:1;blog:9;hrn:3,5.541,3.56,caprun ngram
+Aquavit,Aquavit|aquavit,33,15,blog:15,5.520,1.71,cap rare
+Whole Foods,Whole Foods,19,18,acast:1;blog:1;hrn:16,5.467,4.41,caprun ngram
+pressure-cooked,pressure-cooked|pressure cooked|Pressure cooked|Pressure Cooked,19,14,acast:2;blog:10;hrn:2,5.415,4.11,hyphen ngram
+Turkey,Turkey,21,14,acast:2;blog:8;hrn:4,5.415,4.56,cap label
+espuma,espuma|Espuma,6,3,blog:1;hrn:2,5.404,1.10,label rare
+Ashmead,Ashmead,16,5,acast:1;blog:4,5.363,1.96,cap rare
+Barterhouse,Barterhouse,8,8,hrn:8,5.357,0.00,cap
+Iuzzini,Iuzzini,8,8,blog:8,5.357,0.00,cap
+Johnny Iuzzini,Johnny Iuzzini,8,8,blog:8,5.357,0.00,caprun ngram
+Dashi,Dashi|dashi,4,4,blog:2;hrn:2,5.347,2.04,cap label
+anesthetizing,anesthetizing,3,3,acast:1;blog:1;hrn:1,5.327,1.31,rare
+garum,garum,4,3,acast:1;blog:1;hrn:1,5.315,1.32,rare
+Harold,Harold,54,40,acast:1;blog:23;hrn:16,5.304,4.03,cap
+Cooking Issues Dave Arnold,Cooking Issues Dave Arnold,49,49,acast:9;hrn:40,5.283,4.00,caprun
+American,American,71,39,acast:13;blog:16;hrn:10,5.269,5.49,cap
+French,French,77,39,acast:7;blog:25;hrn:7,5.269,5.09,cap
+Science,Science,56,39,acast:5;blog:19;hrn:15,5.269,5.12,cap
+New York City,New York City,26,16,acast:1;blog:7;hrn:8,5.261,5.37,caprun
+Justino,Justino|JUSTINO,6,4,blog:2;hrn:2,5.238,1.62,cap rare
+gluten-free,gluten-free|Gluten-free|Gluten Free|Gluten-Free,9,6,acast:1;blog:2;hrn:3,5.203,3.62,cap caprun hyphen
+lactic acid,lactic acid|lactic-acid,7,5,acast:2;blog:2;hrn:1,5.202,2.91,hyphen ngram
+French fries,French fries|french fries|French Fries,37,15,acast:3;blog:5;hrn:7,5.186,3.81,caprun ngram
+Circulator,Circulator|circulator,4,4,blog:1;hrn:3,5.179,2.16,cap label
+Wylie Dufresne,Wylie Dufresne,11,8,acast:1;blog:7,5.172,2.32,caprun ngram
+You,You,51,36,acast:2;blog:28;hrn:6,5.157,6.98,cap
+fried chicken,fried chicken|Fried Chicken,23,15,acast:6;blog:5;hrn:4,5.148,4.06,caprun ngram
+Jackie,Jackie,16,15,acast:6;blog:1;hrn:8,5.148,3.97,cap
+plastic wrap,plastic wrap|Plastic Wrap|Plastic wrap,64,15,acast:1;blog:10;hrn:4,5.148,4.20,caprun ngram
+Mokume-Gane fish,Mokume-Gane fish|Mokume-Gane Fish|Mokume-gane fish|mokume gane fish,9,4,blog:4,5.131,0.00,caprun label ngram
+Euell,Euell,6,3,blog:1;hrn:2,5.131,1.04,cap rare
+Red Hot,Red Hot|red-hot,21,12,acast:1;blog:9;hrn:2,5.129,5.16,hyphen ngram
+For,For,47,35,acast:1;blog:30;hrn:4,5.118,7.01,cap
+Kim,Kim,37,35,acast:2;blog:1;hrn:32,5.118,4.59,cap
+freeze-thaw,freeze-thaw|Freeze thaw|Freeze-thaw|freeze thaw,22,8,acast:1;blog:7,5.116,3.18,cap hyphen ngram
+Star Chefs,Star Chefs|star chefs,20,13,blog:12;hrn:1,5.086,3.64,caprun label ngram
+Japanese,Japanese,60,34,acast:4;blog:20;hrn:10,5.078,4.81,cap
+Tekserve,Tekserve,7,7,hrn:7,5.070,0.00,cap
+gellan,gellan|Gellan|GELLAN,55,5,blog:5,5.064,1.21,acronym cap rare
+French Fry,French Fry|French fry|french fry|French-fry,16,7,acast:1;blog:3;hrn:3,5.049,3.89,cap caprun hyphen ngram
+rotovapped,rotovapped|Rotovapped,5,5,blog:5,5.041,0.00,cap rare
+Kitchen,Kitchen,41,33,acast:15;blog:6;hrn:12,5.037,4.65,cap
+Network,Network,36,33,acast:3;blog:21;hrn:9,5.037,5.02,cap
+Cookbook,Cookbook,9,8,acast:3;blog:1;hrn:4,5.017,3.36,cap
+Momofuku Ssam,Momofuku Ssam,4,4,blog:3;hrn:1,5.012,1.18,caprun ngram
+Ssam,Ssam,4,4,blog:3;hrn:1,5.012,1.18,cap
+Jim Lahey,Jim Lahey,10,8,acast:1;hrn:7,5.011,2.43,caprun ngram
+Lahey,Lahey,10,8,acast:1;hrn:7,5.011,2.43,cap
+evaporators,evaporators|Evaporators,5,4,blog:2;hrn:2,5.003,1.81,cap rare
+pu-erh,pu-erh|Pu-erh,5,4,acast:1;blog:3,4.996,2.29,cap hyphen
+Peter,Peter,38,32,acast:2;blog:1;hrn:29,4.994,4.88,cap
+kombu dashi,kombu dashi|Kombu Dashi|Kombu dashi|kombu-dashi,9,3,blog:2;hrn:1,4.981,1.73,caprun hyphen ngram
+Wong,Wong,15,11,acast:3;blog:3;hrn:5,4.967,3.67,cap
+Center,Center,35,31,acast:5;blog:8;hrn:18,4.950,5.19,cap
+Nastassia talk,Nastassia talk,13,13,hrn:13,4.950,0.00,ngram
+Sother,Sother,3,2,acast:1;hrn:1,4.945,0.00,cap rare
+CO2,CO2,35,12,blog:10;hrn:2,4.926,3.77,digit label
+Tsukiji,Tsukiji,17,4,blog:3;hrn:1,4.916,1.88,cap rare
+Myhrvold,Myhrvold,5,4,blog:3;hrn:1,4.905,1.28,cap
+Nathan Myhrvold,Nathan Myhrvold,5,4,blog:3;hrn:1,4.905,1.28,caprun ngram
+agar clarification,agar clarification|Agar Clarification,22,10,blog:8;hrn:2,4.873,3.02,label ngram
+Drink,Drink,46,29,acast:1;blog:6;hrn:22,4.858,4.90,cap
+sorbets,sorbets,3,3,acast:1;blog:1;hrn:1,4.858,1.71,rare
+andVacuum,andVacuum,4,4,blog:4,4.830,0.00,camel rare
+Chinatown,Chinatown,7,7,acast:1;blog:5;hrn:1,4.824,3.32,cap
+sous-vide cooking,sous-vide cooking|Sous Vide Cooking|Sous-Vide cooking|sous vide cooking,15,11,blog:9;hrn:2,4.822,2.94,caprun ngram
+Nastassia answer,Nastassia answer,12,12,hrn:12,4.811,0.00,ngram
+Conigliaro,Conigliaro,6,4,blog:3;hrn:1,4.808,1.37,cap
+Tony Conigliaro,Tony Conigliaro,6,4,blog:3;hrn:1,4.808,1.37,caprun ngram
+Peter Kim,Peter Kim,36,34,acast:2;hrn:32,4.801,4.59,caprun ngram
+Safety,Safety|safety,14,10,acast:1;blog:8;hrn:1,4.795,4.97,cap label
+Nick Wong,Nick Wong,13,10,acast:3;blog:2;hrn:5,4.793,3.67,caprun ngram
+whippers,whippers|WHIPPERS,6,4,blog:1;hrn:3,4.775,1.03,rare
+Field,Field,33,27,acast:7;blog:1;hrn:19,4.759,5.24,cap
+Thanksgiving,Thanksgiving,37,27,acast:6;blog:6;hrn:15,4.759,4.04,cap
+Mindy Lvoff Purpose,Mindy Lvoff Purpose,6,6,blog:6,4.744,0.00,caprun ngram
+Nastassia Lopez Dave,Nastassia Lopez Dave,6,6,blog:6,4.744,0.00,caprun ngram
+International Culinary Center,International Culinary Center,23,21,blog:4;hrn:17,4.720,3.56,caprun ngram
+guanciale,guanciale|Guanciale,7,3,acast:1;hrn:2,4.715,1.43,cap rare
+International,International,28,26,acast:1;blog:8;hrn:17,4.707,5.36,cap
+Johnson,Johnson,39,26,acast:8;blog:4;hrn:14,4.707,4.72,cap
+Dave talks,Dave talks,25,25,acast:2;blog:1;hrn:22,4.653,4.44,ngram
+Ashmead Kernel,Ashmead Kernel|Ashmead kernel,14,5,acast:1;blog:4,4.648,1.96,caprun ngram
+Clarification,Clarification,14,9,blog:7;hrn:2,4.638,3.54,cap label
+Frying,Frying,8,7,acast:1;blog:3;hrn:3,4.633,3.42,cap
+immersion circulators,immersion circulators,8,8,blog:1;hrn:7,4.632,1.74,ngram
+MSG,MSG,19,10,blog:4;hrn:6,4.632,3.16,acronym
+Chris Young,Chris Young,17,11,acast:1;blog:4;hrn:6,4.614,4.81,caprun ngram
+old-school,old-school|Old-school,9,9,acast:4;blog:4;hrn:1,4.604,5.71,hyphen
+City,City,35,24,acast:5;blog:8;hrn:11,4.597,5.61,cap
+Cream,Cream,34,24,acast:3;blog:10;hrn:11,4.597,4.62,cap
+Museum,Museum,30,24,acast:2;blog:2;hrn:20,4.597,4.71,cap
+vacuum bag,vacuum bag|Vacuum bag|Vacuum-bag,35,22,blog:21;hrn:1,4.560,4.09,hyphen ngram
+Heritage Radio,Heritage Radio,29,28,blog:19;hrn:9,4.547,4.36,caprun ngram
+Ice,Ice,32,23,acast:1;blog:12;hrn:10,4.539,5.00,cap
+Meat,Meat,28,23,acast:1;blog:8;hrn:14,4.539,4.63,cap
+gymnemic,gymnemic|Gymnemic,14,4,blog:4,4.528,0.00,cap rare
+Hamine,Hamine,9,4,blog:4,4.528,0.00,cap rare
+Tangent,Tangent,84,58,acast:58,4.520,3.19,cap
+Pulque,Pulque|pulque,3,3,blog:2;hrn:1,4.512,1.62,cap rare
+thickeners,thickeners,5,5,blog:4;hrn:1,4.511,1.76,rare
+Celsius,Celsius,17,13,blog:9;hrn:4,4.505,3.29,cap
+Nastassia discuss,Nastassia discuss,10,10,hrn:10,4.497,0.00,ngram
+The International Culinary Center,The International Culinary Center,18,18,blog:1;hrn:17,4.496,3.56,caprun
+More,More,24,22,acast:5;blog:5;hrn:12,4.478,6.36,cap
+Paul,Paul,27,22,acast:2;blog:8;hrn:12,4.478,5.03,cap
+Roberta,Roberta,11,11,blog:2;hrn:9,4.457,3.16,cap
+fish sauce,fish sauce|Fish Sauce,16,10,acast:2;blog:2;hrn:6,4.452,4.30,caprun ngram
+Lime,Lime,13,10,acast:1;blog:7;hrn:2,4.452,3.86,cap
+Rebecca,Rebecca,11,10,acast:1;blog:1;hrn:8,4.452,3.96,cap
+Recipes,Recipes,11,10,acast:3;blog:2;hrn:5,4.452,3.99,cap
+rotary evaporator,rotary evaporator,24,12,blog:11;hrn:1,4.447,2.47,ngram
+Euell Gibbons,Euell Gibbons,6,3,blog:1;hrn:2,4.447,1.04,caprun ngram
+lime juice,lime juice|Lime juice|Lime Juice|lime-juice,93,20,blog:18;hrn:2,4.427,3.86,hyphen ngram
+Hamine Eggs,Hamine Eggs|Hamine eggs|hamine eggs,5,3,blog:3,4.420,0.00,caprun label ngram
+Star,Star,31,21,acast:2;blog:16;hrn:3,4.415,5.19,cap
+Your,Your,26,21,acast:2;blog:9;hrn:10,4.415,6.53,cap
+HACCP,HACCP,15,3,acast:1;blog:2,4.415,1.97,acronym rare
+rancidity,rancidity,9,4,blog:3;hrn:1,4.409,1.40,rare
+Teague,Teague,7,4,acast:1;blog:2;hrn:1,4.398,2.87,cap
+deep-fried,deep-fried|Deep-Fried|Deep-fried,10,8,acast:1;blog:6;hrn:1,4.394,4.06,cap hyphen
+peanut butter,peanut butter|Peanut Butter|peanut-butter,12,8,acast:2;blog:4;hrn:2,4.394,3.90,hyphen ngram
+side-by-side,side-by-side,12,8,acast:1;blog:6;hrn:1,4.394,5.50,hyphen
+Agar,Agar|AGAR,18,9,blog:9,4.387,3.02,acronym cap label
+Boondoggler,Boondoggler,5,5,hrn:5,4.369,0.00,cap
+Jouan,Jouan,30,5,blog:5,4.369,0.00,cap
+rotovap primer,rotovap primer|Rotovap Primer|Rotovap primer,5,5,blog:5,4.369,0.00,caprun ngram
+The Barterhouse,The Barterhouse,5,5,hrn:5,4.369,0.00,caprun
+The Boondoggler,The Boondoggler,5,5,hrn:5,4.369,0.00,caprun
+America,America,27,20,acast:4;blog:8;hrn:8,4.348,5.22,cap
+calcium hydroxide,calcium hydroxide|Calcium Hydroxide,12,4,acast:1;blog:2;hrn:1,4.339,2.91,caprun ngram
+rotary evaporators,rotary evaporators|Rotary Evaporators|Rotary evaporators,5,4,blog:2;hrn:2,4.336,1.81,caprun ngram
+Caf,Caf,7,4,acast:1;blog:1;hrn:2,4.324,2.92,cap
+Michelin,Michelin,6,5,acast:2;blog:2;hrn:1,4.288,3.24,cap
+Hauske,Hauske,3,2,blog:1;hrn:1,4.286,0.00,cap
+Laiskonis,Laiskonis,2,2,acast:1;blog:1,4.286,0.00,cap
+Michael Laiskonis,Michael Laiskonis,2,2,acast:1;blog:1,4.286,0.00,caprun
+Narun Barun,Narun Barun,2,2,blog:1;hrn:1,4.286,0.00,caprun
+Sother Teague,Sother Teague,3,2,acast:1;hrn:1,4.286,0.00,caprun
+Ultrasperse,Ultrasperse,3,2,blog:1;hrn:1,4.286,0.00,cap
+Bar,Bar,24,19,acast:4;blog:11;hrn:4,4.279,4.94,cap
+David,David,24,19,acast:5;blog:6;hrn:8,4.279,5.13,cap
+Hot,Hot,35,19,acast:2;blog:7;hrn:10,4.279,5.16,cap
+Red,Red,36,19,acast:2;blog:12;hrn:5,4.279,5.32,cap
+White,White,22,19,acast:2;blog:3;hrn:14,4.279,5.51,cap
+Wylie,Wylie,12,8,acast:1;blog:7,4.278,2.93,cap
+Food Science,Food Science|food science,13,9,acast:3;blog:1;hrn:5,4.275,5.12,caprun ngram
+dehydrator,dehydrator,14,5,blog:3;hrn:2,4.268,1.98,rare
+Tsukiji Market,Tsukiji Market|Tsukiji market,9,4,blog:3;hrn:1,4.261,1.88,caprun ngram
+filleting,filleting|Filleting,9,3,blog:2;hrn:1,4.256,1.86,cap rare
+cold brew,cold brew|cold-brew,4,6,acast:1;blog:1;hrn:4,4.246,3.64,hyphen ngram
+Heritage Foods,Heritage Foods,22,22,blog:3;hrn:19,4.234,4.36,caprun ngram
+Nitrogen,Nitrogen,9,8,acast:1;blog:6;hrn:1,4.211,3.76,cap
+John,John,23,18,acast:7;blog:6;hrn:5,4.205,5.38,cap
+World,World,24,18,acast:3;blog:11;hrn:4,4.205,5.89,cap
+Horchata,Horchata|horchata,4,3,blog:1;hrn:2,4.203,1.91,cap rare
+Bravo,Bravo,11,8,acast:2;blog:1;hrn:5,4.191,3.77,cap
+emulsifiers,emulsifiers|Emulsifiers,3,3,blog:2;hrn:1,4.181,1.93,cap rare
+CVap ovens,CVap ovens|CVap Ovens|CVAP ovens,7,3,acast:1;blog:2,4.160,0.00,ngram
+Nastassia reports,Nastassia reports,3,3,acast:2;hrn:1,4.160,0.00,ngram
+Spinzall centrifuge,Spinzall centrifuge|Spinzall Centrifuge,3,3,acast:1;hrn:2,4.160,0.00,ngram
+follow-up,follow-up,7,7,acast:1;blog:3;hrn:3,4.158,5.14,hyphen
+Habanero,Habanero,6,5,blog:4;hrn:1,4.158,2.37,cap
+Marination,Marination|marination,7,5,blog:5,4.136,1.05,cap rare
+Arts,Arts,23,17,acast:8;blog:7;hrn:2,4.128,4.70,cap
+But,But,21,17,acast:2;blog:14;hrn:1,4.128,6.63,cap
+Nick,Nick,24,17,acast:7;blog:4;hrn:6,4.128,4.59,cap
+eGullet,eGullet,5,2,blog:2,4.121,0.00,camel label rare
+Pectinex Smash XXL,Pectinex Smash XXL,16,8,blog:8,4.121,0.00,ngram
+room temperature,room temperature|room-temperature,28,16,blog:15;hrn:1,4.120,4.64,hyphen ngram
+Cornell,Cornell,13,7,acast:2;blog:3;hrn:2,4.118,3.69,cap
+clove oil,clove oil|Clove oil|Clove-oil|clove-oil,23,6,acast:1;blog:5,4.108,2.91,hyphen ngram
+maltodextrin,maltodextrin,10,4,acast:1;blog:3,4.092,1.72,rare
+Chefs,Chefs,26,15,acast:1;blog:14,4.086,3.64,cap
+Heritage,Heritage,56,50,blog:22;hrn:28,4.084,4.36,cap
+Issues Dave Arnold,Issues Dave Arnold,50,50,acast:9;hrn:41,4.084,4.00,ngram
+Food Network,Food Network,9,8,acast:2;blog:5;hrn:1,4.080,5.02,caprun ngram
+New York Times,New York Times,8,8,acast:1;blog:4;hrn:3,4.080,5.37,caprun
+Pasta,Pasta,11,8,acast:2;blog:1;hrn:5,4.080,3.92,cap
+ascorbic acid,ascorbic acid|Ascorbic acid,13,9,blog:8;hrn:1,4.075,2.40,ngram
+slicers,slicers,4,4,blog:2;hrn:2,4.052,1.76,rare
+45pm,45pm,11,11,blog:11,4.049,2.22,digit
+California,California,21,16,acast:3;blog:8;hrn:5,4.047,5.00,cap
+Don't,Don't,18,16,acast:1;blog:12;hrn:3,4.047,4.74,cap
+James,James,18,16,acast:3;blog:5;hrn:8,4.047,5.11,cap
+Jean,Jean,17,16,acast:6;blog:4;hrn:6,4.047,4.36,cap
+Michael,Michael,23,16,acast:6;blog:7;hrn:3,4.047,5.08,cap
+rotovapping,rotovapping,5,5,blog:5,4.033,0.00,rare
+12pm,12pm,5,5,blog:4;hrn:1,4.027,2.72,digit
+denature,denature,4,4,blog:3;hrn:1,4.022,1.79,rare
+emulsification,emulsification,5,4,acast:2;hrn:2,4.022,1.79,rare
+John deBary,John deBary|John Debary,5,3,acast:1;hrn:2,3.994,1.53,caprun ngram
+Martins,Martins,11,8,blog:1;hrn:7,3.985,3.13,cap
+Molecules,Molecules,19,18,acast:6;hrn:12,3.976,3.92,cap
+Alex,Alex,20,15,acast:4;blog:8;hrn:3,3.960,4.62,cap
+cooking techniques,cooking techniques|Cooking Techniques,16,15,acast:1;blog:4;hrn:10,3.960,4.45,ngram
+country ham,country ham|Country Ham|COUNTRY HAM|Country ham,39,15,acast:1;blog:4;hrn:10,3.960,4.12,ngram
+English,English,17,15,acast:2;blog:11;hrn:2,3.960,5.19,cap
+Institute,Institute,15,15,acast:1;blog:11;hrn:3,3.960,4.80,cap
+Juice,Juice,15,15,acast:1;blog:9;hrn:5,3.960,4.36,cap
+Not,Not,22,15,acast:1;blog:10;hrn:4,3.960,6.69,cap
+University,University,17,15,acast:2;blog:11;hrn:2,3.960,5.39,cap
+Wine,Wine,20,15,acast:2;blog:8;hrn:5,3.960,4.74,cap
+carrageenans,carrageenans|Carrageenans,6,2,blog:1;hrn:1,3.956,0.00,rare
+consomm,consomm,3,2,acast:1;blog:1,3.956,0.00,rare
+Narun,Narun,2,2,blog:1;hrn:1,3.956,0.00,rare
+rethermalizing,rethermalizing,2,2,blog:1;hrn:1,3.956,0.00,rare
+selzter,selzter,2,2,blog:1;hrn:1,3.956,0.00,rare
+Tranglutaminase,Tranglutaminase,2,2,blog:1;hrn:1,3.956,0.00,rare
+I'm,I'm,61,43,blog:40;hrn:3,3.931,4.69,cap
+Cooking Issues Nastassia,Cooking Issues Nastassia,4,4,hrn:4,3.924,0.00,caprun ngram
+gymnemic acid,gymnemic acid|Gymnemic acid|Gymnemic Acid,12,4,blog:4,3.924,0.00,caprun ngram
+L'Ecole,L'Ecole,6,4,blog:4,3.924,0.00,cap
+Wickson,Wickson,2,2,blog:1;hrn:1,3.922,1.21,cap rare
+French Culinary Institute,French Culinary Institute,12,12,blog:9;hrn:3,3.917,3.56,caprun ngram
+MacGyvered,MacGyvered,2,2,blog:2,3.915,0.00,camel cap rare
+yMkan,yMkan|YMkan,17,2,blog:2,3.915,0.00,camel cap rare
+bain marie,bain marie|bain-marie,11,7,blog:6;hrn:1,3.913,3.23,hyphen ngram
+chinois,chinois,13,11,blog:11,3.910,1.76,rare
+Jackie Molecules,Jackie Molecules,18,17,acast:6;hrn:11,3.903,3.92,caprun ngram
+Later Dave,Later Dave,18,17,acast:1;hrn:16,3.903,4.44,caprun ngram
+Paul Adams,Paul Adams,20,17,blog:4;hrn:13,3.903,4.25,caprun ngram
+Beaumes,Beaumes,6,3,blog:3,3.900,0.00,cap rare
+Cambros,Cambros|cambros,3,3,blog:3,3.900,0.00,cap rare
+email Nastassia,email Nastassia,7,7,blog:7,3.900,0.00,ngram
+jimed,jimed|Jimed|Jime'd,10,3,blog:3,3.900,0.00,cap rare
+mokume,mokume|Mokume,4,3,blog:3,3.900,0.00,cap rare
+Shinderhannes,Shinderhannes,6,3,blog:3,3.900,0.00,cap rare
+Silpat,Silpat|silpat,6,3,blog:3,3.900,0.00,cap rare
+skoaled,skoaled|Skoaled,5,3,blog:3,3.900,0.00,cap rare
+Skoaling,Skoaling|skoaling,4,3,blog:3,3.900,0.00,cap rare
+Veggetti,Veggetti|veggetti,4,3,hrn:3,3.900,0.00,cap rare
+cured meats,cured meats|Cured Meats,8,5,acast:1;blog:2;hrn:2,3.894,3.48,caprun ngram
+co-founder,co-founder|Co-founder,6,6,acast:4;blog:1;hrn:1,3.891,4.46,cap hyphen
+Fries,Fries,11,7,acast:3;blog:3;hrn:1,3.890,3.81,cap
+fish killing,fish killing|Fish Killing|fish-killing|Fish-Killing,13,8,blog:6;hrn:2,3.880,4.88,cap caprun hyphen ngram
+Microplane,Microplane|microplane,2,2,blog:1;hrn:1,3.872,1.27,cap rare
+Rothman,Rothman,6,5,acast:3;hrn:2,3.871,2.61,cap
+Art,Art,19,14,acast:5;blog:1;hrn:8,3.868,5.29,cap
+Brooklyn,Brooklyn,14,14,acast:2;blog:1;hrn:11,3.868,4.25,cap
+Classic,Classic,14,14,acast:1;blog:3;hrn:10,3.868,4.72,cap
+Director,Director,15,14,acast:4;blog:5;hrn:5,3.868,5.15,cap
+special guest,special guest|special Guest,14,14,acast:1;blog:4;hrn:9,3.868,4.58,ngram
+Thai,Thai,33,14,acast:3;blog:9;hrn:2,3.868,4.17,cap
+Water,Water,20,14,acast:1;blog:11;hrn:2,3.868,5.52,cap
+dehydrators,dehydrators,3,3,blog:1;hrn:2,3.866,1.32,rare
+hot dogs,hot dogs|Hot Dogs,8,7,acast:3;blog:3;hrn:1,3.861,4.77,caprun ngram
+The Cooking Issues,The Cooking Issues,8,7,acast:2;blog:2;hrn:3,3.861,4.45,caprun
+Pernod,Pernod,6,4,blog:2;hrn:2,3.810,2.30,cap
+Patrick Martins,Patrick Martins,10,7,blog:1;hrn:6,3.772,3.13,caprun ngram
+China,China,15,13,acast:2;blog:8;hrn:3,3.769,5.10,cap
+Chris,Chris,22,13,acast:3;blog:4;hrn:6,3.769,4.81,cap
+Italian,Italian,14,13,acast:3;blog:7;hrn:3,3.769,4.66,cap
+Japan,Japan,20,13,acast:1;blog:9;hrn:3,3.769,4.89,cap
+Manhattan,Manhattan,15,13,acast:4;blog:6;hrn:3,3.769,4.16,cap
+Matt,Matt,19,13,acast:7;blog:1;hrn:5,3.769,4.55,cap
+Taste,Taste,15,13,acast:1;blog:10;hrn:2,3.769,4.73,cap
+Fairway,Fairway,21,21,hrn:21,3.762,2.93,cap
+Eben Klemm,Eben Klemm,21,9,blog:9,3.752,1.94,caprun ngram
+Klemm,Klemm,21,9,blog:9,3.752,1.94,cap
+Dave rants,Dave rants,6,6,acast:4;blog:1;hrn:1,3.747,3.12,ngram
+Brix,Brix,6,4,blog:2;hrn:2,3.735,2.37,cap
+Combi Ovens,Combi Ovens|Combi ovens|combi ovens,11,4,blog:3;hrn:1,3.735,2.37,caprun ngram
+Lobster,Lobster|lobster,12,6,blog:4;hrn:2,3.733,3.65,cap label
+eBay,eBay|Ebay,18,12,blog:8;hrn:4,3.730,4.04,camel cap
+Calamansi,Calamansi|calamansi,2,2,blog:1;hrn:1,3.719,1.45,cap rare
+egg yolks,egg yolks,16,10,blog:9;hrn:1,3.715,2.83,ngram
+salumi,salumi|Salumi,3,2,blog:1;hrn:1,3.702,1.47,cap rare
+I've,I've,49,34,blog:31;hrn:3,3.693,4.02,cap
+Market,Market,38,34,blog:4;hrn:30,3.693,5.29,cap
+Amazon,Amazon,12,12,acast:1;blog:2;hrn:9,3.663,4.55,cap
+Butter,Butter,15,12,acast:4;blog:4;hrn:4,3.663,4.40,cap
+Christmas,Christmas,16,12,acast:1;blog:4;hrn:7,3.663,4.91,cap
+God,God,12,12,acast:1;blog:10;hrn:1,3.663,5.57,cap
+Ham,Ham,17,12,acast:2;blog:3;hrn:7,3.663,4.12,cap
+Home,Home,22,12,acast:3;blog:4;hrn:5,3.663,5.81,cap
+Milk,Milk,16,12,acast:2;blog:5;hrn:5,3.663,4.66,cap
+Techniques,Techniques,14,12,acast:2;blog:9;hrn:1,3.663,4.51,cap
+Times,Times,13,12,acast:3;blog:6;hrn:3,3.663,5.56,cap
+Young,Young,18,12,acast:2;blog:4;hrn:6,3.663,5.43,cap
+vacuum distillation,vacuum distillation|vacuum-distillation,4,5,blog:3;hrn:2,3.654,3.01,hyphen ngram
+cookbook author,cookbook author|Cookbook author,7,7,acast:5;blog:1;hrn:1,3.652,3.36,ngram
+Lvoff Purpose,Lvoff Purpose,6,6,blog:6,3.650,0.00,ngram
+Nastassia tackle,Nastassia tackle,6,6,hrn:6,3.650,0.00,ngram
+Pectinex SP-L,Pectinex SP-L,15,6,blog:6,3.650,0.00,ngram
+rigor mortis,rigor mortis|Rigor Mortis|rigor-mortis|Rigor mortis,16,7,blog:7,3.649,2.63,caprun hyphen ngram
+Aqui-S,Aqui-S,14,6,blog:6,3.648,2.41,cap hyphen
+simple syrup,simple syrup|Simple syrup|Simple Syrup,67,29,blog:25;hrn:4,3.646,3.76,ngram
+BDX,BDX,2,2,acast:1;hrn:1,3.645,1.23,acronym
+batched,batched,3,3,blog:1;hrn:2,3.635,1.59,rare
+hydrocolloid,hydrocolloid|Hydrocolloid|HYDROCOLLOID,48,8,blog:8,3.635,1.55,rare
+Radio,Radio,43,32,blog:22;hrn:10,3.632,5.01,cap
+Culinary Center,Culinary Center,23,21,blog:4;hrn:17,3.631,3.56,ngram
+International Culinary,International Culinary,23,21,blog:4;hrn:17,3.631,3.56,ngram
+Modernist Pantry,Modernist Pantry,27,26,hrn:26,3.626,3.21,caprun ngram
+skoaler,skoaler,4,4,blog:4,3.622,0.00,rare
+Belgian,Belgian,7,6,acast:4;blog:1;hrn:1,3.622,3.82,cap
+Kickstarter,Kickstarter,12,10,blog:2;hrn:8,3.614,3.59,cap
+hot dog,hot dog|hot-dog|Hot Dog|Hot dog,25,11,acast:7;blog:4,3.614,5.10,hyphen ngram
+Eats,Eats,6,6,acast:2;blog:3;hrn:1,3.613,3.95,cap
+Executive Chef,Executive Chef|executive chef,13,6,acast:1;blog:3;hrn:2,3.613,4.23,caprun ngram
+gum arabic,gum arabic|Gum Arabic|GUM ARABIC|Gum arabic,12,6,acast:2;blog:3;hrn:1,3.613,3.94,caprun ngram
+Serious Eats,Serious Eats,6,6,acast:2;blog:3;hrn:1,3.613,3.95,caprun ngram
+Steak,Steak,6,6,acast:1;blog:2;hrn:3,3.613,3.97,cap
+tenderize,tenderize,3,3,blog:1;hrn:2,3.610,1.62,rare
+stainless steel,stainless steel|Stainless steel|stainless-steel,12,10,blog:9;hrn:1,3.599,3.76,hyphen ngram
+Pantry,Pantry,27,26,hrn:26,3.599,3.23,cap
+Daniel Patterson,Daniel Patterson|daniel patterson,4,3,acast:1;blog:1;hrn:1,3.590,3.69,caprun label ngram
+Corn,Corn,8,5,acast:1;blog:3;hrn:1,3.583,4.19,cap label
+Music,Music|music,6,5,acast:3;blog:1;hrn:1,3.583,5.52,cap label
+pre-cooked,pre-cooked,5,5,acast:1;blog:3;hrn:1,3.583,4.11,hyphen
+Thai basil,Thai basil|Thai Basil|thai basil,24,9,acast:1;blog:7;hrn:1,3.573,3.65,ngram
+I'll,I'll,33,30,blog:28;hrn:2,3.567,4.72,cap
+Distillation,Distillation|distillation,11,9,blog:9,3.564,3.01,cap label
+Pates,Pates|pates,2,2,blog:1;hrn:1,3.550,1.65,cap rare
+Eggs,Eggs,13,11,acast:2;blog:6;hrn:3,3.549,4.50,cap
+From,From,12,11,acast:1;blog:5;hrn:5,3.549,6.63,cap
+Scotch,Scotch,9,5,acast:1;blog:3;hrn:1,3.549,3.69,cap
+galangal,galangal,4,3,acast:2;blog:1,3.541,1.70,rare
+purees,purees,4,3,blog:2;hrn:1,3.541,1.70,rare
+Cookers,Cookers,4,4,acast:1;hrn:3,3.520,2.57,cap
+Fairway Market,Fairway Market,17,17,hrn:17,3.518,2.93,caprun ngram
+Anti-Caking,Anti-Caking|anti-caking,2,2,acast:1;blog:1,3.516,2.18,cap hyphen
+Cookware,Cookware,5,4,acast:1;hrn:3,3.510,2.58,cap
+Sando,Sando,4,3,acast:2;hrn:1,3.504,2.06,cap
+BeaterBlade,BeaterBlade,5,2,blog:2,3.503,0.00,camel cap
+El-Waylly,El-Waylly|EL-WAYLLY,4,2,acast:2,3.503,0.00,cap hyphen
+Kelcogel,Kelcogel|KelcoGel,3,2,blog:2,3.503,0.00,camel cap
+Shir-Khesht,Shir-Khesht|Shir-khesht|shir-khesht|Shir Khesht,10,2,blog:2,3.503,0.00,cap caprun hyphen
+Ziploc bag,Ziploc bag|ziploc bag|Ziploc-bag,10,8,blog:8,3.501,2.30,hyphen ngram
+Some,Some,32,28,blog:27;hrn:1,3.498,6.20,cap
+Schramm,Schramm,12,9,hrn:9,3.493,2.21,cap
+duck fat,duck fat|Duck fat|duck-fat,21,10,blog:9;hrn:1,3.487,4.21,hyphen ngram
+astringency,astringency,3,3,acast:2;blog:1,3.473,1.78,rare
+pungency,pungency,3,3,blog:2;hrn:1,3.473,1.78,rare
+Gin,Gin,16,10,blog:9;hrn:1,3.470,3.68,cap
+Don Lee,Don Lee,17,12,blog:4;hrn:8,3.464,4.60,caprun ngram
+I'd,I'd,40,27,blog:25;hrn:2,3.461,4.61,cap
+Bionic Turkey,Bionic Turkey|bionic turkey|Bionic turkey,12,5,blog:4;hrn:1,3.453,2.96,caprun ngram
+nitrous oxide,nitrous oxide|Nitrous Oxide,7,5,acast:1;blog:4,3.453,2.96,caprun ngram
+Pokers,Pokers|pokers,2,2,blog:1;hrn:1,3.449,1.77,cap rare
+Sorbet,Sorbet,5,4,acast:1;blog:3,3.445,2.64,cap
+daiquiris,daiquiris,4,3,blog:2;hrn:1,3.439,1.82,rare
+Americans,Americans,15,10,acast:1;blog:8;hrn:1,3.425,4.83,cap
+Bread,Bread,10,10,acast:5;blog:1;hrn:4,3.425,4.50,cap
+Dave explains,Dave explains|Dave Explains,10,10,acast:2;blog:1;hrn:7,3.425,4.42,ngram
+Del,Del,13,10,acast:1;blog:5;hrn:4,3.425,4.32,cap
+duck breast,duck breast|Duck breast|Duck Breast,13,10,acast:2;blog:6;hrn:2,3.425,4.21,ngram
+Everything,Everything,10,10,acast:1;blog:8;hrn:1,3.425,5.54,cap
+George,George,17,10,acast:3;blog:4;hrn:3,3.425,5.04,cap
+Great,Great,10,10,acast:1;blog:4;hrn:5,3.425,5.88,cap
+Jim,Jim,13,10,acast:2;blog:1;hrn:7,3.425,4.62,cap
+King,King,14,10,acast:2;blog:7;hrn:1,3.425,5.17,cap
+Los,Los,10,10,acast:5;blog:1;hrn:4,3.425,4.78,cap
+Magazine,Magazine,12,10,acast:1;blog:7;hrn:2,3.425,4.74,cap
+National,National,12,10,acast:1;blog:7;hrn:2,3.425,5.51,cap
+Pastry,Pastry,5,4,acast:2;blog:1;hrn:1,3.424,3.53,cap
+Radio Network,Radio Network,26,26,blog:18;hrn:8,3.424,5.01,ngram
+Alex Guarnaschelli,Alex Guarnaschelli,2,2,blog:1;hrn:1,3.414,1.19,caprun
+Guarnaschelli,Guarnaschelli,4,2,blog:1;hrn:1,3.414,1.19,cap
+Vita,Vita,10,8,blog:7;hrn:1,3.414,3.52,cap
+Masa,Masa,7,4,acast:1;blog:3,3.413,2.67,cap
+Ziploc,Ziploc,39,9,blog:9,3.407,2.30,cap
+bookended,bookended,3,3,blog:2;hrn:1,3.396,1.87,rare
+Bananagrams,Bananagrams,2,2,acast:1;hrn:1,3.392,1.22,cap
+After,After,28,25,blog:24;hrn:1,3.384,6.11,cap
+Carvel,Carvel,4,3,acast:2;hrn:1,3.383,2.19,cap
+Chitosan,Chitosan,4,3,blog:2;hrn:1,3.383,2.19,cap
+Batterberry,Batterberry,3,3,blog:3,3.380,0.00,cap
+Cooking Issues Dave Nastassia,Cooking Issues Dave Nastassia,3,3,hrn:3,3.380,0.00,caprun
+Ike Jime'd,Ike Jime'd|Ike Jimed,4,3,blog:3,3.380,0.00,caprun
+Michael Batterberry,Michael Batterberry,3,3,blog:3,3.380,0.00,caprun ngram
+Mindy Lvoff Remember,Mindy Lvoff Remember,3,3,blog:3,3.380,0.00,caprun ngram
+Nastassia Quinn,Nastassia Quinn,3,3,acast:3,3.380,0.00,caprun ngram
+Pectinex Ultra,Pectinex Ultra,12,3,blog:3,3.380,0.00,caprun ngram
+Sorvall,Sorvall,4,3,blog:3,3.380,0.00,cap
+doughs,doughs,3,3,acast:2;blog:1,3.379,1.89,rare
+Novozymes,Novozymes,6,5,blog:5,3.375,1.33,cap
+pez-Alt,pez-Alt,5,3,acast:1;hrn:2,3.375,2.46,hyphen
+Jordana,Jordana,3,3,acast:1;hrn:2,3.374,2.20,cap
+Jordana Rothman,Jordana Rothman,3,3,acast:1;hrn:2,3.374,2.20,caprun ngram
+extruding,extruding,3,3,blog:2;hrn:1,3.371,1.90,rare
+pre-batched,pre-batched,2,2,blog:1;hrn:1,3.361,1.59,hyphen
+Issues Nastassia,Issues Nastassia,5,5,hrn:5,3.360,0.00,ngram
+Nastassia Lopez talk,Nastassia Lopez talk,5,5,hrn:5,3.360,0.00,ngram
+low temp cooking,low temp cooking|low-temp cooking|Low-Temp Cooking|Low-temp cooking,17,10,blog:7;hrn:3,3.358,3.75,caprun ngram
+Alchemy,Alchemy,3,3,acast:1;blog:1;hrn:1,3.356,3.21,cap
+USDA,USDA,6,6,blog:4;hrn:2,3.354,3.45,acronym
+jam-packed,jam-packed,9,9,acast:1;hrn:8,3.349,4.17,hyphen
+SP-L,SP-L|SP-l,43,9,blog:8;hrn:1,3.349,4.03,cap hyphen
+GMO,GMO,5,5,blog:1;hrn:4,3.346,3.25,acronym
+temperature cooking,temperature cooking|Temperature Cooking,66,24,blog:13;hrn:11,3.344,4.45,ngram
+yokan,yokan,4,3,blog:3,3.342,1.15,label rare
+Jack Schramm,Jack Schramm,11,8,hrn:8,3.333,2.21,caprun ngram
+whipped cream,whipped cream,9,8,acast:1;blog:6;hrn:1,3.332,3.70,ngram
+Buchi,Buchi,24,4,blog:4,3.328,1.55,cap rare
+Bangkok,Bangkok,9,5,acast:1;blog:3;hrn:1,3.327,3.84,cap
+Happy Holidays,Happy Holidays|happy holidays|Happy holidays,5,5,acast:2;blog:2;hrn:1,3.327,4.22,caprun ngram
+Iron Chef,Iron Chef,6,5,acast:1;blog:3;hrn:1,3.327,4.23,caprun ngram
+New Orleans,New Orleans,6,5,acast:1;blog:1;hrn:3,3.327,4.21,caprun
+Special Bonus,Special Bonus|special bonus,5,5,acast:1;blog:3;hrn:1,3.327,4.45,caprun ngram
+N2O,N2O,38,6,blog:6,3.310,2.06,digit
+HAACP,HAACP,4,2,blog:2,3.297,0.00,acronym rare
+incoloy,incoloy|Incoloy,6,2,blog:2,3.297,0.00,label rare
+Sabering,Sabering|sabering,8,2,blog:2,3.297,0.00,label rare
+WAFCO,WAFCO,3,2,blog:2,3.297,0.00,acronym rare
+myoglobin,myoglobin|Myoglobin,4,3,blog:1;hrn:2,3.294,1.99,rare
+African,African,11,9,acast:5;blog:1;hrn:3,3.289,4.82,cap
+Back,Back,10,9,acast:1;blog:4;hrn:4,3.289,6.04,cap
+Cheese,Cheese,10,9,acast:1;blog:4;hrn:4,3.289,4.57,cap
+Columbia,Columbia,11,9,acast:1;blog:7;hrn:1,3.289,4.40,cap
+Deep,Deep,9,9,acast:3;blog:2;hrn:4,3.289,5.05,cap
+Egg,Egg,16,9,acast:1;blog:5;hrn:3,3.289,4.46,cap
+Executive,Executive,16,9,acast:1;blog:3;hrn:5,3.289,4.87,cap
+Flavor,Flavor,20,9,acast:1;blog:4;hrn:4,3.289,4.04,cap
+Fruit,Fruit,18,9,acast:1;blog:4;hrn:4,3.289,4.57,cap
+Island,Island,10,9,acast:2;blog:3;hrn:4,3.289,5.01,cap
+Mexico,Mexico,13,9,acast:1;blog:5;hrn:3,3.289,4.75,cap
+Pressure,Pressure,11,9,acast:1;blog:6;hrn:2,3.289,5.01,cap
+San,San,16,9,acast:1;blog:6;hrn:2,3.289,4.97,cap
+Show,Show,9,9,acast:1;blog:3;hrn:5,3.289,5.68,cap
+Stone,Stone,12,9,acast:3;blog:4;hrn:2,3.289,4.80,cap
+Time,Time,10,9,acast:1;blog:6;hrn:2,3.289,6.29,cap
+Fabbro,Fabbro,3,2,acast:1;hrn:1,3.282,1.37,cap
+Gargano,Gargano,5,3,acast:1;hrn:2,3.282,2.30,cap
+Joel Gargano,Joel Gargano,5,3,acast:1;hrn:2,3.282,2.30,caprun ngram
+Pernod Ricard,Pernod Ricard,3,3,blog:1;hrn:2,3.282,2.30,caprun ngram
+ichiban,ichiban|Ichiban,5,2,acast:1;blog:1,3.271,1.98,cap rare
+Skoal Project,Skoal Project|skoal project,6,6,blog:6,3.268,1.82,caprun ngram
+Nils Nor,Nils Nor,4,4,blog:3;hrn:1,3.263,2.81,caprun ngram
+Dave answers,Dave answers,22,22,acast:2;hrn:20,3.257,4.44,ngram
+Team,Team,22,22,acast:1;blog:21,3.257,5.67,cap
+carbonated cocktails,carbonated cocktails|Carbonated Cocktails,5,4,acast:1;hrn:3,3.252,2.82,caprun ngram
+maple syrup,maple syrup,11,8,acast:2;blog:4;hrn:2,3.239,3.76,ngram
+Jeffrey,Jeffrey,13,10,blog:8;hrn:2,3.238,3.90,cap
+Kitchen Arts Letters,Kitchen Arts Letters,14,10,acast:8;hrn:2,3.238,4.65,caprun ngram
+distillations,distillations,17,6,blog:6,3.227,1.54,rare
+dry-aged,dry-aged,4,4,acast:2;blog:1;hrn:1,3.218,4.50,hyphen
+in-depth,in-depth|In-depth,4,4,acast:1;blog:1;hrn:2,3.218,4.55,hyphen
+Powder,Powder|powder,4,4,acast:1;blog:2;hrn:1,3.218,4.25,cap label
+Combi,Combi,11,3,blog:2;hrn:1,3.217,2.37,cap
+Habanero Vodka,Habanero Vodka|habanero vodka,3,3,blog:2;hrn:1,3.217,2.37,caprun ngram
+Foods USA,Foods USA,21,21,blog:2;hrn:19,3.211,4.41,ngram
+Project,Project,28,21,blog:19;hrn:2,3.211,5.22,cap
+Booker Dax,Booker Dax,17,15,hrn:15,3.201,3.08,caprun ngram
+Hams,Hams,6,4,blog:2;hrn:2,3.198,2.87,cap
+Eben,Eben,20,10,blog:10,3.198,2.65,cap
+Chocolate,Chocolate,10,8,blog:7;hrn:1,3.195,4.49,cap label
+on-air,on-air,9,8,acast:1;hrn:7,3.195,5.37,hyphen
+metates,metates,2,2,acast:1;blog:1,3.192,1.13,rare
+Pastry Chef,Pastry Chef|pastry chef|Pastry chef,7,6,acast:3;blog:2;hrn:1,3.184,3.53,ngram
+Primer,Primer|primer,11,11,blog:11,3.183,3.50,cap label
+Bushwick,Bushwick,3,3,blog:1;hrn:2,3.180,2.41,cap
+Boulud,Boulud,2,2,blog:1;hrn:1,3.172,1.52,cap
+Fry,Fry|fry,13,5,blog:4;hrn:1,3.164,3.89,cap label
+All,All,25,20,blog:19;hrn:1,3.162,6.52,cap
+Heritage Foods USA,Heritage Foods USA,20,20,blog:1;hrn:19,3.162,4.36,ngram
+joins Dave,joins Dave,21,20,acast:12;hrn:8,3.162,4.04,ngram
+One,One,24,20,blog:17;hrn:3,3.162,6.47,cap
+Our,Our,23,20,blog:19;hrn:1,3.162,6.14,cap
+Hearst,Hearst,14,14,hrn:14,3.149,3.06,cap
+Hearst Ranch,Hearst Ranch,14,14,hrn:14,3.149,3.06,caprun ngram
+ice creams,ice creams|Ice Creams,7,5,acast:2;blog:3,3.142,3.22,caprun ngram
+Bad,Bad,10,8,acast:2;blog:4;hrn:2,3.138,5.53,cap
+Black,Black,8,8,acast:1;blog:4;hrn:3,3.138,5.46,cap
+Book,Book,8,8,acast:3;blog:1;hrn:4,3.138,5.43,cap
+East,East,8,8,acast:4;blog:1;hrn:3,3.138,5.16,cap
+Farm,Farm,14,8,acast:1;blog:5;hrn:2,3.138,4.75,cap
+Jersey,Jersey,10,8,acast:2;blog:5;hrn:1,3.138,4.66,cap
+London,London,13,8,acast:1;blog:6;hrn:1,3.138,5.27,cap
+Next,Next,8,8,acast:1;blog:5;hrn:2,3.138,5.70,cap
+Park,Park,16,8,acast:2;blog:3;hrn:3,3.138,5.16,cap
+Professor,Professor,10,8,acast:2;blog:4;hrn:2,3.138,4.90,cap
+Spanish,Spanish,18,8,acast:1;blog:5;hrn:2,3.138,4.73,cap
+Nguyen,Nguyen,6,5,acast:1;blog:4,3.130,3.23,cap
+Maillard reactions,Maillard reactions,9,4,blog:3;hrn:1,3.129,2.06,ngram
+Activa,Activa,29,4,blog:4,3.127,1.81,cap rare
+flavedo,flavedo|Flavedo,8,3,blog:3,3.120,0.00,rare
+fuges,fuges,7,3,blog:3,3.120,0.00,rare
+isoeugenol,isoeugenol|Isoeugenol,17,3,blog:3,3.120,0.00,rare
+skoals,skoals|Skoals,3,3,blog:3,3.120,0.00,rare
+Ricard,Ricard,3,3,blog:1;hrn:2,3.115,2.48,cap
+Los Angeles,Los Angeles,9,9,acast:5;hrn:4,3.109,4.73,caprun ngram
+Prep,Prep,17,9,blog:8;hrn:1,3.109,3.94,cap
+temperature control,temperature control|Temperature Control,20,9,blog:8;hrn:1,3.109,4.64,caprun ngram
+Texture,Texture,25,9,acast:1;blog:8,3.109,3.93,cap
+Salep,Salep|salep,46,3,blog:3,3.100,1.20,cap rare
+NTT,NTT,7,7,acast:7,3.099,2.53,acronym
+Brogdale,Brogdale,16,2,blog:2,3.091,0.00,cap rare
+CVaps,CVaps,5,2,blog:2,3.091,0.00,cap rare
+Dolsot,Dolsot|dolsot,3,2,blog:2,3.091,0.00,cap rare
+Dondurma,Dondurma|dondurma,17,2,blog:2,3.091,0.00,cap rare
+Fryable,Fryable|fryable,3,2,blog:2,3.091,0.00,cap rare
+Lisinska,Lisinska,5,2,blog:2,3.091,0.00,cap rare
+miraculin,miraculin|Miraculin,6,2,blog:2,3.091,0.00,cap rare
+Nixtamalized,Nixtamalized|nixtamalized,10,2,blog:2,3.091,0.00,cap rare
+Schinderhannes,Schinderhannes|schinderhannes,2,2,blog:2,3.091,0.00,cap rare
+Sconzo,Sconzo,2,2,blog:2,3.091,0.00,cap rare
+Spinzalls,Spinzalls|spinzalls,2,2,hrn:2,3.091,0.00,cap rare
+Velveting,Velveting|velveting,3,2,hrn:2,3.091,0.00,cap rare
+Huggett,Huggett,6,5,blog:5,3.084,1.72,cap
+Travis Huggett,Travis Huggett,6,5,blog:5,3.084,1.72,caprun ngram
+Philoctetes,Philoctetes,6,3,blog:3,3.083,1.77,cap label
+Tangents,Tangents,8,8,acast:8,3.077,2.49,cap
+Kold-Draft,Kold-Draft|Kold Draft,15,3,blog:3,3.068,1.79,cap caprun hyphen
+Tuna,Tuna,9,7,blog:6;hrn:1,3.065,3.64,cap
+texturizing,texturizing,2,2,blog:1;hrn:1,3.063,1.32,rare
+Brooks Headley,Brooks Headley,7,3,blog:1;hrn:2,3.060,2.54,caprun ngram
+Headley,Headley,7,3,blog:1;hrn:2,3.060,2.54,cap
+Cook,Cook,26,18,blog:9;hrn:9,3.059,4.65,cap
+Ziplock bags,Ziplock bags|ziplock bags,5,4,blog:1;hrn:3,3.055,2.15,ngram
+TIC,TIC,8,4,blog:3;hrn:1,3.051,3.21,acronym
+TIC Gums,TIC Gums,4,4,blog:3;hrn:1,3.051,3.21,label ngram
+PSA,PSA,6,5,acast:1;hrn:4,3.050,3.48,acronym
+Berkel,Berkel,5,2,blog:1;hrn:1,3.048,1.69,cap
+Van Berkel,Van Berkel,3,2,blog:1;hrn:1,3.048,1.69,caprun
+Fermentation,Fermentation,9,5,acast:2;hrn:3,3.047,3.30,cap
+Aperol,Aperol,3,2,blog:1;hrn:1,3.033,1.71,cap
+caller questions,caller questions,13,13,acast:1;hrn:12,3.032,3.61,ngram
+connective tissue,connective tissue|Connective tissue,13,7,blog:6;hrn:1,3.029,3.01,ngram
+Alinea,Alinea,2,2,acast:1;blog:1,3.026,1.72,cap
+fluid gel,fluid gel|fluid-gel,13,7,acast:1;blog:6,3.024,3.84,hyphen ngram
+high-end,high-end,8,7,blog:2;hrn:5,3.024,5.68,hyphen
+in-studio,in-studio,7,7,acast:5;hrn:2,3.024,4.66,hyphen
+pop-up,pop-up|Pop-Up,8,7,acast:5;hrn:2,3.024,4.87,cap hyphen
+chewier,chewier,2,2,blog:1;hrn:1,3.023,1.38,rare
+gelatin clarification,gelatin clarification|Gelatin Clarification|gelatin-clarification,7,6,blog:6,3.023,3.00,caprun hyphen ngram
+andVacuum Tricks,andVacuum Tricks,4,4,blog:4,3.019,0.00,ngram
+Machine andVacuum,Machine andVacuum,4,4,blog:4,3.019,0.00,ngram
+Machine andVacuum Tricks,Machine andVacuum Tricks,4,4,blog:4,3.019,0.00,ngram
+Vacuum Machine andVacuum,Vacuum Machine andVacuum,4,4,blog:4,3.019,0.00,ngram
+French Culinary,French Culinary,12,12,blog:9;hrn:3,3.013,3.56,ngram
+Sushi,Sushi,9,7,blog:5;hrn:2,3.009,3.68,cap
+Toshio,Toshio,7,7,blog:7,3.007,2.38,cap
+SPL,SPL,11,3,blog:2;hrn:1,3.007,2.83,acronym
+gluconate,gluconate|Gluconate,14,4,blog:4,3.003,1.97,cap rare
+Adams,Adams,20,17,blog:4;hrn:13,3.002,4.25,cap
+Edwards,Edwards,18,17,blog:1;hrn:16,3.002,4.04,cap
+Lee,Lee,26,17,blog:7;hrn:10,3.002,4.73,cap
+orange juice,orange juice|Orange Juice,21,17,blog:13;hrn:4,3.002,4.36,ngram
+vacuum infused,vacuum infused|vacuum-infused|Vacuum Infused|Vacuum-Infused,11,14,blog:14,3.002,3.38,hyphen ngram
+XXL,XXL,18,8,blog:8,2.998,2.81,acronym
+James Beard Award,James Beard Award,4,4,acast:1;blog:1;hrn:2,2.988,4.07,caprun ngram
+Madness,Madness,6,4,acast:1;blog:2;hrn:1,2.988,3.97,cap
+Pierre,Pierre,5,4,acast:1;blog:2;hrn:1,2.988,3.95,cap
+Toast,Toast,6,4,acast:1;blog:2;hrn:1,2.988,3.96,cap
+West African,West African,5,4,acast:2;blog:1;hrn:1,2.988,4.82,caprun ngram
+The Rest,The Rest,33,33,hrn:33,2.976,5.23,caprun
+Beard,Beard,7,7,acast:1;blog:2;hrn:4,2.970,4.07,cap
+Best,Best,7,7,acast:3;blog:1;hrn:3,2.970,5.84,cap
+Daniel,Daniel,8,7,acast:2;blog:1;hrn:4,2.970,4.62,cap
+food writer,food writer|Food Writer|Food writer,9,7,acast:3;blog:3;hrn:1,2.970,4.69,ngram
+Fried,Fried,7,7,acast:1;blog:5;hrn:1,2.970,4.06,cap
+fry oil,fry oil,7,7,acast:1;blog:3;hrn:3,2.970,3.89,ngram
+Get,Get,8,7,acast:2;blog:4;hrn:1,2.970,6.28,cap
+Life,Life,10,7,acast:2;blog:1;hrn:4,2.970,5.89,cap
+Mexican,Mexican,15,7,acast:1;blog:4;hrn:2,2.970,4.41,cap
+Nation,Nation,7,7,acast:2;blog:3;hrn:2,2.970,4.88,cap
+Photo,Photo,9,7,acast:1;blog:1;hrn:5,2.970,4.97,cap
+Simple,Simple,11,7,acast:2;blog:4;hrn:1,2.970,5.08,cap
+South,South,13,7,acast:2;blog:4;hrn:1,2.970,5.40,cap
+Top,Top,8,7,acast:2;blog:4;hrn:1,2.970,5.57,cap
+highballs,highballs,2,2,blog:1;hrn:1,2.969,1.46,rare
+Pistachio Sorbet,Pistachio Sorbet|pistachio sorbet,4,3,acast:1;blog:2,2.967,2.64,caprun ngram
+Classics,Classics,9,8,acast:2;hrn:6,2.967,3.90,cap
+Dave goes,Dave goes|Dave Goes,8,8,acast:3;hrn:5,2.967,4.44,caprun ngram
+Japanese fish killing,Japanese fish killing|Japanese Fish-Killing|Japanese fish-killing|Japanese fish Killing,10,8,blog:6;hrn:2,2.967,4.81,caprun ngram
+Poker,Poker,17,8,blog:7;hrn:1,2.967,3.97,cap
+Popular Science,Popular Science,9,8,blog:1;hrn:7,2.967,5.07,caprun ngram
+United States,United States,8,8,blog:5;hrn:3,2.967,5.47,caprun
+Vodka,Vodka,8,8,blog:4;hrn:4,2.967,3.83,cap
+Flash Pickling,Flash Pickling|flash-pickling|flash pickling,5,4,blog:4,2.965,2.47,caprun label ngram
+McGee Lecture Series,McGee Lecture Series|McGee lecture series,5,5,blog:4;hrn:1,2.963,3.37,caprun ngram
+Peanuts,Peanuts,3,3,acast:1;blog:1;hrn:1,2.962,3.52,cap
+Rotary Evaporation,Rotary Evaporation|rotary evaporation|Rotary evaporation,21,12,blog:12,2.961,3.08,caprun ngram
+low acyl,low acyl|Low Acyl|Low-acyl|low-acyl,15,4,blog:4,2.956,2.48,cap hyphen ngram
+greenmarket,greenmarket|Greenmarket,3,3,blog:3,2.953,1.42,cap rare
+Bitters,Bitters,3,3,blog:2;hrn:1,2.949,2.66,cap
+Esquire,Esquire,4,4,acast:1;blog:3,2.941,3.11,cap
+Chang,Chang,17,7,acast:1;blog:6,2.940,3.73,cap
+pasteurize,pasteurize,2,2,blog:1;hrn:1,2.935,1.51,rare
+artificial sweeteners,artificial sweeteners,3,3,acast:1;blog:1;hrn:1,2.933,2.85,ngram
+Barun,Barun,2,2,blog:1;hrn:1,2.930,1.85,cap
+caramelization,caramelization,2,2,acast:1;hrn:1,2.928,1.52,rare
+hear Dave,hear Dave|Hear Dave,40,31,hrn:31,2.925,4.44,caprun ngram
+BPA,BPA,5,3,blog:2;hrn:1,2.917,2.92,acronym
+mashed potatoes,mashed potatoes,15,9,acast:3;blog:6,2.906,3.39,ngram
+refractometer,refractometer|Refractometer,10,5,blog:5,2.895,1.65,rare
+tree sap,tree sap|Tree sap|tree-sap,6,5,acast:3;blog:2,2.895,3.60,hyphen ngram
+Foreman,Foreman,3,3,acast:1;blog:1;hrn:1,2.885,3.58,cap
+potato-chip-bag-resealer,potato-chip-bag-resealer,2,2,blog:2,2.885,0.00,hyphen
+off-flavors,off-flavors,9,5,blog:3;hrn:2,2.882,3.61,hyphen
+No-Knead,No-Knead|no-knead,4,4,hrn:4,2.877,2.57,cap hyphen
+combi oven,combi oven|Combi oven,10,4,blog:2;hrn:2,2.873,2.37,ngram
+Lopez Dave,Lopez Dave,7,7,blog:6;hrn:1,2.857,3.79,caprun ngram
+crispier,crispier,2,2,acast:1;blog:1,2.854,1.63,rare
+Ouzo,Ouzo,3,2,blog:1;hrn:1,2.850,1.96,cap
+Hong Kong,Hong Kong|Hong-Kong,5,4,acast:1;blog:3,2.842,4.49,cap caprun hyphen ngram
+Sous-Vide Intensive,Sous-Vide Intensive|Sous Vide Intensive,7,5,blog:5,2.842,2.94,caprun label ngram
+500ml,500ml,2,2,blog:2,2.840,0.09,digit
+quart containers,quart containers,7,6,blog:4;hrn:2,2.835,3.01,ngram
+trichinosis,trichinosis,2,2,blog:1;hrn:1,2.833,1.66,rare
+Gums,Gums,4,4,blog:3;hrn:1,2.833,3.21,cap
+Tequila,Tequila,6,5,acast:1;blog:4,2.832,3.48,cap
+award-winning,award-winning,7,6,acast:5;blog:1,2.830,4.88,hyphen
+call-in,call-in,6,6,blog:1;hrn:5,2.830,5.51,hyphen
+dry-aging,dry-aging,7,6,acast:4;blog:2,2.830,4.04,hyphen
+long-term,long-term|Long-term,11,6,blog:5;hrn:1,2.830,5.23,hyphen
+Pierre Thiam,Pierre Thiam,2,2,acast:1;hrn:1,2.828,1.99,caprun
+Thiam,Thiam,3,2,acast:1;hrn:1,2.828,1.99,cap
+Ovens,Ovens,7,4,blog:2;hrn:2,2.823,3.22,cap
+Piper,Piper,6,6,blog:2;hrn:4,2.816,3.68,cap
+And,And,14,14,blog:13;hrn:1,2.813,7.41,cap
+Sons,Sons,14,14,blog:2;hrn:12,2.813,4.50,cap
+F50,F50,3,3,blog:3,2.812,1.33,digit
+Gum,Gum,7,7,blog:4;hrn:3,2.808,3.94,cap
+thermocouples,thermocouples|Thermocouples,12,5,blog:5,2.806,1.78,rare
+C412,C412,4,2,blog:2,2.796,0.18,digit
+Max von Sydow,Max von Sydow|max von sydow,5,4,blog:4,2.788,1.99,label ngram
+Turducken,Turducken|turducken,4,3,hrn:3,2.787,1.67,cap rare
+Dave Nils,Dave Nils,10,8,blog:8,2.784,2.81,caprun ngram
+Marcus Samuelsson,Marcus Samuelsson,2,2,acast:1;blog:1,2.784,2.05,caprun
+Samuelsson,Samuelsson,2,2,acast:1;blog:1,2.784,2.05,cap
+Ajinomoto,Ajinomoto,12,3,blog:3,2.780,1.68,cap rare
+Austin,Austin,6,6,acast:4;blog:1;hrn:1,2.779,4.36,cap
+Beach,Beach,9,6,acast:2;blog:2;hrn:2,2.779,4.92,cap
+Canadian,Canadian,7,6,acast:3;blog:1;hrn:2,2.779,4.70,cap
+Carolina,Carolina,7,6,acast:1;blog:3;hrn:2,2.779,4.52,cap
+Dave tries,Dave tries,6,6,acast:1;blog:1;hrn:4,2.779,4.44,ngram
+Douglas,Douglas,8,6,acast:1;blog:3;hrn:2,2.779,4.21,cap
+Iron,Iron,11,6,acast:1;blog:4;hrn:1,2.779,4.74,cap
+James Beard,James Beard,6,6,acast:1;blog:2;hrn:3,2.779,4.07,ngram
+Old,Old,6,6,acast:1;blog:3;hrn:2,2.779,5.75,cap
+Orleans,Orleans,7,6,acast:2;blog:1;hrn:3,2.779,4.21,cap
+Press,Press,6,6,acast:1;blog:2;hrn:3,2.779,5.16,cap
+Richard,Richard,10,6,acast:3;blog:1;hrn:2,2.779,4.79,cap
+Secret,Secret,7,6,acast:4;blog:1;hrn:1,2.779,4.92,cap
+Serious,Serious,6,6,acast:2;blog:3;hrn:1,2.779,5.10,cap
+Side,Side,7,6,acast:3;blog:2;hrn:1,2.779,5.50,cap
+Special,Special,12,6,acast:1;blog:2;hrn:3,2.779,5.34,cap
+Street,Street,6,6,acast:1;blog:2;hrn:3,2.779,5.28,cap
+Sugar,Sugar,6,6,acast:1;blog:3;hrn:2,2.779,4.68,cap
+Tokyo,Tokyo,11,6,acast:1;blog:3;hrn:2,2.779,4.27,cap
+Western,Western,10,6,acast:1;blog:3;hrn:2,2.779,5.01,cap
+Dave revisits,Dave revisits,4,4,acast:1;hrn:3,2.774,2.49,ngram
+Dolin,Dolin,3,3,blog:3,2.773,1.69,cap rare
+PhD,PhD,3,3,acast:1;blog:1;hrn:1,2.772,4.07,camel cap
+doneness,doneness,10,5,blog:5,2.764,1.84,rare
+HACCP plans,HACCP plans,3,3,acast:1;blog:2,2.759,1.97,ngram
+BdV,BdV,9,2,blog:2,2.754,1.25,camel cap
+MDF,MDF,4,2,blog:1;hrn:1,2.753,2.36,acronym
+slaked,slaked|Slaked,4,2,acast:1;blog:1,2.752,1.78,rare
+Santha,Santha,15,3,blog:3,2.750,1.09,cap
+Kindai Tuna,Kindai Tuna,2,2,blog:2,2.748,1.26,caprun label
+rapid infusion,rapid infusion|Rapid Infusion|Rapid infusion,6,4,acast:1;blog:3,2.748,3.29,caprun ngram
+Angostura,Angostura,2,2,blog:1;hrn:1,2.747,2.10,cap
+Negroni,Negroni,3,2,blog:1;hrn:1,2.747,2.10,cap
+Patterson,Patterson,4,3,acast:1;blog:1;hrn:1,2.746,3.69,cap
+Ike,Ike,59,14,blog:14,2.743,3.42,cap
+low temperatures,low temperatures|Low temperatures,17,13,blog:11;hrn:2,2.741,4.33,ngram
+makes sense,makes sense,16,13,acast:1;blog:12,2.741,5.19,ngram
+Returns,Returns,13,13,acast:10;hrn:3,2.741,4.60,cap
+lexan,lexan|Lexan,4,3,blog:3,2.740,1.74,cap rare
+Starch,Starch,5,4,blog:3;hrn:1,2.737,3.30,cap
+The French Culinary Institute,The French Culinary Institute,5,5,blog:4;hrn:1,2.736,3.56,caprun
+Kent Kirshenbaum,Kent Kirshenbaum,3,3,blog:3,2.733,1.12,caprun ngram
+Kirshenbaum,Kirshenbaum,3,3,blog:3,2.733,1.12,cap
+juicers,juicers,3,2,blog:1;hrn:1,2.725,1.82,rare
+Jacques,Jacques,3,3,acast:1;blog:1;hrn:1,2.720,3.71,cap
+Hiroko,Hiroko,3,2,blog:1;hrn:1,2.718,2.14,cap
+Celiac Disease,Celiac Disease|Celiac disease|celiac disease,5,3,blog:1;hrn:2,2.718,2.91,caprun ngram
+vacuum machine,vacuum machine|Vacuum Machine,52,24,blog:24,2.717,4.09,caprun ngram
+McMaster Carr,McMaster Carr|McMaster-Carr,9,5,blog:5,2.715,3.07,camel cap caprun hyphen ngram
+emulsifying,emulsifying|Emulsifying,3,2,blog:1;hrn:1,2.705,1.85,rare
+stripers,stripers|Stripers,10,5,blog:5,2.702,1.93,rare
+Phil Bravo,Phil Bravo,9,6,acast:2;hrn:4,2.699,3.77,caprun ngram
+hotplate,hotplate,2,2,blog:1;hrn:1,2.691,1.87,rare
+peristaltic pump,peristaltic pump|Peristaltic Pump,13,4,blog:4,2.690,1.84,caprun ngram
+Vacu Vin,Vacu Vin|Vacu-Vin,3,2,blog:2,2.688,1.36,cap caprun hyphen
+Rich Shih,Rich Shih,5,3,acast:1;hrn:2,2.681,2.95,caprun ngram
+Shih,Shih,5,3,acast:1;hrn:2,2.681,2.95,cap
+Adam Leonti,Adam Leonti,5,2,hrn:2,2.679,0.00,caprun
+Amazon Searzall,Amazon Searzall,2,2,hrn:2,2.679,0.00,caprun
+Angelena,Angelena,2,2,hrn:2,2.679,0.00,cap
+Austin Hennelly,Austin Hennelly,2,2,acast:2,2.679,0.00,caprun
+Baxtrom,Baxtrom,4,2,acast:2,2.679,0.00,cap
+Behroush,Behroush,2,2,blog:2,2.679,0.00,cap
+Behroush Sharifi,Behroush Sharifi,2,2,blog:2,2.679,0.00,caprun
+Briscione,Briscione,3,2,hrn:2,2.679,0.00,cap
+Brogdale Farm,Brogdale Farm,3,2,blog:2,2.679,0.00,caprun
+Bruno Goussault,Bruno Goussault,2,2,blog:2,2.679,0.00,caprun
+Capoferri,Capoferri,4,2,acast:2,2.679,0.00,cap
+Creami,Creami,2,2,acast:2,2.679,0.00,cap
+CVap Ovens CVap,CVap Ovens CVap,2,2,blog:2,2.679,0.00,caprun
+Darren Vengroff,Darren Vengroff,2,2,hrn:2,2.679,0.00,caprun
+Dave Arnold Nastassia Lopez,Dave Arnold Nastassia Lopez,2,2,hrn:2,2.679,0.00,caprun
+Fake Fryable,Fake Fryable,2,2,blog:2,2.679,0.00,caprun
+Finchville,Finchville,3,2,blog:2,2.679,0.00,cap
+Finchville Farms,Finchville Farms,2,2,blog:2,2.679,0.00,caprun
+Goussault,Goussault,2,2,blog:2,2.679,0.00,cap
+Greg Baxtrom,Greg Baxtrom,3,2,acast:2,2.679,0.00,caprun
+Gruet,Gruet,4,2,blog:2,2.679,0.00,cap
+Hennelly,Hennelly,3,2,acast:2,2.679,0.00,cap
+James Briscione,James Briscione,3,2,hrn:2,2.679,0.00,caprun
+Leonti,Leonti,5,2,hrn:2,2.679,0.00,cap
+Lexans,Lexans,2,2,blog:2,2.679,0.00,cap
+Marthafuge,Marthafuge,2,2,hrn:2,2.679,0.00,cap
+Mindy Lvoff Our,Mindy Lvoff Our,2,2,blog:2,2.679,0.00,caprun
+Nastassia Lopez The,Nastassia Lopez The,2,2,blog:2,2.679,0.00,caprun
+Nitrogenating,Nitrogenating,2,2,hrn:2,2.679,0.00,cap
+Nomiku,Nomiku,2,2,hrn:2,2.679,0.00,cap
+Perhaps Ziplocs,Perhaps Ziplocs,2,2,blog:2,2.679,0.00,caprun
+Searzall Pro,Searzall Pro,2,2,acast:2,2.679,0.00,caprun
+Stassia,Stassia,2,2,hrn:2,2.679,0.00,cap
+TGase,TGase,2,2,blog:2,2.679,0.00,cap
+The Cvap,The Cvap,2,2,blog:2,2.679,0.00,caprun
+The Jouan,The Jouan,5,2,blog:2,2.679,0.00,caprun
+Ticaloid,Ticaloid,4,2,blog:2,2.679,0.00,cap
+Vengroff,Vengroff,2,2,hrn:2,2.679,0.00,cap
+Watlow,Watlow,2,2,blog:2,2.679,0.00,cap
+Wondra,Wondra,3,2,hrn:2,2.679,0.00,cap
+Ziplocs,Ziplocs,12,2,blog:2,2.679,0.00,cap
+Hydrocolloid Intensive,Hydrocolloid Intensive,3,3,blog:3,2.676,1.55,label
+glutamic acid,glutamic acid,5,3,acast:1;blog:2,2.674,2.09,ngram
+skillets,skillets,2,2,blog:1;hrn:1,2.671,1.90,rare
+grassfed,grassfed,4,4,hrn:4,2.669,1.54,rare
+Hammer,Hammer,13,12,acast:2;hrn:10,2.664,4.16,cap
+Man,Man,14,12,blog:6;hrn:6,2.664,5.82,cap
+Mark,Mark,20,12,blog:8;hrn:4,2.664,5.05,cap
+Restaurant,Restaurant,15,12,acast:7;blog:5,2.664,4.68,cap
+striper,striper,15,5,blog:5,2.661,1.99,rare
+Glue,Glue,13,6,blog:3;hrn:3,2.660,3.80,cap
+quail eggs,quail eggs,3,3,acast:1;blog:1;hrn:1,2.660,3.13,ngram
+Senegal,Senegal,4,4,blog:1;hrn:3,2.651,3.38,cap
+rehydrated,rehydrated,2,2,acast:1;blog:1,2.651,1.93,rare
+knife sharpening,knife sharpening|knife-sharpening,6,7,hrn:7,2.651,3.01,hyphen ngram
+nichrome,nichrome,5,4,blog:4,2.650,1.57,rare
+Cocktail Science,Cocktail Science|cocktail science,11,10,blog:10,2.646,3.89,caprun label ngram
+flash-pickled,flash-pickled|flash pickled|Flash pickled,6,8,blog:8,2.643,3.17,hyphen ngram
+Tanqueray,Tanqueray,4,4,blog:4,2.643,1.91,cap
+Tanqueray gin,Tanqueray gin|Tanqueray Gin,4,4,blog:4,2.643,1.91,caprun ngram
+Nils Dave,Nils Dave,7,7,blog:7,2.635,2.81,caprun ngram
+Hydrocolloids Primer,Hydrocolloids Primer,2,2,blog:2,2.635,1.45,caprun label
+Guar,Guar,8,2,blog:1;hrn:1,2.630,2.26,cap
+Cooking Issues crew,Cooking Issues crew|Cooking Issues Crew,7,6,acast:4;blog:2,2.628,4.45,caprun ngram
+Joshua,Joshua,7,6,acast:4;hrn:2,2.628,3.92,cap
+The Art,The Art,8,6,acast:1;hrn:5,2.628,5.29,caprun
+The Hammer,The Hammer,6,6,acast:1;hrn:5,2.628,4.16,caprun
+The Museum,The Museum,8,6,blog:2;hrn:4,2.628,4.71,caprun
+The Science,The Science,9,6,blog:4;hrn:2,2.628,5.12,caprun
+BLT,BLT,6,2,blog:1;hrn:1,2.627,2.52,acronym
+Lacto,Lacto|lacto,2,2,acast:1;hrn:1,2.624,1.97,rare
+Pegu,Pegu,14,4,blog:4,2.623,1.94,cap
+Pegu Club,Pegu Club,9,4,blog:4,2.623,1.94,caprun ngram
+clumpy,clumpy,2,2,acast:1;blog:1,2.617,1.98,rare
+maceration,maceration,2,2,acast:1;blog:1,2.617,1.98,rare
+polymerized,polymerized,2,2,blog:1;hrn:1,2.617,1.98,rare
+Tuscan,Tuscan,3,3,acast:2;hrn:1,2.616,3.02,cap
+Tuscan Bread,Tuscan Bread|Tuscan bread,3,3,acast:2;hrn:1,2.616,3.02,caprun ngram
+Szechuan,Szechuan,5,2,blog:1;hrn:1,2.615,2.28,cap
+Herve,Herve,6,5,blog:5,2.614,2.35,cap
+Pastures,Pastures,10,10,hrn:10,2.608,3.24,cap
+White Oak Pastures,White Oak Pastures,10,10,hrn:10,2.608,3.24,caprun
+LN2,LN2,3,3,blog:3,2.607,1.66,digit
+Herv,Herv,6,3,blog:3,2.606,1.34,cap
+Country,Country|country,8,5,blog:3;hrn:2,2.606,5.48,cap label
+freeze-dried,freeze-dried,5,5,acast:3;blog:2,2.606,4.04,hyphen
+information-packed,information-packed,5,5,blog:1;hrn:4,2.606,4.31,hyphen
+non-traditional,non-traditional|Non-Traditional,5,5,blog:3;hrn:2,2.606,4.84,hyphen
+striped bass,striped bass|Striped bass,10,8,acast:1;blog:7,2.604,3.54,ngram
+swinging bucket,swinging bucket,5,5,acast:1;blog:3;hrn:1,2.603,3.79,ngram
+Campari,Campari,2,2,blog:1;hrn:1,2.601,2.30,cap
+Arnold Nastassia,Arnold Nastassia,3,3,hrn:3,2.600,0.00,ngram
+Arnold Nastassia Lopez,Arnold Nastassia Lopez,3,3,hrn:3,2.600,0.00,ngram
+Dave Arnold Nastassia,Dave Arnold Nastassia,3,3,hrn:3,2.600,0.00,ngram
+Dave Nastassia answer,Dave Nastassia answer,3,3,hrn:3,2.600,0.00,ngram
+friend Johnny Iuzzini,friend Johnny Iuzzini,3,3,blog:3,2.600,0.00,ngram
+Lvoff Remember,Lvoff Remember,3,3,blog:3,2.600,0.00,ngram
+Pectinex Ultra SP-L,Pectinex Ultra SP-L,11,3,blog:3,2.600,0.00,ngram
+rotovap base,rotovap base,4,3,blog:3,2.600,0.00,ngram
+rotovap distillation,rotovap distillation,3,3,blog:3,2.600,0.00,ngram
+Noodles,Noodles|noodles,4,3,blog:1;hrn:2,2.599,3.70,cap label
+0308-8146,0308-8146,7,2,blog:2,2.599,0.58,hyphen
+enzyme clarification,enzyme clarification|Enzyme Clarification|enzyme-clarification,5,6,blog:6,2.594,3.54,hyphen label ngram
+deep frying,deep frying|Deep Frying,9,7,blog:2;hrn:5,2.592,3.42,ngram
+Toshio Suzuki,Toshio Suzuki,5,5,blog:5,2.591,2.38,caprun ngram
+Sydow,Sydow,5,4,blog:4,2.589,1.99,cap
+Jean Georges,Jean Georges|Jean-Georges,5,6,blog:6,2.588,3.41,cap caprun hyphen ngram
+ice cubes,ice cubes,21,7,blog:5;hrn:2,2.581,3.43,ngram
+chicken stock,chicken stock|Chicken stock,23,11,blog:9;hrn:2,2.581,4.63,ngram
+Dave gives,Dave gives,12,11,acast:2;hrn:9,2.581,4.44,ngram
+Good,Good,14,11,blog:8;hrn:3,2.581,6.12,cap
+How,How,13,11,blog:9;hrn:2,2.581,6.24,cap
+Last,Last,12,11,acast:1;blog:10,2.581,5.86,cap
+Other,Other,18,11,blog:10;hrn:1,2.581,6.16,cap
+Smash,Smash,21,11,blog:10;hrn:1,2.581,4.09,cap
+States,States,12,11,blog:6;hrn:5,2.581,5.52,cap
+Tales,Tales,16,11,blog:8;hrn:3,2.581,4.10,cap
+Well,Well|We'll,12,11,blog:9;hrn:2,2.581,6.03,cap
+Filleted,Filleted|filleted,8,3,blog:3,2.580,1.98,cap rare
+Perfect French,Perfect French|perfect french,3,3,acast:1;blog:1;hrn:1,2.574,5.09,caprun ngram
+holy grail,holy grail|Holy Grail,4,4,blog:3;hrn:1,2.565,3.46,caprun ngram
+juiciness,juiciness,4,4,blog:4,2.563,1.71,rare
+Dax Arnold,Dax Arnold,3,3,blog:1;hrn:2,2.561,3.08,caprun ngram
+Angela,Angela,7,5,acast:1;blog:2;hrn:2,2.559,4.02,cap
+Big,Big,6,5,acast:1;blog:2;hrn:2,2.559,5.67,cap
+Bill,Bill,7,5,acast:1;blog:3;hrn:1,2.559,5.15,cap
+Blue,Blue,6,5,acast:1;blog:2;hrn:2,2.559,5.13,cap
+Boys,Boys,6,5,acast:2;blog:1;hrn:2,2.559,5.03,cap
+bread dough,bread dough,7,5,acast:1;blog:2;hrn:2,2.559,3.86,ngram
+British,British,5,5,acast:2;blog:1;hrn:2,2.559,5.18,cap
+Chicago,Chicago,7,5,acast:2;blog:2;hrn:1,2.559,4.83,cap
+Crew,Crew,5,5,acast:3;blog:1;hrn:1,2.559,4.70,cap
+Dairy,Dairy,6,5,acast:1;blog:1;hrn:3,2.559,4.09,cap
+Delicious,Delicious,6,5,acast:1;blog:3;hrn:1,2.559,4.34,cap
+Elizabeth,Elizabeth,6,5,acast:2;blog:1;hrn:2,2.559,4.47,cap
+Family,Family,5,5,acast:1;blog:1;hrn:3,2.559,5.66,cap
+Freeze,Freeze,17,5,acast:1;blog:3;hrn:1,2.559,4.11,cap
+High,High,9,5,acast:2;blog:2;hrn:1,2.559,5.75,cap
+History,History,7,5,acast:3;blog:1;hrn:1,2.559,5.39,cap
+Live,Live,5,5,acast:1;blog:3;hrn:1,2.559,5.54,cap
+Lower,Lower,5,5,acast:2;blog:1;hrn:2,2.559,5.11,cap
+Miracle,Miracle,5,5,acast:1;blog:1;hrn:3,2.559,4.13,cap
+Night,Night,5,5,acast:1;blog:3;hrn:1,2.559,5.61,cap
+People,People,6,5,acast:1;blog:3;hrn:1,2.559,6.25,cap
+President,President,9,5,acast:1;blog:3;hrn:1,2.559,5.45,cap
+Pro,Pro,8,5,acast:2;blog:1;hrn:2,2.559,4.94,cap
+Quality,Quality,5,5,acast:1;blog:2;hrn:2,2.559,5.11,cap
+red pepper,red pepper|Red Pepper,6,5,acast:2;blog:1;hrn:2,2.559,4.14,ngram
+sweet potato,sweet potato|Sweet Potato|Sweet potato,11,5,acast:1;blog:1;hrn:3,2.559,4.11,ngram
+Tropical,Tropical,9,5,acast:3;blog:1;hrn:1,2.559,4.18,cap
+Valley,Valley,6,5,acast:1;blog:2;hrn:2,2.559,4.72,cap
+William,William,5,5,acast:1;blog:2;hrn:2,2.559,4.88,cap
+Yellow,Yellow,9,5,acast:1;blog:2;hrn:2,2.559,4.69,cap
+degrees Celsius,degrees Celsius|degrees celsius,7,6,blog:4;hrn:2,2.555,3.29,ngram
+guar gum,guar gum|Guar Gum,5,3,blog:2;hrn:1,2.553,2.26,ngram
+Jacques Pepin,Jacques Pepin,4,2,acast:1;blog:1,2.549,2.37,caprun
+Pepin,Pepin,4,2,acast:1;blog:1,2.549,2.37,cap
+ice crystals,ice crystals,22,10,blog:9;hrn:1,2.546,3.78,ngram
+Jeremiah,Jeremiah,5,4,blog:3;hrn:1,2.544,3.48,cap
+30pm,30pm,4,4,blog:4,2.543,2.33,digit
+The Modernist Pantry,The Modernist Pantry,9,9,hrn:9,2.534,3.21,caprun
+Sous Chef,Sous Chef|sous chef,3,3,acast:1;blog:2,2.533,3.11,caprun ngram
+Scandinavian,Scandinavian,6,4,blog:3;hrn:1,2.533,3.49,cap
+pu-erh tea,pu-erh tea|Pu-erh tea,3,3,acast:1;blog:2,2.532,2.29,ngram
+Kaiseki,Kaiseki,3,3,blog:3,2.519,1.49,cap
+Pomelos,Pomelos|pomelos,2,2,blog:2,2.515,1.09,cap rare
+Schwarzenegger,Schwarzenegger,3,3,blog:2;hrn:1,2.514,3.13,cap
+Datta,Datta,6,2,blog:1;hrn:1,2.513,2.42,cap
+Brandy,Brandy,9,4,acast:1;blog:3,2.511,3.51,cap
+eggplant parm,eggplant parm,3,3,blog:1;hrn:2,2.510,2.32,ngram
+fudge-like,fudge-like,3,3,acast:1;blog:2,2.509,3.33,hyphen
+alginates,alginates|Alginates,6,3,blog:3,2.507,1.15,rare
+cream whipper,cream whipper|Cream Whipper,9,4,blog:4,2.502,2.12,caprun ngram
+Pre-blanch,Pre-blanch|pre-blanch|Pre-Blanch,5,3,blog:3,2.501,2.54,cap hyphen
+Caviar,Caviar,5,3,blog:2;hrn:1,2.496,3.15,cap
+Arts Letters,Arts Letters,14,10,acast:8;hrn:2,2.491,4.66,ngram
+Dave takes,Dave takes,10,10,acast:1;hrn:9,2.491,4.44,ngram
+Death,Death,12,10,blog:8;hrn:2,2.491,5.40,cap
+Don,Don,13,10,blog:3;hrn:7,2.491,4.60,cap
+egg whites,egg whites,18,10,blog:8;hrn:2,2.491,4.06,ngram
+First,First,11,10,acast:2;blog:8,2.491,6.11,cap
+Kitchen Arts,Kitchen Arts,14,10,acast:8;hrn:2,2.491,4.65,ngram
+Letters,Letters,14,10,acast:8;hrn:2,2.491,4.66,cap
+Making,Making,10,10,blog:5;hrn:5,2.491,5.54,cap
+Part,Part,13,10,blog:9;hrn:1,2.491,5.78,cap
+Swedish,Swedish,15,10,blog:9;hrn:1,2.491,4.21,cap
+Table,Table,12,10,acast:5;hrn:5,2.491,5.05,cap
+Technique,Technique,12,10,acast:1;blog:9,2.491,4.47,cap
+United,United,11,10,blog:6;hrn:4,2.491,5.47,cap
+Bubbles,Bubbles,3,3,blog:2;hrn:1,2.490,3.79,cap label
+Syneresis,Syneresis|syneresis,14,2,blog:2,2.483,1.15,cap rare
+peristaltic,peristaltic|Peristaltic,16,4,blog:4,2.483,1.84,rare
+Leatherman,Leatherman,4,4,hrn:4,2.482,2.15,cap
+Honeycrisp,Honeycrisp,3,3,blog:3,2.479,1.56,cap
+Hyatt,Hyatt,5,3,blog:2;hrn:1,2.478,3.17,cap
+anesthesized,anesthesized,4,2,blog:2,2.473,0.00,rare
+crunchiest,crunchiest,3,2,blog:2,2.473,0.00,rare
+dangerfuge,dangerfuge,5,2,blog:2,2.473,0.00,rare
+dashis,dashis,2,2,blog:2,2.473,0.00,rare
+foodchem,foodchem,6,2,blog:2,2.473,0.00,rare
+galactomannan,galactomannan,2,2,blog:2,2.473,0.00,rare
+hemicelluloses,hemicelluloses,2,2,blog:2,2.473,0.00,rare
+homogenizers,homogenizers,2,2,hrn:2,2.473,0.00,rare
+mannas,mannas,5,2,blog:2,2.473,0.00,rare
+masterbaker,masterbaker,2,2,hrn:2,2.473,0.00,rare
+overcooks,overcooks,4,2,blog:2,2.473,0.00,rare
+pectolytic,pectolytic,2,2,blog:2,2.473,0.00,rare
+polybutene,polybutene,2,2,blog:2,2.473,0.00,rare
+quenelled,quenelled,2,2,blog:2,2.473,0.00,rare
+recontamination,recontamination,2,2,blog:2,2.473,0.00,rare
+roulades,roulades,2,2,blog:2,2.473,0.00,rare
+sashimied,sashimied,2,2,blog:2,2.473,0.00,rare
+stringier,stringier,2,2,blog:2,2.473,0.00,rare
+tammied,tammied,2,2,blog:2,2.473,0.00,rare
+tangental,tangental,2,2,acast:2,2.473,0.00,rare
+tlacoyos,tlacoyos,3,2,blog:2,2.473,0.00,rare
+trisaccharide,trisaccharide,2,2,blog:2,2.473,0.00,rare
+troubleshoots,troubleshoots,2,2,hrn:2,2.473,0.00,rare
+unctuousness,unctuousness,2,2,blog:2,2.473,0.00,rare
+DiPalos,DiPalos,4,1,blog:1,2.470,0.00,camel cap rare
+KojiCon,KojiCon,2,1,acast:1,2.470,0.00,camel cap rare
+Sohla,Sohla|SOHLA,3,1,acast:1,2.470,0.00,acronym cap rare
+gelee,gelee,3,3,blog:3,2.469,1.22,rare
+Casella,Casella,7,4,blog:4,2.462,2.18,cap
+Cesare Casella,Cesare Casella,6,4,blog:4,2.462,2.18,caprun ngram
+deep dive,deep dive|Deep Dive|deep-dive,14,14,acast:14,2.461,4.12,hyphen ngram
+Meatballs,Meatballs,3,3,blog:2;hrn:1,2.450,3.20,cap
+coconut milk,coconut milk|Coconut-milk,4,3,acast:1;blog:2,2.448,3.88,cap hyphen ngram
+cross-linking,cross-linking|Cross-Linking,3,3,blog:2;hrn:1,2.448,3.96,cap hyphen
+raw food,raw food|Raw food|raw-food|Raw Food,17,3,blog:1;hrn:2,2.448,4.53,caprun hyphen ngram
+Berries,Berries,4,4,blog:2;hrn:2,2.447,3.57,cap
+re-distill,re-distill,5,4,blog:4,2.442,2.47,hyphen
+Magnolia,Magnolia,3,3,blog:1;hrn:2,2.441,3.21,cap
+Saffron,Saffron,3,3,acast:1;blog:2,2.441,3.21,cap
+Jiro Dreams,Jiro Dreams,2,2,blog:1;hrn:1,2.440,2.52,caprun
+Kernel,Kernel,13,4,acast:1;blog:3,2.436,3.58,cap
+gloppy,gloppy,4,3,blog:3,2.432,1.29,rare
+Kindai,Kindai,11,2,blog:2,2.425,1.26,cap rare
+Waffles,Waffles,3,3,acast:2;hrn:1,2.422,3.23,cap
+brined,brined,4,4,blog:4,2.421,1.94,rare
+0C,0C,3,3,blog:3,2.420,1.96,digit
+American Country Ham,American Country Ham|American country ham|AMERICAN COUNTRY HAM,9,5,blog:3;hrn:2,2.420,4.12,caprun ngram
+Champagne,Champagne,6,5,blog:2;hrn:3,2.420,3.90,cap
+Joel,Joel,6,5,acast:2;hrn:3,2.420,3.97,cap
+Maximum Flavor,Maximum Flavor|maximum flavor|Maximum flavor,6,5,blog:4;hrn:1,2.420,4.04,caprun ngram
+New Zealand,New Zealand,7,5,blog:4;hrn:1,2.420,4.50,caprun
+Smoked,Smoked,6,5,blog:3;hrn:2,2.420,3.92,cap
+Stay tuned,Stay tuned|Stay Tuned,5,5,blog:4;hrn:1,2.420,3.87,caprun ngram
+Aaron Polsky,Aaron Polsky,4,3,hrn:3,2.415,1.67,caprun ngram
+Polsky,Polsky,4,3,hrn:3,2.415,1.67,cap
+Gibbons,Gibbons,6,3,blog:1;hrn:2,2.413,3.24,cap
+salting meat,salting meat|Salting meat,4,3,blog:2;hrn:1,2.411,2.46,ngram
+Pistachios,Pistachios,2,2,blog:1;hrn:1,2.410,2.56,cap
+Venise,Venise,6,3,blog:3,2.409,1.68,cap
+Dave recounts,Dave recounts,5,5,acast:3;hrn:2,2.408,3.23,ngram
+broths,broths,14,4,blog:4,2.402,1.97,rare
+pre-portioned,pre-portioned,3,3,blog:3,2.402,1.99,hyphen
+Kosher,Kosher,4,3,blog:1;hrn:2,2.394,3.26,cap
+Angeles,Angeles,9,9,acast:5;hrn:4,2.392,4.73,cap
+Beyond,Beyond,9,9,acast:7;hrn:2,2.392,4.98,cap
+Collective,Collective,9,9,blog:4;hrn:5,2.392,4.30,cap
+cooking questions,cooking questions,9,9,blog:4;hrn:5,2.392,4.45,ngram
+Every,Every,10,9,blog:6;hrn:3,2.392,5.79,cap
+final product,final product|Final product,9,9,acast:1;blog:8,2.392,4.95,ngram
+Harvard,Harvard,9,9,blog:3;hrn:6,2.392,4.24,cap
+Hot Poker,Hot Poker|hot poker,19,9,blog:7;hrn:2,2.392,3.97,ngram
+House,House,17,9,blog:4;hrn:5,2.392,5.71,cap
+Just,Just,10,9,blog:8;hrn:1,2.392,6.43,cap
+Liquid,Liquid,14,9,blog:8;hrn:1,2.392,4.39,cap
+Make,Make,10,9,blog:8;hrn:1,2.392,6.08,cap
+Orange,Orange,16,9,blog:7;hrn:2,2.392,4.62,cap
+Problem,Problem,9,9,acast:2;blog:7,2.392,5.40,cap
+Shaking,Shaking,17,9,blog:8;hrn:1,2.392,4.08,cap
+Sweden,Sweden,11,9,blog:7;hrn:2,2.392,4.40,cap
+Test,Test,12,9,blog:8;hrn:1,2.392,5.19,cap
+topics include,topics include|Topics include,9,9,acast:2;hrn:7,2.392,4.27,ngram
+The Cooking Issues Team,The Cooking Issues Team,16,16,blog:16,2.391,4.45,caprun
+Kenta,Kenta,16,4,blog:4,2.381,2.30,cap
+Kenta Goto,Kenta Goto,11,4,blog:4,2.381,2.30,caprun ngram
+Godin,Godin,3,2,acast:1;hrn:1,2.381,2.60,cap
+Seth Godin,Seth Godin,3,2,acast:1;hrn:1,2.381,2.60,caprun
+Narragansetts,Narragansetts,2,2,blog:2,2.377,1.35,cap rare
+Harold McGee Lecture Series,Harold McGee Lecture Series,3,2,blog:1;hrn:1,2.376,3.37,caprun label
+Infusion,Infusion,3,3,blog:2;hrn:1,2.367,3.29,cap
+Gin-Infused,Gin-Infused|Gin-infused,2,2,blog:1;hrn:1,2.366,3.38,cap hyphen
+Koji Alchemy,Koji Alchemy,2,2,acast:1;hrn:1,2.366,2.62,caprun
+Cooks,Cooks,5,4,blog:3;hrn:1,2.361,3.65,cap
+Philoctetes Center,Philoctetes Center,4,3,blog:3,2.357,1.77,caprun ngram
+sous-vided,sous-vided,5,2,blog:2,2.357,1.07,hyphen
+using gelatin,using gelatin,4,4,acast:1;blog:3,2.353,3.00,ngram
+amylopectin,amylopectin|Amylopectin,4,2,blog:2,2.351,1.40,cap rare
+Desserts,Desserts,4,3,acast:2;blog:1,2.348,3.31,cap
+Steaks,Steaks,3,3,acast:1;hrn:2,2.348,3.31,cap
+Curried Apples,Curried Apples|curried apples,7,4,blog:4,2.348,2.35,caprun ngram
+nut milks,nut milks,4,3,blog:2;hrn:1,2.347,2.55,ngram
+bad-ass,bad-ass,4,4,blog:3;hrn:1,2.341,5.00,hyphen
+co-owner,co-owner|Co-Owner,4,4,acast:2;blog:2,2.341,4.83,cap hyphen
+Experiments,Experiments|experiments,4,4,acast:1;blog:3,2.341,4.20,cap label
+high-pressure,high-pressure,5,4,blog:3;hrn:1,2.341,5.01,hyphen
+how-to,how-to|How-To,5,4,blog:2;hrn:2,2.341,6.24,hyphen
+non-stick,non-stick|Non-Stick,12,4,blog:2;hrn:2,2.341,4.76,cap hyphen
+Oven,Oven,4,4,blog:1;hrn:3,2.341,4.05,cap label
+rapid-fire,rapid-fire,4,4,acast:3;hrn:1,2.341,4.38,hyphen
+shelf-stable,shelf-stable,4,4,acast:1;hrn:3,2.341,4.02,hyphen
+Stock,Stock|stock,5,4,blog:3;hrn:1,2.341,4.93,cap label
+Cooking Issues Radio,Cooking Issues Radio|Cooking Issues radio,16,15,blog:15,2.340,4.45,caprun ngram
+Napa,Napa,8,3,acast:1;blog:2,2.339,3.32,cap
+Haggis,Haggis,2,2,acast:1;hrn:1,2.337,2.66,cap
+Meadery,Meadery|meadery,2,2,hrn:2,2.335,1.43,cap rare
+All-Tangent,All-Tangent|All Tangent|all-tangent,6,4,acast:4,2.333,3.19,cap caprun hyphen
+gelatinized,gelatinized,4,3,blog:3,2.331,1.48,rare
+Christy,Christy,4,3,blog:2;hrn:1,2.330,3.33,cap
+Christy Pope,Christy Pope,5,3,blog:2;hrn:1,2.330,3.33,caprun ngram
+Rest,Rest,35,35,hrn:35,2.326,5.23,cap
+Sharifi,Sharifi,3,2,blog:2,2.325,1.45,cap rare
+skoal shot,skoal shot|Skoal shot,5,5,blog:5,2.315,1.82,ngram
+Habaneros,Habaneros|habaneros,2,2,blog:2,2.314,1.47,cap rare
+Modesto,Modesto|modesto,7,3,blog:3,2.312,2.79,cap label
+Ramen,Ramen,5,3,acast:2;hrn:1,2.311,3.35,cap
+pectins,pectins,7,3,blog:3,2.309,1.52,rare
+Geoduck,Geoduck|geoduck,3,2,hrn:2,2.309,1.48,cap rare
+USDA-approved,USDA-approved,2,2,blog:1;hrn:1,2.299,3.45,cap hyphen
+Adam,Adam,6,4,acast:1;blog:1;hrn:2,2.299,4.57,cap
+Award,Award,4,4,acast:1;blog:1;hrn:2,2.299,4.88,cap
+Awards,Awards,4,4,acast:1;blog:1;hrn:2,2.299,4.71,cap
+Beard Award,Beard Award,4,4,acast:1;blog:1;hrn:2,2.299,4.07,ngram
+Beer,Beer,4,4,acast:1;blog:1;hrn:2,2.299,4.70,cap
+Bible,Bible,5,4,acast:1;blog:2;hrn:1,2.299,4.54,cap
+Billy,Billy,4,4,acast:2;blog:1;hrn:1,2.299,4.33,cap
+Bob,Bob,4,4,acast:1;blog:1;hrn:2,2.299,4.63,cap
+Chef Owner,Chef Owner|chef owner,8,4,acast:1;blog:2;hrn:1,2.299,4.23,ngram
+Diamond,Diamond,4,4,acast:1;blog:1;hrn:2,2.299,4.42,cap
+Dog,Dog,4,4,acast:1;blog:2;hrn:1,2.299,5.10,cap
+essential oils,essential oils|Essential Oils,8,4,acast:1;blog:1;hrn:2,2.299,3.86,ngram
+favorite food,favorite food|Favorite Food,4,4,acast:2;blog:1;hrn:1,2.299,4.97,ngram
+Five,Five,4,4,acast:1;blog:2;hrn:1,2.299,5.45,cap
+flavor scientist,flavor scientist|Flavor scientist,4,4,acast:2;blog:1;hrn:1,2.299,4.04,ngram
+food products,food products,4,4,acast:1;blog:1;hrn:2,2.299,5.04,ngram
+Guide,Guide,6,4,acast:1;blog:1;hrn:2,2.299,4.75,cap
+Holidays,Holidays,4,4,acast:1;blog:2;hrn:1,2.299,4.22,cap
+Manager,Manager,4,4,acast:1;blog:2;hrn:1,2.299,4.97,cap
+Media,Media,4,4,acast:1;blog:1;hrn:2,2.299,5.30,cap
+Out,Out,6,4,acast:1;blog:2;hrn:1,2.299,6.38,cap
+Owner,Owner,8,4,acast:1;blog:2;hrn:1,2.299,4.83,cap
+Recipe,Recipe,6,4,acast:1;blog:2;hrn:1,2.299,4.23,cap
+related questions,related questions,4,4,acast:1;blog:1;hrn:2,2.299,5.10,ngram
+Research,Research,6,4,acast:1;blog:2;hrn:1,2.299,5.39,cap
+Robert,Robert,7,4,acast:1;blog:1;hrn:2,2.299,4.85,cap
+Sandwich,Sandwich,4,4,acast:1;blog:2;hrn:1,2.299,4.13,cap
+Scott,Scott,7,4,acast:1;blog:2;hrn:1,2.299,4.72,cap
+Seed,Seed,4,4,acast:1;blog:2;hrn:1,2.299,4.37,cap
+seed oil,seed oil,4,4,acast:2;blog:1;hrn:1,2.299,4.37,ngram
+Spain,Spain,6,4,acast:1;blog:2;hrn:1,2.299,4.59,cap
+special guests,special guests,4,4,acast:1;blog:1;hrn:2,2.299,4.42,ngram
+Standard,Standard,5,4,acast:1;blog:2;hrn:1,2.299,5.03,cap
+Steve,Steve,6,4,acast:1;blog:1;hrn:2,2.299,4.71,cap
+Tim,Tim,4,4,acast:2;blog:1;hrn:1,2.299,4.51,cap
+Tour,Tour,5,4,acast:1;blog:1;hrn:2,2.299,4.99,cap
+Way,Way,4,4,acast:1;blog:2;hrn:1,2.299,6.01,cap
+West,West,6,4,acast:1;blog:1;hrn:2,2.299,5.29,cap
+Wheat,Wheat,4,4,acast:1;blog:2;hrn:1,2.299,4.01,cap
+Vogue,Vogue,4,4,blog:3;hrn:1,2.297,3.71,cap
+Nirvana,Nirvana,3,3,blog:2;hrn:1,2.293,3.37,cap
+Westphalian pumpernickel,Westphalian pumpernickel|Westphalian Pumpernickel,4,3,acast:3,2.288,1.89,caprun ngram
+Strawberry,Strawberry,8,4,acast:1;blog:3,2.286,3.72,cap
+answers questions,answers questions,8,8,acast:1;hrn:7,2.282,4.60,ngram
+Chinese,Chinese,15,8,blog:5;hrn:3,2.282,5.01,cap
+Club,Club,17,8,acast:3;blog:5,2.282,5.20,cap
+Coffee,Coffee,9,8,blog:1;hrn:7,2.282,4.86,cap
+Control,Control,13,8,blog:6;hrn:2,2.282,5.40,cap
+Dave gets,Dave gets|Dave Gets,8,8,acast:3;hrn:5,2.282,4.44,ngram
+email questions,email questions|Email questions,8,8,blog:6;hrn:2,2.282,4.68,ngram
+Florida,Florida,13,8,blog:5;hrn:3,2.282,4.76,cap
+Germany,Germany,9,8,blog:4;hrn:4,2.282,4.90,cap
+hot sauce,hot sauce|Hot Sauce,10,8,blog:1;hrn:7,2.282,4.30,ngram
+Ideas,Ideas,10,8,blog:4;hrn:4,2.282,4.84,cap
+Japanese fish,Japanese fish,10,8,blog:6;hrn:2,2.282,4.81,ngram
+Korean,Korean,11,8,acast:5;blog:3,2.282,4.49,cap
+Lab,Lab,9,8,acast:3;hrn:5,2.282,4.42,cap
+Many,Many,8,8,blog:7;hrn:1,2.282,5.91,cap
+Party,Party,10,8,blog:4;hrn:4,2.282,5.49,cap
+Popular,Popular,9,8,blog:1;hrn:7,2.282,5.07,cap
+Salt,Salt,9,8,blog:7;hrn:1,2.282,4.60,cap
+science behind,science behind,8,8,acast:1;hrn:7,2.282,5.12,ngram
+Temperature,Temperature,16,8,blog:7;hrn:1,2.282,4.64,cap
+Teruo,Teruo,3,2,blog:2,2.282,1.53,cap rare
+vacuum bags,vacuum bags,15,8,blog:6;hrn:2,2.282,4.09,ngram
+vacuum pump,vacuum pump|Vacuum Pump,17,8,blog:4;hrn:4,2.282,4.09,ngram
+Ike Jime fish,Ike Jime fish|ike jime fish|ike-jime fish,4,4,blog:4,2.281,1.43,ngram
+McGee Lecture,McGee Lecture|McGee lecture,5,5,blog:4;hrn:1,2.279,3.37,ngram
+Meehan,Meehan,2,2,blog:1;hrn:1,2.278,2.74,cap
+Neapolitan,Neapolitan,2,2,blog:1;hrn:1,2.271,2.75,cap
+Cold Buttered Rum,Cold Buttered Rum|Cold buttered rum,5,3,blog:3,2.267,2.85,caprun label ngram
+We've,We've,5,5,blog:5,2.263,2.82,cap
+crunchiness,crunchiness|Crunchiness,3,2,blog:2,2.261,1.57,cap rare
+12pm-12,12pm-12,4,4,blog:4,2.261,2.72,digit hyphen
+induction burner,induction burner,4,3,acast:1;blog:1;hrn:1,2.259,3.54,ngram
+surface area,surface area|surface-area,24,11,blog:11,2.259,4.83,hyphen ngram
+taste test,taste test|Taste Test|Taste test,13,11,blog:11,2.259,4.73,label ngram
+Tech Demo,Tech Demo,11,11,blog:11,2.259,4.06,label
+Vacuum,Vacuum|vacuum,26,11,blog:11,2.259,4.09,cap label
+Cambro,Cambro|cambro,2,2,blog:2,2.256,1.58,cap rare
+prime rib,prime rib|prime-rib,3,3,blog:1;hrn:2,2.250,3.59,hyphen ngram
+Gelato,Gelato,2,2,acast:1;blog:1,2.249,2.78,cap
+Fishes,Fishes,4,3,blog:2;hrn:1,2.246,3.42,cap
+calcium gluconate,calcium gluconate|Calcium Gluconate|Calcium gluconate,11,3,blog:3,2.242,1.97,caprun ngram
+citric acid,citric acid,3,3,acast:2;blog:1,2.240,2.70,ngram
+temp cooking,temp cooking,7,7,blog:4;hrn:3,2.240,3.75,ngram
+culinary science,culinary science,3,3,acast:1;blog:1;hrn:1,2.239,3.56,ngram
+Rancid,Rancid,2,2,acast:1;hrn:1,2.234,2.80,cap
+Champion Juicer,Champion Juicer|Champion juicer|champion juicer,4,4,blog:4,2.234,2.52,caprun ngram
+Ice Cream Sandwiches,Ice Cream Sandwiches|ice cream sandwiches,5,4,acast:1;hrn:3,2.232,3.77,caprun ngram
+Ultra-Tex,Ultra-Tex|Ultra Tex,4,2,blog:1;hrn:1,2.232,3.52,cap caprun hyphen
+Dave tackles,Dave tackles,7,7,acast:2;hrn:5,2.229,3.76,ngram
+trout roe,trout roe|Trout Roe,6,3,acast:1;blog:2,2.228,3.44,caprun ngram
+Beastie,Beastie,2,2,blog:1;hrn:1,2.227,2.81,cap
+gluey,gluey,3,3,blog:3,2.224,1.68,rare
+Cookbooks,Cookbooks,2,2,acast:1;hrn:1,2.220,2.82,cap
+Granita,Granita|granita,2,2,hrn:2,2.219,1.65,cap rare
+Hamburger,Hamburger,5,3,acast:2;blog:1,2.219,3.45,cap
+soy sauce,soy sauce|Soy Sauce,7,6,acast:1;blog:5,2.216,3.63,ngram
+Leatherman-inspired,Leatherman-inspired,2,2,hrn:2,2.215,2.15,cap hyphen
+Aburiya Kinnosuke,Aburiya Kinnosuke|aburiya kinnosuke,2,1,blog:1,2.210,0.00,caprun label
+Agalmatolite,Agalmatolite,3,1,blog:1,2.210,0.00,cap label
+Benion,Benion|benion,3,1,blog:1,2.210,0.00,cap label
+Boccalone,Boccalone|boccalone,2,1,blog:1,2.210,0.00,cap label
+Cain Vineyard Winery,Cain Vineyard Winery,7,7,hrn:7,2.210,3.30,caprun ngram
+Craig Koketsu,Craig Koketsu|craig koketsu,2,1,blog:1,2.210,0.00,caprun label
+CrunchGear,CrunchGear,1,1,blog:1,2.210,0.00,camel cap
+Cup4Cup,Cup4Cup,2,1,hrn:1,2.210,0.00,cap digit
+De-Oaking,De-Oaking|de-oaking,5,1,blog:1,2.210,0.00,cap hyphen
+DenisB,DenisB,1,1,blog:1,2.210,0.00,camel cap
+DiPalo,DiPalo,1,1,blog:1,2.210,0.00,camel cap
+EatingAsia,EatingAsia,3,1,blog:1,2.210,0.00,camel cap
+Food52,Food52,1,1,acast:1,2.210,0.00,cap digit
+FoodPlayer,FoodPlayer,1,1,blog:1,2.210,0.00,camel cap
+Gymnema Sylvestre,Gymnema Sylvestre|gymnema sylvestre,3,1,blog:1,2.210,0.00,caprun label
+HeritageFoodsUSA,HeritageFoodsUSA,1,1,hrn:1,2.210,0.00,camel cap
+JordanaRothman,JordanaRothman,1,1,hrn:1,2.210,0.00,camel cap
+Lab-vaps,Lab-vaps,1,1,blog:1,2.210,0.00,cap hyphen
+LadyKingel,LadyKingel,1,1,blog:1,2.210,0.00,camel cap
+MOFAD-fame,MOFAD-fame,1,1,hrn:1,2.210,0.00,cap hyphen
+Niloufer King,Niloufer King|niloufer king,2,1,blog:1,2.210,0.00,caprun label
+Otero-Pailos,Otero-Pailos,1,1,blog:1,2.210,0.00,cap hyphen
+PastryScoop,PastryScoop,1,1,blog:1,2.210,0.00,camel cap
+Paul Liebrandt,Paul Liebrandt|paul liebrandt,2,1,blog:1,2.210,0.00,caprun label
+SavvyB,SavvyB,1,1,hrn:1,2.210,0.00,camel cap
+SodaStreams,SodaStreams,1,1,hrn:1,2.210,0.00,camel cap
+Winery,Winery,7,7,hrn:7,2.210,3.30,cap
+YuMaNuMa,YuMaNuMa,1,1,hrn:1,2.210,0.00,camel cap
+Zak Pelaccio,Zak Pelaccio,2,1,blog:1,2.210,0.00,caprun label
+pre-gelling,pre-gelling,3,3,blog:3,2.203,2.31,hyphen
+Austrian,Austrian,4,4,acast:2;blog:2,2.200,3.80,cap
+Wines,Wines,5,4,blog:1;hrn:3,2.200,3.80,cap
+Haggard,Haggard|haggard,12,3,blog:3,2.199,2.94,cap label
+Vacuum Marination,Vacuum Marination,2,2,blog:2,2.198,1.05,caprun
+Vacuum Marination Forming De-airing,Vacuum Marination Forming De-airing,2,2,blog:2,2.198,1.05,caprun
+tasting notes,tasting notes|Tasting Notes,6,6,acast:2;blog:4,2.196,3.65,ngram
+Carpenter,Carpenter,5,4,acast:1;blog:3,2.189,3.81,cap
+Chad Solomon,Chad Solomon,8,4,blog:3;hrn:1,2.189,3.81,caprun ngram
+Solomon,Solomon,8,4,blog:3;hrn:1,2.189,3.81,cap
+vacuum infuse,vacuum infuse|Vacuum infuse|vacuum-infuse,3,4,blog:4,2.189,2.82,hyphen ngram
+Cesare,Cesare,6,5,blog:5,2.188,2.92,cap
+Yorker,Yorker,3,3,acast:1;blog:2,2.182,3.49,cap
+Westphalian,Westphalian,4,3,acast:3,2.178,2.08,cap
+Aki,Aki,3,2,blog:1;hrn:1,2.176,2.88,cap
+Salami,Salami,2,2,blog:1;hrn:1,2.176,2.88,cap
+New Yorkers,New Yorkers,6,6,blog:6,2.174,3.17,caprun
+Yorkers,Yorkers,6,6,blog:6,2.174,3.17,cap
+NaOH,NaOH,5,2,blog:2,2.174,2.22,camel cap
+African American,African American,4,4,acast:3;hrn:1,2.173,4.82,caprun ngram
+black garlic,black garlic|Black Garlic,5,4,acast:1;hrn:3,2.173,3.92,caprun ngram
+Chad,Chad,6,4,blog:3;hrn:1,2.173,3.93,cap
+Cook Illustrated,Cook Illustrated,5,4,blog:2;hrn:2,2.173,4.17,caprun ngram
+Dave finally,Dave finally|Dave Finally,4,4,acast:1;hrn:3,2.173,4.44,caprun ngram
+deep fry,deep fry|Deep Fry,6,4,blog:1;hrn:3,2.173,3.89,caprun ngram
+Food Chemistry,Food Chemistry,10,4,blog:3;hrn:1,2.173,4.35,caprun ngram
+Ginger,Ginger,4,4,acast:1;blog:3,2.173,3.93,cap
+Holy Crap,Holy Crap|Holy crap|holy crap,4,4,blog:3;hrn:1,2.173,4.40,caprun ngram
+Nation Table,Nation Table,4,4,acast:2;hrn:2,2.173,4.88,caprun ngram
+New Jersey,New Jersey,5,4,acast:1;blog:3,2.173,4.66,caprun
+Peanut,Peanut,5,4,blog:2;hrn:2,2.173,3.90,cap
+Vermont,Vermont,4,4,blog:2;hrn:2,2.173,3.84,cap
+Kristensen,Kristensen,3,3,hrn:3,2.172,2.09,cap
+Piper Kristensen,Piper Kristensen,3,3,hrn:3,2.172,2.09,caprun ngram
+Underground Meats,Underground Meats,10,8,hrn:8,2.170,3.48,caprun ngram
+50F,50F,2,2,blog:2,2.170,1.45,digit
+non-refrigerated,non-refrigerated,2,2,acast:1;blog:1,2.170,3.10,hyphen
+re-moistens,re-moistens,2,2,blog:2,2.170,1.45,hyphen
+Guelph,Guelph,2,2,acast:1;blog:1,2.169,2.89,cap
+ice cube,ice cube,10,7,blog:6;hrn:1,2.165,3.82,ngram
+Wallace Edwards,Wallace Edwards,12,12,hrn:12,2.165,4.04,caprun ngram
+Whole Foods Market,Whole Foods Market,12,12,hrn:12,2.165,4.41,caprun ngram
+centrifuge bucket,centrifuge bucket,3,3,blog:2;hrn:1,2.162,2.81,ngram
+Firestein,Firestein,2,2,blog:2,2.161,1.13,cap
+Both,Both,7,7,blog:6;hrn:1,2.160,5.79,cap
+Cold,Cold,9,7,blog:6;hrn:1,2.160,5.02,cap
+Company,Company,7,7,blog:6;hrn:1,2.160,5.60,cap
+dry ice,dry ice|Dry ice,12,7,blog:2;hrn:5,2.160,4.74,ngram
+Editor,Editor,9,7,blog:4;hrn:3,2.160,4.62,cap
+European,European,10,7,acast:1;blog:6,2.160,5.08,cap
+Even,Even,9,7,acast:1;blog:6,2.160,5.99,cap
+Fat,Fat,14,7,blog:5;hrn:2,2.160,4.85,cap
+Illustrated,Illustrated,11,7,blog:4;hrn:3,2.160,4.17,cap
+Issue,Issue,21,7,blog:5;hrn:2,2.160,5.23,cap
+Joe,Joe,7,7,acast:6;hrn:1,2.160,4.78,cap
+Like,Like,8,7,blog:4;hrn:3,2.160,6.41,cap
+Machine,Machine,7,7,blog:6;hrn:1,2.160,4.90,cap
+Max,Max,13,7,acast:2;blog:5,2.160,4.66,cap
+Once,Once,7,7,acast:1;blog:6,2.160,5.53,cap
+Potato,Potato,10,7,blog:4;hrn:3,2.160,4.11,cap
+Right,Right,9,7,blog:6;hrn:1,2.160,5.96,cap
+Sauce,Sauce,8,7,acast:1;hrn:6,2.160,4.30,cap
+taste tests,taste tests|Taste Tests|Taste tests,9,7,acast:2;blog:5,2.160,4.67,ngram
+Thomas,Thomas,16,7,acast:1;blog:6,2.160,4.84,cap
+Use,Use,10,7,acast:1;blog:6,2.160,5.81,cap
+Madeira,Madeira,13,5,blog:5,2.158,2.96,cap
+Fransisco,Fransisco,4,3,blog:3,2.155,2.12,cap
+San Fransisco,San Fransisco,4,3,blog:3,2.155,2.12,caprun ngram
+Mandarin,Mandarin,3,3,blog:2;hrn:1,2.154,3.52,cap
+Rye,Rye,4,3,blog:2;hrn:1,2.154,3.52,cap
+Celiac,Celiac,6,2,blog:1;hrn:1,2.154,2.91,cap
+SCD,SCD,9,3,blog:3,2.153,2.39,acronym
+Haraguchi,Haraguchi,3,2,blog:2,2.147,1.16,cap
+Yuji Haraguchi,Yuji Haraguchi,3,2,blog:2,2.147,1.16,caprun
+Trotter,Trotter,2,2,blog:1;hrn:1,2.147,2.92,cap
+Eggplant,Eggplant|eggplant,3,3,blog:3,2.146,3.01,cap label
+Kuhn Rikon,Kuhn Rikon,12,2,blog:2,2.143,1.17,caprun
+Rikon,Rikon,12,2,blog:2,2.143,1.17,cap
+iSi whippers,iSi whippers|ISI WHIPPERS|ISI whippers,4,3,hrn:3,2.142,1.03,ngram
+Smash XXL,Smash XXL,16,8,blog:8,2.141,2.81,ngram
+cross-contamination,cross-contamination,3,3,acast:1;blog:2,2.140,3.70,hyphen
+Ziplock,Ziplock,5,3,hrn:3,2.138,2.15,cap
+LiveWire,LiveWire,3,2,hrn:2,2.132,2.29,camel cap
+10ml,10ml,2,2,blog:2,2.130,1.53,digit
+VSOP,VSOP,2,2,blog:2,2.130,1.53,acronym
+Bluto,Bluto,3,2,hrn:2,2.129,1.82,cap rare
+Brickman,Brickman,5,3,blog:3,2.126,2.17,cap
+Chez,Chez,2,2,acast:1;blog:1,2.125,2.95,cap
+Vongerichten,Vongerichten,2,2,blog:2,2.125,1.21,cap
+Merle,Merle|merle,16,3,blog:3,2.123,3.04,cap label
+Hobart,Hobart,12,4,blog:4,2.123,3.43,cap label
+goopy,goopy,3,3,blog:3,2.117,1.88,rare
+Zucchini,Zucchini,2,2,acast:1;hrn:1,2.117,2.96,cap
+Culinary Director,Culinary Director,3,3,acast:2;hrn:1,2.117,3.56,caprun ngram
+Valrhona,Valrhona,3,2,blog:2,2.115,1.23,cap
+plasticizer,plasticizer,5,3,blog:3,2.112,1.89,rare
+Goff,Goff,4,2,acast:1;blog:1,2.110,2.97,cap
+Iota,Iota,2,2,blog:1;hrn:1,2.110,2.97,cap
+Professor Douglas Goff,Professor Douglas Goff,3,2,acast:1;blog:1,2.110,2.97,caprun
+Rhubarb,Rhubarb,5,2,blog:1;hrn:1,2.110,2.97,cap
+Sinew,Sinew,2,2,blog:2,2.108,2.33,cap label
+Tamarisk,Tamarisk|tamarisk,6,2,blog:2,2.103,1.87,cap rare
+McMaster,McMaster,12,3,blog:3,2.100,3.07,camel cap
+Suzuki,Suzuki,36,7,blog:7,2.097,3.43,cap
+meatier,meatier,3,3,blog:3,2.096,1.92,rare
+Ferran,Ferran,7,3,blog:3,2.086,2.24,cap
+plasticizers,plasticizers,3,3,blog:3,2.085,1.94,rare
+Activa RM,Activa RM,13,4,blog:4,2.085,1.81,ngram
+bittersTotal,bittersTotal,1,1,blog:1,2.080,0.00,camel rare
+byHearst,byHearst,1,1,hrn:1,2.080,0.00,camel rare
+centrOfuge,centrOfuge,1,1,blog:1,2.080,0.00,camel rare
+FoodPlayerasked,FoodPlayerasked,1,1,blog:1,2.080,0.00,camel rare
+FoodPlayerLinda,FoodPlayerLinda,1,1,blog:1,2.080,0.00,camel rare
+FreeNastassia,FreeNastassia,1,1,hrn:1,2.080,0.00,camel rare
+HASIP,HASIP,2,1,hrn:1,2.080,0.00,acronym rare
+MBOCTP,MBOCTP,2,1,blog:1,2.080,0.00,acronym rare
+McGeez,McGeez,1,1,hrn:1,2.080,0.00,camel rare
+saltTotal,saltTotal,1,1,blog:1,2.080,0.00,camel rare
+SNIBBS,SNIBBS,3,1,acast:1,2.080,0.00,acronym rare
+waterSome,waterSome,1,1,blog:1,2.080,0.00,camel rare
+sterilizer,sterilizer|Sterilizer,10,2,blog:2,2.076,1.92,cap rare
+Goto,Goto,12,5,blog:5,2.076,3.07,cap
+re-sealable,re-sealable,2,2,blog:2,2.071,1.65,hyphen
+sous-vide techniques,sous-vide techniques|sous vide techniques,5,3,blog:2;hrn:1,2.069,2.94,ngram
+using sous-vide,using sous-vide|using sous vide,3,3,blog:2;hrn:1,2.069,2.94,ngram
+vide cooking,vide cooking|Vide Cooking,3,3,blog:2;hrn:1,2.069,2.94,ngram
+Evaporation,Evaporation,10,5,blog:5,2.069,3.08,cap
+Howdy Readers,Howdy Readers|Howdy readers,5,5,blog:5,2.069,3.08,caprun ngram
+Chef Herv,Chef Herv,2,2,blog:2,2.065,1.34,caprun
+ramen noodles,ramen noodles,4,4,acast:1;hrn:3,2.064,3.35,ngram
+acyl gellan,acyl gellan|Acyl Gellan,11,3,blog:3,2.062,1.21,ngram
+low acyl gellan,low acyl gellan|Low Acyl Gellan|Low-acyl gellan,10,3,blog:3,2.062,1.21,ngram
+decanted,decanted,4,3,blog:3,2.059,1.99,rare
+HRN Member,HRN Member,3,3,hrn:3,2.058,1.22,ngram
+Daiquiri,Daiquiri,7,3,blog:3,2.057,2.29,cap
+grapefruits,grapefruits|Grapefruits,3,2,blog:2,2.055,1.96,cap rare
+MASASHI,MASASHI|Masashi,5,2,blog:2,2.055,1.96,cap rare
+fennel seed,fennel seed|Fennel seed,4,3,acast:1;blog:2,2.055,2.96,ngram
+Cointreau,Cointreau|cointreau,3,2,blog:2,2.050,1.97,cap rare
+gummy bears,gummy bears,3,3,acast:2;hrn:1,2.048,2.97,ngram
+crispy skin,crispy skin,6,4,acast:1;blog:3,2.047,3.37,ngram
+Tortilla,Tortilla,2,2,blog:1;hrn:1,2.044,3.06,cap
+Jeung,Jeung,4,2,acast:2,2.042,1.39,cap
+Kevin Jeung,Kevin Jeung,4,2,acast:2,2.042,1.39,caprun
+heat conduction,heat conduction,3,3,blog:2;hrn:1,2.041,2.98,ngram
+Ziploc bags,Ziploc bags,14,5,blog:5,2.039,2.30,ngram
+pork chops,pork chops,4,4,acast:2;hrn:2,2.039,3.38,ngram
+pre-hydrated,pre-hydrated,2,2,blog:1;hrn:1,2.036,3.27,hyphen
+Cooks Illustrated,Cooks Illustrated,5,3,blog:2;hrn:1,2.034,3.65,caprun ngram
+Herbs,Herbs,3,3,acast:1;blog:2,2.034,3.65,cap
+Joshua David Stein,Joshua David Stein,5,3,acast:2;hrn:1,2.034,3.65,caprun ngram
+Stein,Stein,5,3,acast:2;hrn:1,2.034,3.65,cap
+Tasting,Tasting,4,3,acast:1;blog:2,2.034,3.65,cap
+Tuna Sinew,Tuna Sinew|tuna sinew|Tuna sinew,4,3,blog:3,2.034,2.33,caprun ngram
+untoasted,untoasted,2,2,blog:2,2.033,1.04,rare
+Purdy Pictures,Purdy Pictures,5,4,blog:4,2.032,2.82,caprun ngram
+post-mortem,post-mortem|Post-mortem,8,3,blog:3,2.032,3.16,cap hyphen
+Texture Modification,Texture Modification|texture modification,5,5,blog:5,2.031,3.77,caprun label ngram
+Worcestershire,Worcestershire,2,2,acast:1;hrn:1,2.029,3.08,cap
+70C,70C,2,2,blog:2,2.027,1.74,digit
+Bonnie,Bonnie,3,3,acast:1;hrn:2,2.025,3.66,cap
+Dave Arnold Ike Jime,Dave Arnold Ike Jime|Dave Arnold Ike-Jime,2,2,blog:2,2.024,1.43,caprun
+Ike Jime Man,Ike Jime Man|Ike-Jime Man,3,2,blog:2,2.024,1.43,caprun
+Wallace Edwards Sons,Wallace Edwards Sons,10,10,hrn:10,2.024,4.04,caprun ngram
+Chef Herve,Chef Herve,3,3,blog:3,2.022,2.35,caprun ngram
+Tartare,Tartare,4,3,blog:3,2.022,2.35,cap
+N20,N20,5,2,blog:2,2.022,1.75,digit
+Torch,Torch|torch,4,2,blog:1;hrn:1,2.021,3.74,cap label
+American country,American country|American Country|AMERICAN COUNTRY,12,6,blog:4;hrn:2,2.021,5.48,ngram
+Asian,Asian,6,6,acast:2;blog:4,2.021,4.69,cap
+Board,Board,8,6,blog:4;hrn:2,2.021,5.24,cap
+chicken breast,chicken breast,6,6,acast:1;blog:5,2.021,4.35,ngram
+cool stuff,cool stuff,6,6,blog:5;hrn:1,2.021,5.14,ngram
+Dave thinks,Dave thinks|dave thinks,6,6,blog:1;hrn:5,2.021,4.44,ngram
+England,England,12,6,acast:2;blog:4,2.021,5.12,cap
+Green,Green,14,6,blog:4;hrn:2,2.021,5.13,cap
+Issues crew,Issues crew|Issues Crew,7,6,acast:4;blog:2,2.021,4.70,ngram
+Italy,Italy,9,6,blog:5;hrn:1,2.021,4.66,cap
+Johnny,Johnny,7,6,blog:5;hrn:1,2.021,4.35,cap
+kitchen equipment,kitchen equipment,6,6,acast:1;blog:5,2.021,4.65,ngram
+mixed drinks,mixed drinks,7,6,blog:4;hrn:2,2.021,4.43,ngram
+Nuts,Nuts,6,6,acast:2;hrn:4,2.021,4.30,cap
+Patrick,Patrick,8,6,blog:1;hrn:5,2.021,4.37,cap
+plastic bags,plastic bags|Plastic Bags,7,6,blog:5;hrn:1,2.021,4.43,ngram
+Series,Series,9,6,blog:4;hrn:2,2.021,5.35,cap
+Smith,Smith,7,6,blog:5;hrn:1,2.021,4.89,cap
+Stuff,Stuff,7,6,blog:4;hrn:2,2.021,5.14,cap
+Tony,Tony,8,6,blog:4;hrn:2,2.021,4.64,cap
+Ultra,Ultra,16,6,blog:3;hrn:3,2.021,4.23,cap
+high-acyl,high-acyl|High-acyl,3,2,blog:2,2.018,2.48,cap hyphen
+3-D,3-D,13,3,blog:2;hrn:1,2.016,5.46,digit hyphen
+3D,3D,3,3,blog:1;hrn:2,2.016,4.46,digit
+boil-over,boil-over,16,3,acast:1;blog:2,2.016,3.83,hyphen
+bottle strength,bottle strength|Bottle Strength|Bottle strength|bottle-strength,8,3,blog:2;hrn:1,2.016,4.57,hyphen ngram
+brother-in-law,brother-in-law,3,3,acast:1;blog:2,2.016,5.11,hyphen
+COVID-19,COVID-19,3,3,acast:1;hrn:2,2.016,3.86,digit hyphen
+fat-washing,fat-washing,3,3,blog:1;hrn:2,2.016,4.13,hyphen
+full-on,full-on,3,3,acast:2;blog:1,2.016,5.54,hyphen
+in-house,in-house,3,3,blog:1;hrn:2,2.016,5.71,hyphen
+low-moisture,low-moisture|Low-moisture,5,3,acast:1;blog:2,2.016,3.90,hyphen
+pre-recorded,pre-recorded|PRE-RECORDED,3,3,blog:1;hrn:2,2.016,4.66,hyphen
+re-heating,re-heating,3,3,blog:2;hrn:1,2.016,4.18,hyphen
+store-bought,store-bought,3,3,blog:2;hrn:1,2.016,4.91,hyphen
+Hydrocolloids Intensive,Hydrocolloids Intensive,2,2,blog:2,2.015,1.45,caprun
+Mozzarella,Mozzarella,2,2,blog:1;hrn:1,2.015,3.10,cap
+Oak Pastures,Oak Pastures,10,10,hrn:10,2.006,3.24,ngram
+induction burners,induction burners,3,3,acast:1;hrn:2,2.005,3.03,ngram
+Chef Toshio Suzuki,Chef Toshio Suzuki,3,3,blog:3,2.005,2.38,caprun ngram
+aerates,aerates,2,2,blog:2,2.003,1.11,rare
+Stass,Stass|stass,2,2,hrn:2,2.003,1.11,rare
+unstrained,unstrained,2,2,blog:2,2.003,1.11,rare
+Cain,Cain,7,7,hrn:7,2.002,3.54,cap
+Vineyard,Vineyard,7,7,hrn:7,2.002,3.54,cap
+mushier,mushier,2,2,blog:2,1.999,1.12,rare
+egg yolk,egg yolk,3,3,blog:1;hrn:2,1.998,3.04,ngram
+chicken skin,chicken skin|chicken-skin,12,8,blog:8,1.997,4.63,hyphen ngram
+crystal clear,crystal clear|crystal-clear|Crystal-clear,6,8,blog:8,1.997,4.40,cap hyphen ngram
+food grade,food grade|food-grade,6,8,blog:8,1.997,4.80,hyphen ngram
+Chilling,Chilling,3,3,blog:2;hrn:1,1.997,3.69,cap
+Mustard,Mustard,6,3,blog:1;hrn:2,1.997,3.69,cap
+Robuchon,Robuchon,2,2,blog:2,1.996,1.49,cap
+Dave recaps,Dave recaps,6,6,acast:6,1.996,2.65,ngram
+pectinase,pectinase,2,2,blog:2,1.995,1.13,rare
+Clams,Clams,2,2,acast:1;blog:1,1.993,3.13,cap
+Kilo,Kilo,2,2,blog:1;hrn:1,1.993,3.13,cap
+Mold-Based,Mold-Based|mold-based,2,2,acast:1;hrn:1,1.993,3.77,cap hyphen
+Unilever,Unilever,7,4,blog:4,1.992,2.88,cap
+von Sydow,von Sydow,5,4,blog:4,1.992,1.99,ngram
+anti-microbial,anti-microbial,2,2,blog:1;hrn:1,1.988,3.33,hyphen
+evaporative cooling,evaporative cooling,5,5,blog:5,1.988,2.39,ngram
+convecting,convecting,2,2,blog:2,1.986,1.15,rare
+Barns,Barns,2,2,acast:1;blog:1,1.985,3.14,cap
+Blanch Dry Fry Fry,Blanch Dry Fry Fry|blanch-dry-fry-fry,2,2,blog:2,1.982,2.54,caprun hyphen
+avant-garde,avant-garde,2,2,blog:1;hrn:1,1.980,3.34,hyphen
+Author,Author,3,3,acast:1;blog:1;hrn:1,1.980,4.95,cap
+Better,Better,3,3,acast:1;blog:1;hrn:1,1.980,5.76,cap
+Canada,Canada,3,3,acast:1;blog:1;hrn:1,1.980,4.97,cap
+Denmark,Denmark,3,3,acast:1;blog:1;hrn:1,1.980,4.04,cap
+Dreams,Dreams,3,3,acast:1;blog:1;hrn:1,1.980,4.59,cap
+Dried,Dried,3,3,acast:1;blog:1;hrn:1,1.980,4.04,cap
+essential oil,essential oil,3,3,acast:1;blog:1;hrn:1,1.980,4.61,ngram
+Favorite,Favorite,3,3,acast:1;blog:1;hrn:1,1.980,4.97,cap
+Fresh,Fresh,3,3,acast:1;blog:1;hrn:1,1.980,4.83,cap
+Head,Head,3,3,acast:1;blog:1;hrn:1,1.980,5.51,cap
+Josh,Josh,3,3,acast:1;blog:1;hrn:1,1.980,4.35,cap
+Jungle,Jungle,3,3,acast:1;blog:1;hrn:1,1.980,4.12,cap
+Knife,Knife,4,3,acast:1;blog:1;hrn:1,1.980,4.41,cap
+Love,Love,3,3,acast:1;blog:1;hrn:1,1.980,5.82,cap
+Magic,Magic,3,3,acast:1;blog:1;hrn:1,1.980,4.76,cap
+Never,Never,3,3,acast:1;blog:1;hrn:1,1.980,5.91,cap
+non-alcoholic drinks,non-alcoholic drinks,3,3,acast:1;blog:1;hrn:1,1.980,3.91,ngram
+River,River,3,3,acast:1;blog:1;hrn:1,1.980,5.03,cap
+School,School,4,3,acast:1;blog:1;hrn:1,1.980,5.71,cap
+Steps,Steps,3,3,acast:1;blog:1;hrn:1,1.980,4.73,cap
+Technical,Technical,3,3,acast:1;blog:1;hrn:1,1.980,4.75,cap
+Trees,Trees,5,3,acast:1;blog:1;hrn:1,1.980,4.69,cap
+upcoming book,upcoming book,3,3,acast:1;blog:1;hrn:1,1.980,4.34,ngram
+Rachael,Rachael,2,2,acast:1;blog:1,1.978,3.15,cap
+Rachael Ray,Rachael Ray,2,2,acast:1;blog:1,1.978,3.15,caprun
+Apples,Apples|apples,12,5,blog:5,1.977,3.96,cap label
+Wish List,Wish List|wish list|WISH LIST|wish-list,6,5,blog:5,1.977,5.18,caprun hyphen ngram
+Most,Most,23,20,blog:20,1.977,6.00,cap
+Alan Richman,Alan Richman,2,2,blog:2,1.976,2.55,caprun label
+kosho,kosho,2,2,blog:2,1.974,1.18,rare
+Rundown,Rundown,2,2,blog:1;hrn:1,1.971,3.16,cap
+aquafaba,aquafaba,2,2,hrn:2,1.970,1.19,rare
+The Buchi,The Buchi,4,2,blog:2,1.969,1.55,caprun
+per liter,per liter,37,12,blog:12,1.965,3.46,ngram
+Jime fish,Jime fish|jime fish,3,3,blog:3,1.964,1.43,ngram
+Bulleit,Bulleit,2,2,blog:2,1.964,1.56,cap
+Fabian,Fabian,3,2,blog:1;hrn:1,1.963,3.17,cap
+nitty-gritty,nitty-gritty,3,3,blog:3,1.960,2.70,hyphen
+Roasted,Roasted,3,3,blog:1;hrn:2,1.960,3.73,cap
+Whammo,Whammo,2,2,blog:2,1.957,1.22,rare
+Bagel,Bagel,2,2,acast:1;hrn:1,1.956,3.18,cap
+Refrigeration,Refrigeration,2,2,blog:1;hrn:1,1.956,3.18,cap
+Hydrocolloids class,Hydrocolloids class,3,3,blog:3,1.956,1.45,ngram
+ANDO,ANDO|Ando,5,2,blog:2,1.952,2.59,acronym cap
+Doritos,Doritos,4,4,hrn:4,1.952,2.94,cap
+Thomas Waugh,Thomas Waugh,14,4,blog:4,1.952,2.94,caprun ngram
+Waugh,Waugh,14,4,blog:4,1.952,2.94,cap
+akami,akami|Akami,5,1,blog:1,1.950,0.00,cap rare
+Amidated,Amidated|amidated,2,1,blog:1,1.950,0.00,cap rare
+Bullshot,Bullshot|bullshot,2,1,blog:1,1.950,0.00,cap rare
+Carbonade,Carbonade|carbonade,2,1,acast:1,1.950,0.00,cap rare
+Corolase,Corolase,2,1,blog:1,1.950,0.00,cap rare
+Cupps,Cupps,3,1,acast:1,1.950,0.00,cap rare
+Czimer,Czimer,13,1,blog:1,1.950,0.00,cap rare
+Eyeclops,Eyeclops,4,1,blog:1,1.950,0.00,cap rare
+fabber,fabber|Fabber,6,1,blog:1,1.950,0.00,cap rare
+Golubowska,Golubowska,3,1,blog:1,1.950,0.00,cap rare
+gymnema,gymnema|Gymnema,5,1,blog:1,1.950,0.00,cap rare
+Kappabashi,Kappabashi,2,1,blog:1,1.950,0.00,cap rare
+Kieselsol,Kieselsol,6,1,blog:1,1.950,0.00,cap rare
+Kusaie,Kusaie|kusaie,5,1,blog:1,1.950,0.00,cap rare
+Larrin,Larrin,2,1,acast:1,1.950,0.00,cap rare
+Lupini,Lupini|lupini,2,1,hrn:1,1.950,0.00,cap rare
+MAKINODAN,MAKINODAN|Makinodan,3,1,blog:1,1.950,0.00,cap rare
+Mayumu,Mayumu,2,1,acast:1,1.950,0.00,cap rare
+Melezitose,Melezitose|melezitose,2,1,blog:1,1.950,0.00,cap rare
+Mianus,Mianus,2,1,hrn:1,1.950,0.00,cap rare
+Moromi,Moromi,2,1,acast:1,1.950,0.00,cap rare
+Mycryo,Mycryo|mycryo,3,1,blog:1,1.950,0.00,cap rare
+Natsudaidai,Natsudaidai|natsudaidai,3,1,blog:1,1.950,0.00,cap rare
+nixtamal,nixtamal|Nixtamal,21,1,blog:1,1.950,0.00,cap rare
+nixtamalizing,nixtamalizing|Nixtamalizing,4,1,blog:1,1.950,0.00,cap rare
+Norprene,Norprene,2,1,blog:1,1.950,0.00,cap rare
+Osayi,Osayi,8,1,acast:1,1.950,0.00,cap rare
+Quixtamal,Quixtamal,3,1,blog:1,1.950,0.00,cap rare
+Rausu,Rausu,6,1,blog:1,1.950,0.00,cap rare
+Rishiri,Rishiri,5,1,blog:1,1.950,0.00,cap rare
+Rovey,Rovey,2,1,blog:1,1.950,0.00,cap rare
+Salumist,Salumist,2,1,hrn:1,1.950,0.00,cap rare
+Sanbitter,Sanbitter,2,1,hrn:1,1.950,0.00,cap rare
+sequestrants,sequestrants|Sequestrants,13,1,blog:1,1.950,0.00,cap rare
+Sukiyabashi,Sukiyabashi,2,1,blog:1,1.950,0.00,cap rare
+Sundstr,Sundstr,6,1,hrn:1,1.950,0.00,cap rare
+Tarajia,Tarajia,2,1,acast:1,1.950,0.00,cap rare
+Transglutaminases,Transglutaminases,2,1,blog:1,1.950,0.00,cap rare
+bacon-infused,bacon-infused,2,2,blog:1;hrn:1,1.949,3.38,hyphen
+non-contaminating,non-contaminating,3,3,blog:3,1.948,2.72,hyphen
+NaCl,NaCl,4,2,blog:2,1.946,2.60,camel cap
+Combis,Combis,4,2,blog:2,1.944,1.25,rare
+nopales,nopales,2,2,hrn:2,1.944,1.25,rare
+Finally Dave,Finally Dave|finally Dave,9,9,hrn:9,1.943,4.44,caprun ngram
+Sous-Vide Primer,Sous-Vide Primer|sous-vide primer|Sous Vide Primer,7,7,blog:7,1.940,2.94,ngram
+Late Night,Late Night|late-night,2,2,acast:1;blog:1,1.940,5.34,caprun hyphen
+White Chocolate,White Chocolate|white-chocolate,2,2,blog:1;hrn:1,1.940,4.49,caprun hyphen
+George Motz,George Motz,2,2,acast:2,1.937,1.62,caprun
+Motz,Motz,4,2,acast:2,1.937,1.62,cap
+nerdery,nerdery,2,2,acast:2,1.936,1.27,rare
+Joan Roca,Joan Roca,3,3,blog:3,1.930,2.51,caprun ngram
+Roca,Roca,4,3,blog:3,1.930,2.51,cap
+Carbonate,Carbonate,2,2,acast:1;hrn:1,1.927,3.22,cap
+Distillery,Distillery,2,2,blog:1;hrn:1,1.927,3.22,cap
+centrifuging,centrifuging,2,2,blog:2,1.923,1.30,rare
+Katie Parla,Katie Parla,4,2,acast:2,1.923,1.65,caprun
+Parla,Parla,4,2,acast:2,1.923,1.65,cap
+Sandwiches,Sandwiches,3,3,blog:1;hrn:2,1.923,3.77,cap
+propane torches,propane torches|Propane torches,3,3,blog:2;hrn:1,1.920,3.15,ngram
+quinine sulfate,quinine sulfate|Quinine Sulfate,5,3,blog:3,1.918,2.53,caprun ngram
+clarified lime juice,clarified lime juice|Clarified Lime Juice|Clarified lime juice,9,6,blog:6,1.914,3.49,caprun ngram
+Supermarket,Supermarket,3,3,acast:1;blog:2,1.914,3.78,cap
+LDPE,LDPE,6,2,blog:2,1.913,1.97,acronym
+Blanch,Blanch,3,3,blog:3,1.912,2.54,cap
+Annette,Annette,3,2,acast:1;blog:1,1.912,3.24,cap
+Emeritus,Emeritus,2,2,acast:1;blog:1,1.905,3.25,cap
+Rhode,Rhode,3,3,blog:1;hrn:2,1.904,3.79,cap
+Rhode Island,Rhode Island,3,3,blog:1;hrn:2,1.904,3.79,caprun ngram
+Bouchon,Bouchon,2,2,blog:2,1.900,1.70,cap
+Dave welcomes,Dave welcomes,4,4,acast:2;hrn:2,1.899,3.55,ngram
+son Booker,son Booker,4,4,blog:1;hrn:3,1.899,3.55,ngram
+Simple Agar Clarification,Simple Agar Clarification|Simple agar clarification|simple agar clarification,12,4,blog:4,1.898,3.02,caprun ngram
+Curing,Curing,2,2,acast:1;hrn:1,1.897,3.26,cap
+Oysters,Oysters,5,3,blog:3,1.896,3.34,cap label
+Cooking Issues Aquavit,Cooking Issues Aquavit,3,2,blog:2,1.896,1.71,caprun
+Sea-Bream,Sea-Bream|Sea Bream,4,2,blog:2,1.892,2.69,cap caprun hyphen
+Martini,Martini,2,2,blog:1;hrn:1,1.890,3.27,cap
+Insane,Insane,7,7,blog:7,1.890,4.40,label
+paper-thin,paper-thin|Paper-thin,7,7,blog:7,1.890,4.47,hyphen
+Tricks,Tricks|tricks,7,7,blog:7,1.890,4.15,cap label
+wide-ranging,wide-ranging,7,7,acast:7,1.890,4.19,hyphen
+Jonny,Jonny,5,5,hrn:5,1.882,3.33,cap
+Jonny Hunter,Jonny Hunter,7,5,hrn:5,1.882,3.33,caprun ngram
+homogenizer,homogenizer,8,2,blog:2,1.881,1.40,rare
+Swede,Swede,5,4,blog:4,1.878,3.05,cap
+Christina,Christina,4,3,blog:2;hrn:1,1.877,3.82,cap
+Meld,Meld|MELD,3,2,hrn:2,1.874,2.72,acronym cap
+Poultry,Poultry,6,6,blog:6,1.873,3.54,cap
+And Dave,And Dave,3,3,blog:1;hrn:2,1.872,4.44,caprun
+Baking,Baking,4,3,blog:1;hrn:2,1.872,3.92,cap
+Brussels,Brussels,3,3,acast:2;hrn:1,1.872,3.99,cap
+Cape Cod,Cape Cod,6,3,acast:1;blog:2,1.872,3.89,caprun ngram
+Chef Nick,Chef Nick,4,3,acast:2;blog:1,1.872,4.23,caprun ngram
+Cod,Cod,6,3,acast:1;blog:2,1.872,3.89,cap
+Colombia,Colombia,3,3,blog:1;hrn:2,1.872,3.95,cap
+Coming Soon,Coming Soon|Coming soon|coming soon,3,3,acast:1;blog:2,1.872,5.32,caprun ngram
+Cooking Issue,Cooking Issue,3,3,blog:1;hrn:2,1.872,4.45,caprun ngram
+Danish,Danish,3,3,acast:2;blog:1,1.872,3.91,cap
+Dynamic Duo,Dynamic Duo|dynamic duo,3,3,blog:1;hrn:2,1.872,4.08,caprun ngram
+Food Mills,Food Mills|food mills,4,3,acast:1;hrn:2,1.872,4.22,caprun ngram
+French Onion,French Onion|French onion|french onion,4,3,acast:1;blog:2,1.872,3.89,caprun ngram
+Lauren,Lauren,3,3,blog:1;hrn:2,1.872,3.98,cap
+Leon,Leon,3,3,blog:2;hrn:1,1.872,3.92,cap
+Lounge,Lounge,3,3,blog:2;hrn:1,1.872,3.92,cap
+Media Lab,Media Lab,3,3,acast:1;hrn:2,1.872,4.42,caprun ngram
+moisture management,moisture management|Moisture Management,4,3,acast:1;hrn:2,1.872,3.90,caprun ngram
+mustard seeds,mustard seeds|Mustard Seeds,18,7,blog:7,1.872,3.69,caprun ngram
+Ninja,Ninja,3,3,acast:2;hrn:1,1.872,3.87,cap
+Passion Fruit,Passion Fruit|passion fruit,3,3,blog:2;hrn:1,1.872,4.44,caprun ngram
+Persian,Persian,3,3,acast:1;blog:2,1.872,3.83,cap
+South Beach,South Beach,6,3,blog:2;hrn:1,1.872,4.92,caprun ngram
+Spice,Spice,6,3,acast:1;blog:2,1.872,3.94,cap
+Spinal,Spinal,9,3,acast:1;blog:2,1.872,3.85,cap
+Star Wars,Star Wars,3,3,acast:1;hrn:2,1.872,4.59,caprun ngram
+The Problem,The Problem,3,3,acast:1;blog:2,1.872,5.40,caprun
+Tomato,Tomato,3,3,blog:2;hrn:1,1.872,3.85,cap
+Tomatoes,Tomatoes,3,3,blog:1;hrn:2,1.872,3.90,cap
+Topics Covered,Topics Covered|Topics covered,3,3,acast:2;hrn:1,1.872,4.27,caprun ngram
+You're,You're,3,3,blog:2;hrn:1,1.872,3.86,cap
+diglycerides,diglycerides|Diglycerides,4,1,blog:1,1.870,1.42,cap label rare
+convection ovens,convection ovens,3,3,blog:2;hrn:1,1.870,3.22,ngram
+dutch ovens,dutch ovens|Dutch Ovens,3,3,blog:1;hrn:2,1.870,3.22,ngram
+short rib,short rib,9,4,blog:3;hrn:1,1.866,3.59,ngram
+Aaron,Aaron,6,5,blog:1;hrn:4,1.861,4.23,cap
+Another,Another,5,5,blog:3;hrn:2,1.861,5.74,cap
+baking soda,baking soda|Baking soda,12,5,blog:4;hrn:1,1.861,3.92,ngram
+Berlin,Berlin,5,5,blog:3;hrn:2,1.861,4.38,cap
+Connecticut,Connecticut,5,5,acast:4;blog:1,1.861,4.11,cap
+Dan,Dan,5,5,blog:4;hrn:1,1.861,4.51,cap
+Dave breaks,Dave breaks,5,5,acast:4;hrn:1,1.861,4.44,ngram
+Dave discusses,Dave discusses,5,5,acast:1;hrn:4,1.861,3.93,ngram
+Dean,Dean,6,5,blog:4;hrn:1,1.861,4.40,cap
+Drinks,Drinks,7,5,blog:2;hrn:3,1.861,4.43,cap
+Eat,Eat,5,5,blog:2;hrn:3,1.861,5.13,cap
+Everyone,Everyone,5,5,acast:1;blog:4,1.861,5.47,cap
+finished product,finished product,5,5,blog:4;hrn:1,1.861,4.94,ngram
+France,France,5,5,acast:1;blog:4,1.861,4.94,cap
+higher temperature,higher temperature,6,5,blog:4;hrn:1,1.861,4.64,ngram
+Holiday,Holiday,5,5,blog:2;hrn:3,1.861,4.66,cap
+holiday season,holiday season,5,5,blog:1;hrn:4,1.861,4.66,ngram
+Inc,Inc,5,5,blog:4;hrn:1,1.861,4.77,cap
+joins Dave Arnold,joins Dave Arnold,5,5,acast:1;hrn:4,1.861,4.00,ngram
+Kong,Kong,7,5,acast:2;blog:3,1.861,4.49,cap
+Lecture Series,Lecture Series|lecture series,5,5,blog:4;hrn:1,1.861,4.14,ngram
+Little,Little,5,5,blog:3;hrn:2,1.861,5.75,cap
+lower temperatures,lower temperatures,6,5,blog:4;hrn:1,1.861,4.33,ngram
+Member,Member,5,5,blog:2;hrn:3,1.861,5.18,cap
+Nathan,Nathan,5,5,blog:3;hrn:2,1.861,4.13,cap
+oil expert,oil expert,5,5,acast:4;blog:1,1.861,4.56,ngram
+olive oil expert,olive oil expert|Olive oil expert,5,5,acast:4;blog:1,1.861,4.09,ngram
+Pizza,Pizza,7,5,acast:2;hrn:3,1.861,4.43,cap
+Plastic,Plastic,9,5,blog:3;hrn:2,1.861,4.51,cap
+potato chips,potato chips,6,5,acast:1;blog:4,1.861,4.11,ngram
+Rolling,Rolling,5,5,blog:2;hrn:3,1.861,4.47,cap
+Sam,Sam,6,5,acast:2;blog:3,1.861,4.64,cap
+Serve,Serve,6,5,acast:1;blog:4,1.861,4.85,cap
+Service,Service,7,5,blog:2;hrn:3,1.861,5.49,cap
+Soup,Soup,6,5,blog:3;hrn:2,1.861,4.15,cap
+State,State,7,5,blog:3;hrn:2,1.861,5.78,cap
+Still,Still,5,5,blog:4;hrn:1,1.861,5.92,cap
+Story,Story,8,5,blog:3;hrn:2,1.861,5.45,cap
+Structure,Structure,15,5,acast:1;blog:4,1.861,4.84,cap
+sugar content,sugar content,5,5,blog:2;hrn:3,1.861,4.68,ngram
+tackle questions,tackle questions,5,5,acast:2;hrn:3,1.861,4.15,ngram
+Tea,Tea,7,5,acast:1;blog:4,1.861,4.73,cap
+Tech,Tech,5,5,blog:4;hrn:1,1.861,4.69,cap
+thin layer,thin layer,6,5,blog:3;hrn:2,1.861,4.40,ngram
+Tom,Tom,6,5,blog:1;hrn:4,1.861,4.83,cap
+Turkish,Turkish,16,5,blog:4;hrn:1,1.861,4.28,cap
+turn brown,turn brown,6,5,blog:4;hrn:1,1.861,5.01,ngram
+Virginia,Virginia,15,5,blog:3;hrn:2,1.861,4.62,cap
+Volume,Volume,25,5,blog:3;hrn:2,1.861,4.76,cap
+Want,Want,6,5,blog:2;hrn:3,1.861,6.04,cap
+wide range,wide range,5,5,blog:4;hrn:1,1.861,4.96,ngram
+wide variety,wide variety,5,5,blog:3;hrn:2,1.861,4.75,ngram
+Wild,Wild,9,5,blog:3;hrn:2,1.861,4.80,cap
+Zealand,Zealand,10,5,blog:4;hrn:1,1.861,4.50,cap
+Contra,Contra,3,2,acast:1;hrn:1,1.861,3.31,cap
+Frozen Desserts,Frozen Desserts,2,2,acast:1;blog:1,1.861,3.31,caprun
+Midtown,Midtown,2,2,acast:1;blog:1,1.861,3.31,cap
+spinal cord,spinal cord|Spinal Cord|SPINAL CORD|Spinal cord,57,8,blog:8,1.854,3.85,caprun ngram
+long-winded,long-winded,3,3,blog:3,1.854,2.87,hyphen
+New York Chinatown,New York Chinatown,2,2,blog:1;hrn:1,1.853,3.32,caprun
+Taipei,Taipei,3,2,acast:1;hrn:1,1.853,3.32,cap
+Lim,Lim,2,2,acast:1;hrn:1,1.846,3.33,cap
+pre-seasoned,pre-seasoned,2,2,acast:1;blog:1,1.846,3.51,hyphen
+Mindy Nguyen,Mindy Nguyen,4,4,blog:4,1.845,3.10,caprun ngram
+1055-1060,1055-1060,2,2,blog:2,1.844,2.11,hyphen
+PIB,PIB,2,2,blog:2,1.844,2.11,acronym
+tenderizing,tenderizing,2,2,hrn:2,1.843,1.49,rare
+Ultrasonically,Ultrasonically|ultrasonically,2,2,blog:2,1.843,1.49,rare
+cold aquavit,cold aquavit|cold Aquavit,3,3,blog:3,1.840,1.71,ngram
+Ice cold aquavit,Ice cold aquavit|ice cold aquavit|ice-cold aquavit,3,3,blog:3,1.840,1.71,ngram
+Ranch,Ranch,16,16,hrn:16,1.839,4.03,cap
+Cooker,Cooker,3,2,blog:1;hrn:1,1.839,3.34,cap
+Peeled,Peeled,2,2,blog:1;hrn:1,1.839,3.34,cap
+crunchier,crunchier,10,2,blog:2,1.834,1.51,rare
+equilibrate,equilibrate,2,2,blog:2,1.834,1.51,rare
+ladling,ladling|Ladling,4,2,blog:2,1.834,1.51,rare
+volatilities,volatilities,2,2,blog:2,1.834,1.51,rare
+taste buds,taste buds|Taste Buds,4,4,blog:2;hrn:2,1.833,3.63,ngram
+Upshot,Upshot,3,3,blog:3,1.832,2.68,cap
+timesaver,timesaver,2,2,blog:2,1.830,1.52,rare
+eggless,eggless,2,2,hrn:2,1.826,1.53,rare
+Kombu-wraped,Kombu-wraped,1,1,blog:1,1.821,1.03,cap hyphen
+"""Food for Thought"" – Nils & Dave host the Philoctetes Organization at The French Culinary Institute","""Food for Thought"" – Nils & Dave host the Philoctetes Organization at The French Culinary Institute",1,1,blog:1,1.820,0.00,label
+00045-X,00045-X,1,1,blog:1,1.820,0.00,digit hyphen
+00050-4,00050-4,1,1,blog:1,1.820,0.00,hyphen
+00131-X,00131-X,1,1,blog:1,1.820,0.00,digit hyphen
+131pF,131pF,1,1,blog:1,1.820,0.00,camel digit
+1763T23,1763T23,1,1,blog:1,1.820,0.00,digit
+18995T51,18995T51,1,1,blog:1,1.820,0.00,digit
+1simple,1simple,2,1,blog:1,1.820,0.00,digit
+1x1x1,1x1x1,1,1,blog:1,1.820,0.00,digit
+2-aminoacetophenone,2-aminoacetophenone,2,1,blog:1,1.820,0.00,digit hyphen
+200pC,200pC,1,1,blog:1,1.820,0.00,camel digit
+2691A15,2691A15,1,1,blog:1,1.820,0.00,digit
+3869K34,3869K34,1,1,blog:1,1.820,0.00,digit
+3869K35,3869K35,1,1,blog:1,1.820,0.00,digit
+392pF,392pF,1,1,blog:1,1.820,0.00,camel digit
+4000g,4000g,2,1,blog:1,1.820,0.00,digit
+40psi,40psi,1,1,blog:1,1.820,0.00,digit
+4450K94,4450K94,1,1,blog:1,1.820,0.00,digit
+4757T93,4757T93,1,1,blog:1,1.820,0.00,digit
+50635K565,50635K565,1,1,blog:1,1.820,0.00,digit
+5520K503,5520K503,1,1,blog:1,1.820,0.00,digit
+5520K602,5520K602,1,1,blog:1,1.820,0.00,digit
+57005-2,57005-2,1,1,blog:1,1.820,0.00,hyphen
+5x5x5,5x5x5,1,1,blog:1,1.820,0.00,digit
+6-Trichloroanisole,6-Trichloroanisole,1,1,blog:1,1.820,0.00,digit hyphen
+6579T38,6579T38,1,1,blog:1,1.820,0.00,digit
+7236K59,7236K59,1,1,blog:1,1.820,0.00,digit
+7356A33,7356A33,1,1,blog:1,1.820,0.00,digit
+74575A69,74575A69,1,1,blog:1,1.820,0.00,digit
+750ml,750ml,1,1,blog:1,1.820,0.00,digit
+86'ed,86'ed,1,1,blog:1,1.820,0.00,digit
+abv1,abv1,2,1,blog:1,1.820,0.00,digit
+al corchesne,al corchesne,1,1,blog:1,1.820,0.00,label
+and18,and18,1,1,blog:1,1.820,0.00,digit
+and3,and3,1,1,blog:1,1.820,0.00,digit
+anito lo,anito lo,1,1,blog:1,1.820,0.00,label
+anti-boilover,anti-boilover,1,1,blog:1,1.820,0.00,hyphen
+Anti-Cremists,Anti-Cremists,1,1,hrn:1,1.820,0.00,hyphen
+approximately5,approximately5,1,1,blog:1,1.820,0.00,digit
+auto-supreming,auto-supreming,1,1,blog:1,1.820,0.00,hyphen
+bacon-grease-on-Mindy's-neck,bacon-grease-on-Mindy's-neck,1,1,blog:1,1.820,0.00,hyphen
+Beta-glucanases,Beta-glucanases,1,1,blog:1,1.820,0.00,hyphen
+beta-ionone,beta-ionone,1,1,blog:1,1.820,0.00,hyphen
+BKON,BKON,2,1,hrn:1,1.820,0.00,acronym
+Boozehound Alert: Agar Alcohol Clarification Plus Some Thoughts.,Boozehound Alert: Agar Alcohol Clarification Plus Some Thoughts.,1,1,blog:1,1.820,0.00,label
+Carrot & Cardamom Oysters,Carrot & Cardamom Oysters,1,1,blog:1,1.820,0.00,label
+chanpagne,chanpagne,1,1,blog:1,1.820,0.00,label
+Chardi-Obvs,Chardi-Obvs,1,1,hrn:1,1.820,0.00,hyphen
+Cocktail Science in General:Part 2 of 2,Cocktail Science in General:Part 2 of 2,1,1,blog:1,1.820,0.00,label
+cold oil spherification,cold oil spherification,1,1,blog:1,1.820,0.00,label
+Cooking Issues Radio with Special Guest Jeffrey Steingarten,Cooking Issues Radio with Special Guest Jeffrey Steingarten,1,1,blog:1,1.820,0.00,label
+Corny Corn McCorn. The Corn Syrup King.,Corny Corn McCorn. The Corn Syrup King.,1,1,blog:1,1.820,0.00,label
+de-alcoholed,de-alcoholed,1,1,blog:1,1.820,0.00,hyphen
+de-germed,de-germed,1,1,blog:1,1.820,0.00,hyphen
+de-odorized,de-odorized,2,1,blog:1,1.820,0.00,hyphen
+diglyceride-spiked,diglyceride-spiked,1,1,blog:1,1.820,0.00,hyphen
+EL131,EL131,2,1,blog:1,1.820,0.00,digit
+"Fake Fryable, Brûlée-able Salep Dondurma Ice Cream: A Legal Recipe","Fake Fryable, Brûlée-able Salep Dondurma Ice Cream: A Legal Recipe",1,1,blog:1,1.820,0.00,label
+FKC,FKC,1,1,hrn:1,1.820,0.00,acronym
+Gonna Build Me a Rotovap,Gonna Build Me a Rotovap,1,1,blog:1,1.820,0.00,label
+Gonna Build Me a Rotovap Update,Gonna Build Me a Rotovap Update,1,1,blog:1,1.820,0.00,label
+Gonna Build Me a Rotovap Update 2: Vacu-Forming Nightmare,Gonna Build Me a Rotovap Update 2: Vacu-Forming Nightmare,1,1,blog:1,1.820,0.00,label
+guanciale-onlyand,guanciale-onlyand,1,1,acast:1,1.820,0.00,hyphen
+Head to Tail Drinking: Breaking up Distillations in the Rotovap,Head to Tail Drinking: Breaking up Distillations in the Rotovap,1,1,blog:1,1.820,0.00,label
+Hookered-Up,Hookered-Up,1,1,hrn:1,1.820,0.00,hyphen
+int0,int0,1,1,hrn:1,1.820,0.00,digit
+juice0,juice0,1,1,blog:1,1.820,0.00,digit
+La Ciccia,La Ciccia,1,1,blog:1,1.820,0.00,label
+"Ladies and Gentlemen, Merle Haggard Skoals.","Ladies and Gentlemen, Merle Haggard Skoals.",1,1,blog:1,1.820,0.00,label
+"Lapsang, Kurisawa, Agar, and Chives","Lapsang, Kurisawa, Agar, and Chives",1,1,blog:1,1.820,0.00,label
+LARL,LARL,1,1,blog:1,1.820,0.00,acronym
+low teperature,low teperature,1,1,blog:1,1.820,0.00,label
+Manna Update: Candygram,Manna Update: Candygram,1,1,blog:1,1.820,0.00,label
+mendubi-gua,mendubi-gua,1,1,blog:1,1.820,0.00,hyphen
+Mesoamerican Miracle Megapost: Tortillas and Nixtamalization,Mesoamerican Miracle Megapost: Tortillas and Nixtamalization,1,1,blog:1,1.820,0.00,label
+methy-butanal,methy-butanal,1,1,blog:1,1.820,0.00,hyphen
+MTNP,MTNP,1,1,blog:1,1.820,0.00,acronym
+Nastassia-height,Nastassia-height,1,1,blog:1,1.820,0.00,hyphen
+nchez-Sinencio,nchez-Sinencio,1,1,blog:1,1.820,0.00,hyphen
+ndez-Albores,ndez-Albores,1,1,blog:1,1.820,0.00,hyphen
+ndez-Pizarro,ndez-Pizarro,1,1,blog:1,1.820,0.00,hyphen
+"New York Culinary Experience Technique-a-thon: Pressure Cooking Eggs, Super Rich Sorbet, N'Stuff","New York Culinary Experience Technique-a-thon: Pressure Cooking Eggs, Super Rich Sorbet, N'Stuff",1,1,blog:1,1.820,0.00,label
+non-nixtamal,non-nixtamal,1,1,blog:1,1.820,0.00,hyphen
+NRTE,NRTE,3,1,blog:1,1.820,0.00,acronym
+Our Friend Michael Batterberry Passes Away,Our Friend Michael Batterberry Passes Away,1,1,blog:1,1.820,0.00,label
+out-doorsy,out-doorsy,1,1,blog:1,1.820,0.00,hyphen
+Patent Pending: the Searzall,Patent Pending: the Searzall,1,1,blog:1,1.820,0.00,label
+Pear Enlightenment and The Brogdale Farm,Pear Enlightenment and The Brogdale Farm,1,1,blog:1,1.820,0.00,label
+Pectinex Smash XXL For Sale,Pectinex Smash XXL For Sale,1,1,blog:1,1.820,0.00,label
+Pectinex Ultra SP-L For Sale,Pectinex Ultra SP-L For Sale,1,1,blog:1,1.820,0.00,label
+Photo3,Photo3,1,1,blog:1,1.820,0.00,digit
+pre-gelatinizes,pre-gelatinizes,1,1,blog:1,1.820,0.00,hyphen
+preee-recorded,preee-recorded,1,1,hrn:1,1.820,0.00,hyphen
+PT1000,PT1000,1,1,acast:1,1.820,0.00,digit
+red-hot-pokered,red-hot-pokered,1,1,blog:1,1.820,0.00,hyphen
+roto-vapped,roto-vapped,1,1,blog:1,1.820,0.00,hyphen
+rotovap-infused,rotovap-infused,1,1,blog:1,1.820,0.00,hyphen
+rquez-Melendez,rquez-Melendez,1,1,blog:1,1.820,0.00,hyphen
+S0308-8146,S0308-8146,1,1,blog:1,1.820,0.00,digit hyphen
+S0963-9969,S0963-9969,1,1,blog:1,1.820,0.00,digit hyphen
+S1043-4526,S1043-4526,1,1,blog:1,1.820,0.00,digit hyphen
+S1466-8564,S1466-8564,1,1,blog:1,1.820,0.00,digit hyphen
+Santo vs. Dave Arnold in El Grande Sacudirse de Coctel,Santo vs. Dave Arnold in El Grande Sacudirse de Coctel,1,1,blog:1,1.820,0.00,label
+Scotch and Peanuts in the Centrifuge = Some Funky Stuff.,Scotch and Peanuts in the Centrifuge = Some Funky Stuff.,1,1,blog:1,1.820,0.00,label
+SHMP,SHMP,3,1,blog:1,1.820,0.00,acronym
+"Skoal to Spinal Chords, Ike Jime and Mokume-Gane: the Star Chefs Demo","Skoal to Spinal Chords, Ike Jime and Mokume-Gane: the Star Chefs Demo",1,1,blog:1,1.820,0.00,label
+Skoals of the Week 9.28,Skoals of the Week 9.28,1,1,blog:1,1.820,0.00,label
+"Skåls of the day (May 11, 2009)","Skåls of the day (May 11, 2009)",1,1,blog:1,1.820,0.00,label
+"Skåls of the day (May 14, 2009)","Skåls of the day (May 14, 2009)",1,1,blog:1,1.820,0.00,label
+"Skåls of the day (May 9, 2009)","Skåls of the day (May 9, 2009)",1,1,blog:1,1.820,0.00,label
+Skåls of the week 5.22.09,Skåls of the week 5.22.09,1,1,blog:1,1.820,0.00,label
+Skåls of the week 6.05.09,Skåls of the week 6.05.09,1,1,blog:1,1.820,0.00,label
+Skåls of the week 6.14.09,Skåls of the week 6.14.09,1,1,blog:1,1.820,0.00,label
+"Skåls of the Week, 6.21.2009","Skåls of the Week, 6.21.2009",1,1,blog:1,1.820,0.00,label
+"Skåls of the Week, 7.27.2009","Skåls of the Week, 7.27.2009",1,1,blog:1,1.820,0.00,label
+"Skåls of the Week, 7.3.2009","Skåls of the Week, 7.3.2009",1,1,blog:1,1.820,0.00,label
+"Skåls of the Week, 9.1.2009","Skåls of the Week, 9.1.2009",1,1,blog:1,1.820,0.00,label
+stass-enfreude,stass-enfreude,1,1,hrn:1,1.820,0.00,hyphen
+styro-packing,styro-packing,1,1,blog:1,1.820,0.00,hyphen
+Substack-era,Substack-era,1,1,acast:1,1.820,0.00,hyphen
+sup2,sup2,1,1,blog:1,1.820,0.00,digit
+surface-rougness,surface-rougness,1,1,blog:1,1.820,0.00,hyphen
+syrup2,syrup2,1,1,blog:1,1.820,0.00,digit
+Tajner-Czopek,Tajner-Czopek,1,1,blog:1,1.820,0.00,hyphen
+The hunt for Alan Slesinski's centrifuge,The hunt for Alan Slesinski's centrifuge,1,1,blog:1,1.820,0.00,label
+The Searzall: Now On Kickstarter,The Searzall: Now On Kickstarter,1,1,blog:1,1.820,0.00,label
+Ticaloid 310 S,Ticaloid 310 S,1,1,blog:1,1.820,0.00,label
+TIME100,TIME100,1,1,acast:1,1.820,0.00,digit
+to750,to750,1,1,blog:1,1.820,0.00,digit
+TVFN,TVFN,1,1,blog:1,1.820,0.00,acronym
+Veiseth-Kent,Veiseth-Kent,3,1,blog:1,1.820,0.00,hyphen
+vermouth2,vermouth2,1,1,blog:1,1.820,0.00,digit
+WANTED: Celebrity Skåls,WANTED: Celebrity Skåls,1,1,blog:1,1.820,0.00,label
+"We have the capability to build a custom rotovap: better, faster, stronger…","We have the capability to build a custom rotovap: better, faster, stronger…",1,1,blog:1,1.820,0.00,label
+Wendelbo-Madsen,Wendelbo-Madsen,1,1,blog:1,1.820,0.00,hyphen
+who-steeno,who-steeno,1,1,blog:1,1.820,0.00,hyphen
+WWJE,WWJE,1,1,hrn:1,1.820,0.00,acronym
+x1ft,x1ft,1,1,blog:1,1.820,0.00,digit
+Chef Suzuki,Chef Suzuki|chef Suzuki,21,5,blog:5,1.807,3.43,caprun ngram
+bubblers,bubblers,2,2,blog:2,1.805,1.58,rare
+Kold-Draft ice,Kold-Draft ice|Kold Draft ice,8,3,blog:3,1.804,1.79,ngram
+Coleman,Coleman,12,7,acast:7,1.803,3.77,cap
+Espresso,Espresso,2,2,blog:1;hrn:1,1.802,3.39,cap
+Issues Radio,Issues Radio|Issues radio,16,15,blog:15,1.800,5.01,ngram
+Rockefeller,Rockefeller,6,5,acast:5,1.800,3.44,cap
+Rockefeller Center,Rockefeller Center,6,5,acast:5,1.800,3.44,caprun ngram
+Jeremie,Jeremie,2,2,blog:2,1.799,1.92,cap
+Vacu-form,Vacu-form|vacu-form,2,1,blog:1,1.796,1.36,hyphen label
+Sly,Sly,2,2,acast:1;hrn:1,1.795,3.40,cap
+554ml,554ml,1,1,blog:1,1.792,0.09,digit
+Natty,Natty,3,3,hrn:3,1.791,2.75,cap
+Styrofoam,Styrofoam,4,3,blog:3,1.791,2.75,cap
+Counterintuitively,Counterintuitively|counterintuitively,2,2,blog:2,1.788,1.62,rare
+yanagi,yanagi,7,2,blog:2,1.788,1.62,rare
+Madeleine,Madeleine,2,2,blog:1;hrn:1,1.788,3.41,cap
+Ricardo,Ricardo,2,2,acast:1;blog:1,1.788,3.41,cap
+Pistachio,Pistachio,4,3,blog:3,1.785,2.76,cap
+pistachio oil,pistachio oil|Pistachio Oil|Pistachio oil,7,3,blog:3,1.785,2.76,caprun ngram
+acidic environments,acidic environments,3,3,acast:1;blog:2,1.785,3.34,ngram
+McGriddles,McGriddles,1,1,blog:1,1.783,1.13,camel cap
+cold oil,cold oil|Cold Oil|cold-oil,5,4,blog:4,1.776,5.02,caprun hyphen ngram
+crazy monkey,crazy monkey|Crazy Monkey|crazy-monkey,8,4,blog:4,1.776,4.07,caprun hyphen ngram
+Agar Tobiko,Agar Tobiko|agar tobiko,3,1,blog:1,1.776,1.15,caprun label
+rice noodles,rice noodles|Rice noodles,4,4,blog:1;hrn:3,1.775,3.70,ngram
+Dustin,Dustin,2,2,acast:1;blog:1,1.773,3.43,cap
+Goldman Sachs,Goldman Sachs,2,2,blog:1;hrn:1,1.773,3.43,caprun
+Ngo,Ngo,4,2,acast:1;blog:1,1.773,3.43,cap
+Sachs,Sachs,2,2,blog:1;hrn:1,1.773,3.43,cap
+Gossling-Reynold,Gossling-Reynold,1,1,hrn:1,1.772,1.16,cap hyphen
+15psi,15psi,1,1,blog:1,1.770,0.16,digit
+Cooking Meats,Cooking Meats,5,5,blog:5,1.770,3.48,caprun ngram
+3-4,3-4,6,6,blog:6,1.769,5.78,hyphen
+fine dining,fine dining|Fine Dining|fine-dining,5,6,acast:6,1.769,4.14,hyphen ngram
+fresh lime,fresh lime|fresh-lime,5,6,blog:6,1.769,3.86,hyphen ngram
+Ice cold,Ice cold|ice-cold|ice cold,4,6,blog:6,1.769,5.00,hyphen ngram
+Colebrook,Colebrook,3,2,blog:2,1.767,1.99,cap
+Colebrook Row,Colebrook Row,3,2,blog:2,1.767,1.99,caprun
+grilled cheese,grilled cheese,4,4,acast:2;blog:2,1.767,3.71,ngram
+limeade,limeade,5,2,blog:2,1.767,1.67,rare
+Roe,Roe,2,2,acast:1;blog:1,1.766,3.44,cap
+caraway seeds,caraway seeds,8,4,blog:4,1.765,2.43,ngram
+Un-freezable,Un-freezable,1,1,blog:1,1.764,1.18,cap hyphen
+Justin Timberlake,Justin Timberlake,4,4,blog:4,1.764,3.22,caprun ngram
+Timberlake,Timberlake,4,4,blog:4,1.764,3.22,cap
+Harold McGee joins,Harold McGee joins,3,3,acast:1;hrn:2,1.764,3.37,ngram
+Harold McGee Lecture,Harold McGee Lecture,3,3,blog:2;hrn:1,1.764,3.37,ngram
+McGee joins,McGee joins,3,3,acast:1;hrn:2,1.764,3.37,ngram
+Manna,Manna,6,3,blog:3,1.762,2.80,cap
+agar agar,agar agar|Agar agar,4,3,blog:3,1.761,3.02,label ngram
+PDT,PDT,3,3,blog:3,1.761,3.02,acronym
+Vita Prepped,Vita Prepped|Vita-Prepped,2,2,blog:2,1.760,2.91,cap caprun hyphen
+Donuts,Donuts,2,2,acast:1;hrn:1,1.758,3.45,cap
+foodways,foodways,2,2,acast:2,1.758,1.69,rare
+Recap,Recap,2,2,blog:1;hrn:1,1.758,3.45,cap
+Rio-Garc,Rio-Garc,1,1,blog:1,1.757,1.20,cap hyphen
+Salep-like,Salep-like,1,1,blog:1,1.757,1.20,cap hyphen
+Salep-ness,Salep-ness,1,1,blog:1,1.757,1.20,cap hyphen
+Existing Conditions,Existing Conditions|Existing conditions,8,7,hrn:7,1.755,4.75,caprun ngram
+220V,220V,1,1,acast:1,1.752,0.22,digit
+Brunch,Brunch,2,2,acast:1;hrn:1,1.751,3.46,cap
+Chestnut,Chestnut,3,2,blog:1;hrn:1,1.751,3.46,cap
+Ketchup,Ketchup,2,2,blog:1;hrn:1,1.751,3.46,cap
+Kenji,Kenji,3,3,hrn:3,1.751,2.82,cap
+new-fangled,new-fangled,2,2,blog:2,1.751,2.30,hyphen
+mixologists,mixologists,2,2,hrn:2,1.750,1.71,rare
+bone broth,bone broth,3,3,acast:1;hrn:2,1.749,3.39,ngram
+calcium chloride,calcium chloride|Calcium chloride,9,3,blog:1;hrn:2,1.749,3.39,ngram
+Corwin Kave,Corwin Kave|corwin kave,2,1,blog:1,1.749,1.22,caprun label
+eugenol,eugenol,5,2,blog:2,1.746,1.72,rare
+Achilles,Achilles,2,2,acast:1;blog:1,1.744,3.47,cap
+300F,300F,1,1,blog:1,1.742,0.25,digit
+80pC,80pC,1,1,blog:1,1.742,0.25,camel digit
+McKirdy,McKirdy,2,1,acast:1,1.742,1.24,camel cap
+emulsify,emulsify,4,2,blog:2,1.741,1.73,rare
+BdV-brandy,BdV-brandy,1,1,blog:1,1.738,1.25,camel cap hyphen
+McFadden,McFadden,3,2,acast:2,1.736,2.95,camel cap
+Caramel,Caramel,2,2,blog:1;hrn:1,1.736,3.48,cap
+Convent,Convent,2,2,blog:1;hrn:1,1.736,3.48,cap
+Fir,Fir,2,2,blog:1;hrn:1,1.736,3.48,cap
+Steve Sando,Steve Sando,3,2,acast:2,1.735,2.06,caprun
+The Maillard,The Maillard,2,2,blog:2,1.735,2.06,caprun
+puffing gun,puffing gun|Puffing Gun,5,5,hrn:5,1.735,2.83,ngram
+Heston Blumenthal,Heston Blumenthal,3,3,blog:3,1.733,2.85,caprun ngram
+Elizabeth Falkner,Elizabeth Falkner,2,2,acast:2,1.731,2.07,caprun
+Falkner,Falkner,4,2,acast:2,1.731,2.07,cap
+Food Saver,Food Saver|food saver,12,4,blog:4,1.731,3.27,caprun ngram
+Botanical,Botanical,2,2,blog:1;hrn:1,1.729,3.49,cap
+Cho,Cho,3,2,acast:1;blog:1,1.729,3.49,cap
+New Yorker,New Yorker,2,2,acast:1;blog:1,1.729,3.49,caprun
+sludgy,sludgy,2,2,blog:2,1.729,1.76,rare
+bonito flakes,bonito flakes|Bonito flakes,6,4,blog:4,1.729,2.50,ngram
+fruit juices,fruit juices,3,3,blog:2;hrn:1,1.728,3.42,ngram
+Blumenthal,Blumenthal,3,3,blog:3,1.728,2.86,cap
+liquid nitrogen ice,liquid nitrogen ice,5,4,blog:3;hrn:1,1.725,3.76,ngram
+nitrogen ice,nitrogen ice,5,4,blog:3;hrn:1,1.725,3.76,ngram
+nitrogen ice cream,nitrogen ice cream,5,4,blog:3;hrn:1,1.725,3.76,ngram
+Buttered Rum,Buttered Rum|buttered rum,7,5,blog:5,1.723,2.85,ngram
+Early-1800s,Early-1800s,1,1,blog:1,1.723,1.29,cap digit hyphen
+cream sandwiches,cream sandwiches|Cream Sandwiches,5,4,acast:1;hrn:3,1.717,3.77,ngram
+inch striper,inch striper,3,3,blog:3,1.716,1.99,ngram
+information visit,information visit,13,13,hrn:13,1.713,5.04,ngram
+grapeseed,grapeseed,2,2,blog:2,1.712,1.80,rare
+granulated sugar,granulated sugar,5,4,blog:4,1.708,2.54,ngram
+Incanto,Incanto,3,1,blog:1,1.708,1.33,cap label
+Dew,Dew,2,2,blog:1;hrn:1,1.707,3.52,cap
+Mountain Dew,Mountain Dew,2,2,blog:1;hrn:1,1.707,3.52,caprun
+LOCUST,LOCUST|Locust,2,2,blog:2,1.706,3.00,acronym cap
+Roy Fong,Roy Fong|roy fong,3,2,blog:2,1.706,3.00,caprun label
+65pC,65pC,1,1,blog:1,1.705,0.37,camel digit
+Garret,Garret,4,3,acast:3,1.704,2.90,cap
+Garret Richard,Garret Richard,5,3,acast:3,1.704,2.90,caprun ngram
+Nahuatl,Nahuatl,2,2,blog:2,1.703,2.13,cap
+unpeeled,unpeeled,2,2,blog:2,1.703,1.82,rare
+Vineyard Winery,Vineyard Winery,7,7,hrn:7,1.700,3.30,ngram
+Executive Pastry Chef,Executive Pastry Chef,2,2,acast:1;hrn:1,1.700,3.53,caprun
+Chios Mastic,Chios Mastic,2,2,blog:2,1.699,2.14,caprun
+50cc,50cc,1,1,blog:1,1.699,0.39,digit
+anglaise base,anglaise base,4,3,blog:3,1.698,2.03,ngram
+DeMartino,DeMartino,1,1,acast:1,1.696,1.36,camel cap
+100MPH,100MPH,1,1,hrn:1,1.696,0.40,digit
+250F,250F,1,1,blog:1,1.696,0.40,digit
+Bisphenol,Bisphenol,2,2,blog:2,1.694,2.15,cap
+Cognac,Cognac,3,3,blog:3,1.693,2.92,cap
+concord grapes,concord grapes|Concord grapes,6,3,acast:1;blog:2,1.692,3.47,ngram
+stirred cocktails,stirred cocktails,4,3,blog:2;hrn:1,1.692,3.47,ngram
+vacuum sealer,vacuum sealer,7,4,blog:4,1.692,2.57,ngram
+preposterously,preposterously,2,2,blog:2,1.691,1.85,rare
+Abeuela,Abeuela,1,1,blog:1,1.690,0.00,cap
+Abi Balingit,Abi Balingit,2,1,acast:1,1.690,0.00,caprun
+Abscent,Abscent,1,1,hrn:1,1.690,0.00,cap
+Aburiya,Aburiya,1,1,blog:1,1.690,0.00,cap
+Aftel,Aftel,1,1,hrn:1,1.690,0.00,cap
+After Bunyard,After Bunyard,1,1,blog:1,1.690,0.00,caprun
+Aging Issues Nastassia,Aging Issues Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Aki Kamozawa,Aki Kamozawa,1,1,hrn:1,1.690,0.00,caprun
+Alain Sailhac,Alain Sailhac,1,1,blog:1,1.690,0.00,caprun
+Alan Slesinski,Alan Slesinski,1,1,blog:1,1.690,0.00,caprun
+Alan Wilkis,Alan Wilkis,1,1,hrn:1,1.690,0.00,caprun
+Alexander Skarsg,Alexander Skarsg,1,1,blog:1,1.690,0.00,caprun
+Alexandra Boardley,Alexandra Boardley,1,1,blog:1,1.690,0.00,caprun
+Alexandra Kicenik Devarenne,Alexandra Kicenik Devarenne,1,1,blog:1,1.690,0.00,caprun
+Altekar,Altekar,1,1,blog:1,1.690,0.00,cap
+Amanda Kludt,Amanda Kludt,1,1,blog:1,1.690,0.00,caprun
+Andre Soltner,Andre Soltner,1,1,blog:1,1.690,0.00,caprun
+Andrew Hultkrans,Andrew Hultkrans,1,1,blog:1,1.690,0.00,caprun
+Angelena James,Angelena James,1,1,hrn:1,1.690,0.00,caprun
+Annato,Annato,1,1,blog:1,1.690,0.00,cap
+Annato Bixa,Annato Bixa,1,1,blog:1,1.690,0.00,caprun
+Annelore,Annelore,1,1,blog:1,1.690,0.00,cap
+Anstendig,Anstendig,1,1,acast:1,1.690,0.00,cap
+Anuual Review,Anuual Review,1,1,blog:1,1.690,0.00,caprun
+Appleness,Appleness,1,1,blog:1,1.690,0.00,cap
+Applestone,Applestone,3,1,hrn:1,1.690,0.00,cap
+Applestone Meat Company,Applestone Meat Company,1,1,hrn:1,1.690,0.00,caprun
+Aquafabah Humbug,Aquafabah Humbug,1,1,hrn:1,1.690,0.00,caprun
+Ariane Daguin,Ariane Daguin,1,1,blog:1,1.690,0.00,caprun
+Armud,Armud,1,1,blog:1,1.690,0.00,cap
+Astrachans,Astrachans,1,1,blog:1,1.690,0.00,cap
+Atera,Atera,1,1,acast:1,1.690,0.00,cap
+Author Brian Hoefling,Author Brian Hoefling,1,1,acast:1,1.690,0.00,caprun
+Autolyse,Autolyse,1,1,hrn:1,1.690,0.00,cap
+Avroko,Avroko,1,1,blog:1,1.690,0.00,cap
+Avroko Restaurant Group,Avroko Restaurant Group,1,1,blog:1,1.690,0.00,caprun
+Baby Jouan,Baby Jouan,1,1,blog:1,1.690,0.00,caprun
+Bagel Issues Dave Nastassia,Bagel Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Bakon Vodka,Bakon Vodka,1,1,hrn:1,1.690,0.00,caprun
+Balingit,Balingit,2,1,acast:1,1.690,0.00,cap
+Bartender Austin Hennelly,Bartender Austin Hennelly,1,1,acast:1,1.690,0.00,caprun
+Basic Rotovap Structure,Basic Rotovap Structure,2,1,blog:1,1.690,0.00,caprun
+Beetville,Beetville,1,1,hrn:1,1.690,0.00,cap
+Beranbaum,Beranbaum,2,1,acast:1,1.690,0.00,cap
+Beurre D'Anjou,Beurre D'Anjou,1,1,blog:1,1.690,0.00,caprun
+Beurre D'Avalon,Beurre D'Avalon,2,1,blog:1,1.690,0.00,caprun
+Biking Issues Dave Nastassia,Biking Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Bilet,Bilet,3,1,hrn:1,1.690,0.00,cap
+Bill Muarry,Bill Muarry,1,1,acast:1,1.690,0.00,caprun
+Billy Joal,Billy Joal,1,1,acast:1,1.690,0.00,caprun
+Blipping Issues Dave Nastassia,Blipping Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Blite,Blite,1,1,blog:1,1.690,0.00,cap
+Boardley,Boardley,1,1,blog:1,1.690,0.00,cap
+Bodega Issues Dave Nastassia,Bodega Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Boedecker,Boedecker,1,1,hrn:1,1.690,0.00,cap
+Boedecker Cellars,Boedecker Cellars,1,1,hrn:1,1.690,0.00,caprun
+Boelte,Boelte,2,1,blog:1,1.690,0.00,cap
+Bornarth,Bornarth,1,1,hrn:1,1.690,0.00,cap
+Bradsell,Bradsell,1,1,blog:1,1.690,0.00,cap
+Brian Hoefling,Brian Hoefling,1,1,acast:1,1.690,0.00,caprun
+Bruno Goussalt,Bruno Goussalt,1,1,blog:1,1.690,0.00,caprun
+Buchi Rotovap,Buchi Rotovap,1,1,blog:1,1.690,0.00,caprun
+Bundts,Bundts,1,1,hrn:1,1.690,0.00,cap
+Bunyard,Bunyard,3,1,blog:1,1.690,0.00,cap
+Burbanks,Burbanks,1,1,blog:1,1.690,0.00,cap
+Burun,Burun,1,1,blog:1,1.690,0.00,cap
+BYOPizza Greens,BYOPizza Greens,1,1,acast:1,1.690,0.00,caprun
+Calbi,Calbi,1,1,blog:1,1.690,0.00,cap
+Californiano,Californiano,1,1,blog:1,1.690,0.00,cap
+Calville Blanc D'Hiver,Calville Blanc D'Hiver,1,1,blog:1,1.690,0.00,caprun
+Carageenan,Carageenan,2,1,blog:1,1.690,0.00,cap
+Carbonated Figroni Hendricks,Carbonated Figroni Hendricks,1,1,blog:1,1.690,0.00,caprun
+Carboxymethylcellulose,Carboxymethylcellulose,1,1,blog:1,1.690,0.00,cap
+Carciofi Dolci Alla Giudia,Carciofi Dolci Alla Giudia,1,1,blog:1,1.690,0.00,caprun
+Carpigiani,Carpigiani,1,1,hrn:1,1.690,0.00,cap
+Casio Exilim,Casio Exilim,1,1,blog:1,1.690,0.00,caprun
+Catillac,Catillac,1,1,blog:1,1.690,0.00,cap
+Causing Issues Dave Nastassia,Causing Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Celebrity Mysteries Dave Nastassia,Celebrity Mysteries Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Celenza,Celenza,2,1,hrn:1,1.690,0.00,cap
+Celiac Disease Carmen Gianfrani,Celiac Disease Carmen Gianfrani,1,1,blog:1,1.690,0.00,caprun
+Centrico,Centrico,1,1,blog:1,1.690,0.00,cap
+Chadzilla,Chadzilla,1,1,blog:1,1.690,0.00,cap
+Chardi-Obvs SavvyB,Chardi-Obvs SavvyB,1,1,hrn:1,1.690,0.00,caprun
+Chef Greg Baxtrom,Chef Greg Baxtrom,1,1,acast:1,1.690,0.00,caprun
+Chef Herve Malivert,Chef Herve Malivert,1,1,blog:1,1.690,0.00,caprun
+Chef Lauren Resler,Chef Lauren Resler,1,1,hrn:1,1.690,0.00,caprun
+Chef Suzanne Cupps,Chef Suzanne Cupps,2,1,acast:1,1.690,0.00,caprun
+Chenaux,Chenaux,1,1,blog:1,1.690,0.00,cap
+Chip Malt Jake Kalick,Chip Malt Jake Kalick,1,1,acast:1,1.690,0.00,caprun
+Chocolate N'Lemons,Chocolate N'Lemons,1,1,blog:1,1.690,0.00,caprun
+Chris Lvoff,Chris Lvoff,1,1,blog:1,1.690,0.00,caprun
+Christian Delouvrier,Christian Delouvrier,1,1,blog:1,1.690,0.00,caprun
+Christina Tossi,Christina Tossi,1,1,hrn:1,1.690,0.00,caprun
+Ciccia,Ciccia,3,1,blog:1,1.690,0.00,cap
+Citrangequat,Citrangequat,1,1,blog:1,1.690,0.00,cap
+Cocula,Cocula,1,1,hrn:1,1.690,0.00,cap
+Coffee Issues Dave Nastassia,Coffee Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Coldewey,Coldewey,1,1,blog:1,1.690,0.00,cap
+Commando SodaStreams,Commando SodaStreams,1,1,hrn:1,1.690,0.00,caprun
+Computer Issues Dave Nastassia,Computer Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Construction Issues Dave Nastassia,Construction Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Contra Wildair,Contra Wildair,2,1,hrn:1,1.690,0.00,caprun
+Cookbook Issues Dave Nastassia,Cookbook Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Cooking Issue Dave Nastassia,Cooking Issue Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Cooking Maxime Bilet,Cooking Maxime Bilet,1,1,hrn:1,1.690,0.00,caprun
+Cookingand,Cookingand,1,1,acast:1,1.690,0.00,cap
+Corchesne,Corchesne,1,1,blog:1,1.690,0.00,cap
+Corima,Corima,3,1,acast:1,1.690,0.00,cap
+Counterjam,Counterjam,1,1,hrn:1,1.690,0.00,cap
+Crassane,Crassane,1,1,blog:1,1.690,0.00,cap
+Creative Director Samantha Gloffke,Creative Director Samantha Gloffke,1,1,hrn:1,1.690,0.00,caprun
+Cristallino Cava,Cristallino Cava,1,1,blog:1,1.690,0.00,caprun
+Crotchfelt,Crotchfelt,1,1,blog:1,1.690,0.00,cap
+Crustastun,Crustastun,1,1,blog:1,1.690,0.00,cap
+Cvap Oven Photo,Cvap Oven Photo,1,1,hrn:1,1.690,0.00,caprun
+Cynge,Cynge,1,1,blog:1,1.690,0.00,cap
+Czimer Sad,Czimer Sad,1,1,blog:1,1.690,0.00,caprun
+Daguin,Daguin,1,1,blog:1,1.690,0.00,cap
+D'Amboise,D'Amboise,1,1,blog:1,1.690,0.00,cap
+Damon Boelte Dish,Damon Boelte Dish,1,1,blog:1,1.690,0.00,caprun
+Dan Nosowitz Update,Dan Nosowitz Update,1,1,blog:1,1.690,0.00,caprun
+Daniel Gritzer Culinary Director,Daniel Gritzer Culinary Director,1,1,hrn:1,1.690,0.00,caprun
+Daniel Shemtob,Daniel Shemtob,2,1,acast:1,1.690,0.00,caprun
+D'Anjou,D'Anjou,1,1,blog:1,1.690,0.00,cap
+D'Artagnan,D'Artagnan,1,1,blog:1,1.690,0.00,cap
+Dashtaki,Dashtaki,2,1,acast:1,1.690,0.00,cap
+D'Avalon,D'Avalon,2,1,blog:1,1.690,0.00,cap
+Dave Arnold Czimer Meats,Dave Arnold Czimer Meats,1,1,blog:1,1.690,0.00,caprun
+Dave Arnold Nixtamalized,Dave Arnold Nixtamalized,1,1,blog:1,1.690,0.00,caprun
+Dave Mokume-Gane,Dave Mokume-Gane,1,1,blog:1,1.690,0.00,caprun
+Dave Nastassia Jack,Dave Nastassia Jack,1,1,hrn:1,1.690,0.00,caprun
+Dave Scantland,Dave Scantland,1,1,blog:1,1.690,0.00,caprun
+Dave Veggetti Birthday,Dave Veggetti Birthday,1,1,hrn:1,1.690,0.00,caprun
+Dax Searzall,Dax Searzall,1,1,hrn:1,1.690,0.00,caprun
+Deeeeeeez Cults,Deeeeeeez Cults,1,1,hrn:1,1.690,0.00,caprun
+Definition Issues Dave Nastassia,Definition Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Dehillerin,Dehillerin,1,1,acast:1,1.690,0.00,cap
+Dejmek,Dejmek,1,1,blog:1,1.690,0.00,cap
+Del Posto Atera,Del Posto Atera,1,1,acast:1,1.690,0.00,caprun
+Delouvrier,Delouvrier,1,1,blog:1,1.690,0.00,cap
+Deragon,Deragon,1,1,blog:1,1.690,0.00,cap
+Deutsch Schweinshaxe,Deutsch Schweinshaxe,1,1,blog:1,1.690,0.00,caprun
+Devarenne,Devarenne,1,1,blog:1,1.690,0.00,cap
+Deviled Hamine Eggs,Deviled Hamine Eggs,1,1,blog:1,1.690,0.00,caprun
+Devin Coldewey,Devin Coldewey,1,1,blog:1,1.690,0.00,caprun
+D'Hiver,D'Hiver,1,1,blog:1,1.690,0.00,cap
+Diane Kochilas,Diane Kochilas,2,1,acast:1,1.690,0.00,caprun
+Dick Bradsell,Dick Bradsell,1,1,blog:1,1.690,0.00,caprun
+Digestability,Digestability,1,1,blog:1,1.690,0.00,cap
+Dommers,Dommers,1,1,blog:1,1.690,0.00,cap
+Dorothy Kalins,Dorothy Kalins,2,1,acast:1,1.690,0.00,caprun
+Drew Nieporent,Drew Nieporent,1,1,blog:1,1.690,0.00,caprun
+Duplais,Duplais,1,1,blog:1,1.690,0.00,cap
+Durocs,Durocs,1,1,blog:1,1.690,0.00,cap
+Duvergnies,Duvergnies,2,1,blog:1,1.690,0.00,cap
+Edward Bunyard,Edward Bunyard,1,1,blog:1,1.690,0.00,caprun
+Edward Nersessian,Edward Nersessian,1,1,blog:1,1.690,0.00,caprun
+Elisabete Matos Amparo Gon,Elisabete Matos Amparo Gon,1,1,blog:1,1.690,0.00,caprun
+Empell,Empell,1,1,hrn:1,1.690,0.00,cap
+Endolyn,Endolyn,2,1,acast:1,1.690,0.00,cap
+Eric Medskar,Eric Medskar,1,1,hrn:1,1.690,0.00,caprun
+Eric Repeirt,Eric Repeirt,1,1,hrn:1,1.690,0.00,caprun
+Eric Warheim,Eric Warheim,2,1,acast:1,1.690,0.00,caprun
+Erikson Beyer Sigholt,Erikson Beyer Sigholt,1,1,blog:1,1.690,0.00,caprun
+Erikson Misimi,Erikson Misimi,1,1,blog:1,1.690,0.00,caprun
+Esopus Spitzenburg,Esopus Spitzenburg,1,1,blog:1,1.690,0.00,caprun
+Eurotilla,Eurotilla,1,1,blog:1,1.690,0.00,cap
+Eustis Limequat Nippon Mandarinquat,Eustis Limequat Nippon Mandarinquat,1,1,blog:1,1.690,0.00,caprun
+Exilim,Exilim,2,1,blog:1,1.690,0.00,cap
+Eywitness,Eywitness,1,1,blog:1,1.690,0.00,cap
+Fabulous Abeuela,Fabulous Abeuela,1,1,blog:1,1.690,0.00,caprun
+Fangela,Fangela,1,1,blog:1,1.690,0.00,cap
+Farideh Sadeghin,Farideh Sadeghin,2,1,acast:1,1.690,0.00,caprun
+Farmerie,Farmerie,1,1,blog:1,1.690,0.00,cap
+Figroni,Figroni,1,1,blog:1,1.690,0.00,cap
+Florabama,Florabama,1,1,hrn:1,1.690,0.00,cap
+Florabama Fish Toss,Florabama Fish Toss,1,1,hrn:1,1.690,0.00,caprun
+Francisco Migoya,Francisco Migoya,2,1,acast:1,1.690,0.00,caprun
+Frankie Celenza,Frankie Celenza,2,1,hrn:1,1.690,0.00,caprun
+French Marennes,French Marennes,1,1,blog:1,1.690,0.00,caprun
+Frieds,Frieds,1,1,hrn:1,1.690,0.00,cap
+Frooties,Frooties,1,1,blog:1,1.690,0.00,cap
+Gagniere,Gagniere,1,1,blog:1,1.690,0.00,cap
+Gastronomists,Gastronomists,1,1,blog:1,1.690,0.00,cap
+Gastrovac,Gastrovac,1,1,hrn:1,1.690,0.00,cap
+George Pralus,George Pralus,1,1,blog:1,1.690,0.00,caprun
+Germanfrancisco,Germanfrancisco,1,1,blog:1,1.690,0.00,cap
+Germanfrancisco Treat,Germanfrancisco Treat,1,1,blog:1,1.690,0.00,caprun
+Ghetto Gastro Osayi,Ghetto Gastro Osayi,1,1,acast:1,1.690,0.00,caprun
+Gianfrani,Gianfrani,1,1,blog:1,1.690,0.00,cap
+Gin Squeezins Dump,Gin Squeezins Dump,1,1,blog:1,1.690,0.00,caprun
+Giudia,Giudia,1,1,blog:1,1.690,0.00,cap
+Gjetost,Gjetost,2,1,blog:1,1.690,0.00,cap
+Glasvin,Glasvin,2,1,acast:1,1.690,0.00,cap
+Gloffke,Gloffke,1,1,hrn:1,1.690,0.00,cap
+Glogg,Glogg,1,1,blog:1,1.690,0.00,cap
+Golubowska The,Golubowska The,1,1,blog:1,1.690,0.00,caprun
+Goussalt,Goussalt,1,1,blog:1,1.690,0.00,cap
+Grace Nastassia Jerry,Grace Nastassia Jerry,1,1,blog:1,1.690,0.00,caprun
+Greg Calbi,Greg Calbi,1,1,blog:1,1.690,0.00,caprun
+Grojsman,Grojsman,1,1,blog:1,1.690,0.00,cap
+Gruy,Gruy,2,1,blog:1,1.690,0.00,cap
+Guest Scott Heimendinger,Guest Scott Heimendinger,1,1,hrn:1,1.690,0.00,caprun
+Gusmer,Gusmer,1,1,blog:1,1.690,0.00,cap
+Hagggard,Hagggard,1,1,blog:1,1.690,0.00,cap
+Haitani,Haitani,1,1,blog:1,1.690,0.00,cap
+Halwachy,Halwachy,1,1,blog:1,1.690,0.00,cap
+Ham El-Waylly,Ham El-Waylly,2,1,acast:1,1.690,0.00,caprun
+Harvesting Issues Dave Nastassia,Harvesting Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Heather Marold Thomason,Heather Marold Thomason,2,1,hrn:1,1.690,0.00,caprun
+Heimendinger,Heimendinger,2,1,hrn:1,1.690,0.00,cap
+Hiroko Shimbo,Hiroko Shimbo,1,1,blog:1,1.690,0.00,caprun
+Hoefling,Hoefling,2,1,acast:1,1.690,0.00,cap
+Homa Dashtaki,Homa Dashtaki,2,1,acast:1,1.690,0.00,caprun
+Honeycrisps,Honeycrisps,1,1,blog:1,1.690,0.00,cap
+Hookered-Up Drinks,Hookered-Up Drinks,1,1,hrn:1,1.690,0.00,caprun
+Hultkrans,Hultkrans,1,1,blog:1,1.690,0.00,cap
+Idunn,Idunn,1,1,hrn:1,1.690,0.00,cap
+Ike Jimed The Western,Ike Jimed The Western,1,1,blog:1,1.690,0.00,caprun
+Ilmvac,Ilmvac,1,1,blog:1,1.690,0.00,cap
+Insititue,Insititue,1,1,blog:1,1.690,0.00,cap
+Intimacy Issues Dave Nastassia,Intimacy Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Iota Carageenan Function,Iota Carageenan Function,1,1,blog:1,1.690,0.00,caprun
+Jaboticaba Tree Grape,Jaboticaba Tree Grape,1,1,blog:1,1.690,0.00,caprun
+Jaboticabas Sapodilla,Jaboticabas Sapodilla,1,1,blog:1,1.690,0.00,caprun
+Jacques D'Amboise American,Jacques D'Amboise American,1,1,blog:1,1.690,0.00,caprun
+Jagweed,Jagweed,1,1,hrn:1,1.690,0.00,cap
+Jarts,Jarts,1,1,acast:1,1.690,0.00,cap
+Jarts Shrinky Dinks,Jarts Shrinky Dinks,1,1,acast:1,1.690,0.00,caprun
+Jean Nihoul,Jean Nihoul,1,1,hrn:1,1.690,0.00,caprun
+Jeffrey Steingarten The Man,Jeffrey Steingarten The Man,1,1,hrn:1,1.690,0.00,caprun
+Jeffrey Steingarten Vogue,Jeffrey Steingarten Vogue,1,1,hrn:1,1.690,0.00,caprun
+Jerz,Jerz,1,1,blog:1,1.690,0.00,cap
+Jianbing,Jianbing,1,1,hrn:1,1.690,0.00,cap
+Joal,Joal,1,1,acast:1,1.690,0.00,cap
+Joe Zakowski,Joe Zakowski,1,1,hrn:1,1.690,0.00,caprun
+Joey Skladany,Joey Skladany,2,1,hrn:1,1.690,0.00,caprun
+John Deragon,John Deragon,1,1,blog:1,1.690,0.00,caprun
+John Juranitch,John Juranitch,1,1,hrn:1,1.690,0.00,caprun
+John Nastassia Quinn,John Nastassia Quinn,1,1,acast:1,1.690,0.00,caprun
+John Sconzo,John Sconzo,1,1,blog:1,1.690,0.00,caprun
+Jorge Otero-Pailos Columbia University,Jorge Otero-Pailos Columbia University,1,1,blog:1,1.690,0.00,caprun
+Joseph Dommers Vehling,Joseph Dommers Vehling,1,1,blog:1,1.690,0.00,caprun
+Josh Ozersky,Josh Ozersky,2,1,blog:1,1.690,0.00,caprun
+Josh Seaburg,Josh Seaburg,1,1,hrn:1,1.690,0.00,caprun
+Joshua Applestone,Joshua Applestone,1,1,hrn:1,1.690,0.00,caprun
+Jouan Centrifuge,Jouan Centrifuge,2,1,blog:1,1.690,0.00,caprun
+Jouans,Jouans,1,1,blog:1,1.690,0.00,cap
+Juneating,Juneating,1,1,blog:1,1.690,0.00,cap
+Juranitch,Juranitch,1,1,hrn:1,1.690,0.00,cap
+Kabawa,Kabawa,1,1,acast:1,1.690,0.00,cap
+Kalick,Kalick,1,1,acast:1,1.690,0.00,cap
+Kalins,Kalins,2,1,acast:1,1.690,0.00,cap
+Kalum The,Kalum The,1,1,blog:1,1.690,0.00,caprun
+Kalustyan,Kalustyan,1,1,blog:1,1.690,0.00,cap
+Kamozawa,Kamozawa,1,1,hrn:1,1.690,0.00,cap
+Kanyawara,Kanyawara,1,1,hrn:1,1.690,0.00,cap
+Kappa Carageenan Function,Kappa Carageenan Function,1,1,blog:1,1.690,0.00,caprun
+Karen Bornarth Program Director,Karen Bornarth Program Director,1,1,hrn:1,1.690,0.00,caprun
+Kaseiki,Kaseiki,1,1,blog:1,1.690,0.00,cap
+Kastuobushi,Kastuobushi,1,1,blog:1,1.690,0.00,cap
+Kastuobushi Until,Kastuobushi Until,1,1,blog:1,1.690,0.00,caprun
+Katsuobuhi,Katsuobuhi,1,1,blog:1,1.690,0.00,cap
+Kelco,Kelco,3,1,blog:1,1.690,0.00,cap
+Ketchup Issues Dave Nastassia,Ketchup Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Khesht,Khesht,1,1,blog:1,1.690,0.00,cap
+Khymos,Khymos,1,1,blog:1,1.690,0.00,cap
+Kicenik,Kicenik,1,1,blog:1,1.690,0.00,cap
+Kindstedt,Kindstedt,1,1,blog:1,1.690,0.00,cap
+Kinnosuke,Kinnosuke,1,1,blog:1,1.690,0.00,cap
+Kitchengrl,Kitchengrl,4,1,blog:1,1.690,0.00,cap
+Kludt,Kludt,1,1,blog:1,1.690,0.00,cap
+Kochilas,Kochilas,2,1,acast:1,1.690,0.00,cap
+Koketsu,Koketsu,1,1,blog:1,1.690,0.00,cap
+Kombus,Kombus,2,1,blog:1,1.690,0.00,cap
+Korean Dolsot,Korean Dolsot,1,1,blog:1,1.690,0.00,caprun
+Kotcheff,Kotcheff,1,1,blog:1,1.690,0.00,cap
+Kurlyandchik,Kurlyandchik,2,1,acast:1,1.690,0.00,cap
+Lappalainen,Lappalainen,1,1,blog:1,1.690,0.00,cap
+Larinus,Larinus,1,1,blog:1,1.690,0.00,cap
+Larrin Thomas,Larrin Thomas,2,1,acast:1,1.690,0.00,caprun
+Laskonis,Laskonis,1,1,acast:1,1.690,0.00,cap
+Later Wipop,Later Wipop,1,1,hrn:1,1.690,0.00,caprun
+Lean Akami,Lean Akami,1,1,blog:1,1.690,0.00,caprun
+Learning Nixtamal,Learning Nixtamal,1,1,blog:1,1.690,0.00,caprun
+L'Ecole The,L'Ecole The,1,1,blog:1,1.690,0.00,caprun
+Leif Sundstr,Leif Sundstr,2,1,hrn:1,1.690,0.00,caprun
+Liebrandt,Liebrandt,1,1,blog:1,1.690,0.00,cap
+Like Big Bundts,Like Big Bundts,1,1,hrn:1,1.690,0.00,caprun
+Like Starfruits,Like Starfruits,1,1,blog:1,1.690,0.00,caprun
+Limequat,Limequat,1,1,blog:1,1.690,0.00,cap
+Liquor De-Oaking The,Liquor De-Oaking The,1,1,blog:1,1.690,0.00,caprun
+Littlenecks,Littlenecks,1,1,blog:1,1.690,0.00,cap
+Lou Vastardis,Lou Vastardis,1,1,hrn:1,1.690,0.00,caprun
+Louis DiPalo,Louis DiPalo,1,1,blog:1,1.690,0.00,caprun
+Luke Pyenson,Luke Pyenson,1,1,acast:1,1.690,0.00,caprun
+Luke Pyenson Taste,Luke Pyenson Taste,1,1,acast:1,1.690,0.00,caprun
+Lukr,Lukr,1,1,acast:1,1.690,0.00,cap
+Lundkvist,Lundkvist,1,1,blog:1,1.690,0.00,cap
+Maangchi,Maangchi,1,1,hrn:1,1.690,0.00,cap
+Mads Refslund,Mads Refslund,2,1,acast:1,1.690,0.00,caprun
+Magician Issues Dave Nastassia,Magician Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Malivert,Malivert,1,1,blog:1,1.690,0.00,cap
+Mandarinquat,Mandarinquat,2,1,blog:1,1.690,0.00,cap
+Mandy Aftel,Mandy Aftel,1,1,hrn:1,1.690,0.00,caprun
+Manugel,Manugel,1,1,blog:1,1.690,0.00,cap
+Many Methocels,Many Methocels,1,1,blog:1,1.690,0.00,caprun
+Marennes,Marennes,3,1,blog:1,1.690,0.00,cap
+Mark Kurlyandchik,Mark Kurlyandchik,2,1,acast:1,1.690,0.00,caprun
+Marold,Marold,2,1,hrn:1,1.690,0.00,cap
+Masahiro Urushido,Masahiro Urushido,1,1,acast:1,1.690,0.00,caprun
+Matsumaeya,Matsumaeya,1,1,blog:1,1.690,0.00,cap
+Max Wittawat,Max Wittawat,2,1,acast:1,1.690,0.00,caprun
+Maxime Bilet,Maxime Bilet,2,1,hrn:1,1.690,0.00,caprun
+McGeez Nuts,McGeez Nuts,1,1,hrn:1,1.690,0.00,caprun
+Meanwhile Nastassia,Meanwhile Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Medskar,Medskar,1,1,hrn:1,1.690,0.00,cap
+Melngailis,Melngailis,1,1,blog:1,1.690,0.00,cap
+Merle Hagggard,Merle Hagggard,1,1,blog:1,1.690,0.00,caprun
+Methocels,Methocels,1,1,blog:1,1.690,0.00,cap
+Michael Anstendig,Michael Anstendig,1,1,acast:1,1.690,0.00,caprun
+Michael Capoferri,Michael Capoferri,2,1,acast:1,1.690,0.00,caprun
+Michael Harlan Turkell,Michael Harlan Turkell,1,1,hrn:1,1.690,0.00,caprun
+Microbial Transglutaminases Generate,Microbial Transglutaminases Generate,1,1,blog:1,1.690,0.00,caprun
+Migoya,Migoya,2,1,acast:1,1.690,0.00,cap
+Mike Capoferri,Mike Capoferri,1,1,acast:1,1.690,0.00,caprun
+Mike Capoferri Returns,Mike Capoferri Returns,1,1,acast:1,1.690,0.00,caprun
+Milkcult,Milkcult,2,1,hrn:1,1.690,0.00,cap
+Mindy Lvoff Besides,Mindy Lvoff Besides,1,1,blog:1,1.690,0.00,caprun
+Mindy Lvoff Let,Mindy Lvoff Let,1,1,blog:1,1.690,0.00,caprun
+Mindy Lvoff Nils,Mindy Lvoff Nils,1,1,blog:1,1.690,0.00,caprun
+Mindy Lvoff One,Mindy Lvoff One,1,1,blog:1,1.690,0.00,caprun
+Mindy Lvoff Since,Mindy Lvoff Since,1,1,blog:1,1.690,0.00,caprun
+Mindy Lvoff Sorry,Mindy Lvoff Sorry,1,1,blog:1,1.690,0.00,caprun
+Mindy Lvoff We're,Mindy Lvoff We're,1,1,blog:1,1.690,0.00,caprun
+Mindy Lvoff While,Mindy Lvoff While,1,1,blog:1,1.690,0.00,caprun
+Minipack,Minipack,2,1,blog:1,1.690,0.00,cap
+Miracle Frooties,Miracle Frooties,1,1,blog:1,1.690,0.00,caprun
+Miraculan,Miraculan,1,1,blog:1,1.690,0.00,cap
+Miraculan The,Miraculan The,1,1,blog:1,1.690,0.00,caprun
+Mirarchi,Mirarchi,3,1,blog:1,1.690,0.00,cap
+Mircale Fruit Photo,Mircale Fruit Photo,1,1,hrn:1,1.690,0.00,caprun
+Misimi,Misimi,1,1,blog:1,1.690,0.00,cap
+Molecular Gastronomists,Molecular Gastronomists,1,1,blog:1,1.690,0.00,caprun
+Monkfruit,Monkfruit,1,1,hrn:1,1.690,0.00,cap
+Montalb,Montalb,1,1,acast:1,1.690,0.00,cap
+More Traditional Hamine Egg,More Traditional Hamine Egg,1,1,blog:1,1.690,0.00,caprun
+Moromi Shoyu Soy Sauce,Moromi Shoyu Soy Sauce,2,1,acast:1,1.690,0.00,caprun
+Muarry,Muarry,1,1,acast:1,1.690,0.00,cap
+Mugaritz,Mugaritz,1,1,acast:1,1.690,0.00,cap
+Mugz,Mugz,1,1,hrn:1,1.690,0.00,cap
+Myogloblin,Myogloblin,1,1,blog:1,1.690,0.00,cap
+Myrhvold,Myrhvold,1,1,hrn:1,1.690,0.00,cap
+Nannypoos,Nannypoos,1,1,hrn:1,1.690,0.00,cap
+Nastasha,Nastasha,1,1,hrn:1,1.690,0.00,cap
+Nastasissa,Nastasissa,1,1,hrn:1,1.690,0.00,cap
+Nastassia Dave,Nastassia Dave,1,1,hrn:1,1.690,0.00,caprun
+Nastassia Dave Arnold,Nastassia Dave Arnold,1,1,blog:1,1.690,0.00,caprun
+Nastassia Harold McGee,Nastassia Harold McGee,1,1,blog:1,1.690,0.00,caprun
+Nastassia Hates Coffee,Nastassia Hates Coffee,1,1,hrn:1,1.690,0.00,caprun
+Nastassia Lopez About,Nastassia Lopez About,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Activa,Nastassia Lopez Activa,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Christmastime,Nastassia Lopez Christmastime,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Cocktail,Nastassia Lopez Cocktail,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Dave Nils,Nastassia Lopez Dave Nils,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Dave Wondrich,Nastassia Lopez Dave Wondrich,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Jeffrey Steingarten,Nastassia Lopez Jeffrey Steingarten,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Our,Nastassia Lopez Our,1,1,blog:1,1.690,0.00,caprun
+Nastassia Lopez Peter Kim,Nastassia Lopez Peter Kim,1,1,hrn:1,1.690,0.00,caprun
+Nastassia Lopez We're,Nastassia Lopez We're,1,1,blog:1,1.690,0.00,caprun
+Nastassia Mark Ladner,Nastassia Mark Ladner,1,1,blog:1,1.690,0.00,caprun
+Nastassia Natsudaidai The,Nastassia Natsudaidai The,1,1,blog:1,1.690,0.00,caprun
+Nastassia Patrick Martins,Nastassia Patrick Martins,1,1,blog:1,1.690,0.00,caprun
+Nastassia Super Bowl,Nastassia Super Bowl,1,1,hrn:1,1.690,0.00,caprun
+Nathan Myrhvold,Nathan Myrhvold,1,1,hrn:1,1.690,0.00,caprun
+Nazli Parvizi President,Nazli Parvizi President,2,1,acast:1,1.690,0.00,caprun
+Nersessian,Nersessian,1,1,blog:1,1.690,0.00,cap
+New World Truffieres Inc,New World Truffieres Inc,1,1,hrn:1,1.690,0.00,caprun
+New Yorkisms,New Yorkisms,1,1,hrn:1,1.690,0.00,caprun
+New Zealand Grapefruit Kusaie,New Zealand Grapefruit Kusaie,1,1,blog:1,1.690,0.00,caprun
+Nick Strangeway,Nick Strangeway,2,1,hrn:1,1.690,0.00,caprun
+Nieporent,Nieporent,1,1,blog:1,1.690,0.00,cap
+Nihoul,Nihoul,1,1,hrn:1,1.690,0.00,cap
+Nils Nastassia,Nils Nastassia,1,1,blog:1,1.690,0.00,caprun
+Ninja Creami,Ninja Creami,1,1,acast:1,1.690,0.00,caprun
+Nippon Mandarinquat,Nippon Mandarinquat,1,1,blog:1,1.690,0.00,caprun
+N'Lemons,N'Lemons,1,1,blog:1,1.690,0.00,cap
+Norprene Tygon Silicone Buna,Norprene Tygon Silicone Buna,1,1,blog:1,1.690,0.00,caprun
+Nosowitz,Nosowitz,1,1,blog:1,1.690,0.00,cap
+Novoshape Pectin Methylase,Novoshape Pectin Methylase,1,1,hrn:1,1.690,0.00,caprun
+Novozymes Pectinex Smash,Novozymes Pectinex Smash,1,1,blog:1,1.690,0.00,caprun
+Nurun Burun,Nurun Burun,1,1,blog:1,1.690,0.00,caprun
+Ofstad Muscle,Ofstad Muscle,1,1,blog:1,1.690,0.00,caprun
+Olfactory Issues Dave Nastassia,Olfactory Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Ooguchi,Ooguchi,1,1,blog:1,1.690,0.00,cap
+Osayi Endolyn,Osayi Endolyn,2,1,acast:1,1.690,0.00,caprun
+Ossabaw,Ossabaw,2,1,blog:1,1.690,0.00,cap
+Our Farm-raised Rishiri Kombu,Our Farm-raised Rishiri Kombu,1,1,blog:1,1.690,0.00,caprun
+Oxholm,Oxholm,1,1,blog:1,1.690,0.00,cap
+Oxyclean,Oxyclean,3,1,blog:1,1.690,0.00,cap
+Oyarzun,Oyarzun,1,1,blog:1,1.690,0.00,cap
+Ozersky,Ozersky,2,1,blog:1,1.690,0.00,cap
+Pacult,Pacult,1,1,blog:1,1.690,0.00,cap
+Pagnozzi,Pagnozzi,1,1,blog:1,1.690,0.00,cap
+Palacchio,Palacchio,1,1,blog:1,1.690,0.00,cap
+Paladar,Paladar,1,1,blog:1,1.690,0.00,cap
+Palkoviks,Palkoviks,1,1,hrn:1,1.690,0.00,cap
+Parvizi,Parvizi,2,1,acast:1,1.690,0.00,cap
+Pasta Flyer Nastassia,Pasta Flyer Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Pastry Chef Michael Laskonis,Pastry Chef Michael Laskonis,1,1,acast:1,1.690,0.00,caprun
+Paul Chenaux Cava,Paul Chenaux Cava,1,1,blog:1,1.690,0.00,caprun
+Paul Kindstedt,Paul Kindstedt,1,1,blog:1,1.690,0.00,caprun
+Pecan Butter YMkan,Pecan Butter YMkan,1,1,blog:1,1.690,0.00,caprun
+Pecan YMkan Pecan YMkan,Pecan YMkan Pecan YMkan,1,1,blog:1,1.690,0.00,caprun
+Pecan YMkan Yield,Pecan YMkan Yield,1,1,blog:1,1.690,0.00,caprun
+Pectinex Smash Chadzilla,Pectinex Smash Chadzilla,1,1,blog:1,1.690,0.00,caprun
+Pedreschi,Pedreschi,5,1,blog:1,1.690,0.00,cap
+Peelzym,Peelzym,6,1,blog:1,1.690,0.00,cap
+Pelaccio,Pelaccio,1,1,blog:1,1.690,0.00,cap
+Peychaud,Peychaud,1,1,hrn:1,1.690,0.00,cap
+Pierre Duplais,Pierre Duplais,1,1,blog:1,1.690,0.00,caprun
+Pierre Gagniere,Pierre Gagniere,1,1,blog:1,1.690,0.00,caprun
+Pimpage,Pimpage,2,1,blog:1,1.690,0.00,cap
+Pinhey,Pinhey,1,1,blog:1,1.690,0.00,cap
+Pione,Pione,2,1,blog:1,1.690,0.00,cap
+Pisanu,Pisanu,1,1,blog:1,1.690,0.00,cap
+Playboy Nastassia,Playboy Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Pokerage,Pokerage,1,1,blog:1,1.690,0.00,cap
+Pokering,Pokering,1,1,blog:1,1.690,0.00,cap
+Polymarket,Polymarket,1,1,acast:1,1.690,0.00,cap
+Polypropylene Issues Dave Nastassia,Polypropylene Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Polyscience Chillers,Polyscience Chillers,1,1,hrn:1,1.690,0.00,caprun
+Pote Altekar,Pote Altekar,1,1,blog:1,1.690,0.00,caprun
+Pralus,Pralus,1,1,blog:1,1.690,0.00,cap
+Prediction Issues Dave Nastassia,Prediction Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Pressure Cooked Hamine Egg,Pressure Cooked Hamine Egg,1,1,blog:1,1.690,0.00,caprun
+Pressure-cooking Jouan,Pressure-cooking Jouan,1,1,blog:1,1.690,0.00,caprun
+Pretested Ticaloid,Pretested Ticaloid,2,1,blog:1,1.690,0.00,caprun
+Preziosa,Preziosa,1,1,blog:1,1.690,0.00,cap
+Proescco,Proescco,1,1,hrn:1,1.690,0.00,cap
+Proesecco,Proesecco,1,1,hrn:1,1.690,0.00,cap
+Professor Oxholm,Professor Oxholm,1,1,blog:1,1.690,0.00,caprun
+Pummelo,Pummelo,1,1,blog:1,1.690,0.00,cap
+Pupsi,Pupsi,1,1,hrn:1,1.690,0.00,cap
+Pupsi Smash Mouth Cover,Pupsi Smash Mouth Cover,1,1,hrn:1,1.690,0.00,caprun
+Pyenson,Pyenson,2,1,acast:1,1.690,0.00,cap
+Qimiq,Qimiq,1,1,hrn:1,1.690,0.00,cap
+Rausu Kombu,Rausu Kombu,1,1,blog:1,1.690,0.00,caprun
+Raw Rovey,Raw Rovey,1,1,blog:1,1.690,0.00,caprun
+Razzmatazzarak,Razzmatazzarak,1,1,acast:1,1.690,0.00,cap
+Rebecca Palkoviks,Rebecca Palkoviks,1,1,hrn:1,1.690,0.00,caprun
+Red Astrachans,Red Astrachans,1,1,blog:1,1.690,0.00,caprun
+Refslund,Refslund,2,1,acast:1,1.690,0.00,cap
+Repeirt,Repeirt,1,1,hrn:1,1.690,0.00,cap
+Reputation Issues Dave Nastassia,Reputation Issues Dave Nastassia,1,1,hrn:1,1.690,0.00,caprun
+Resler,Resler,1,1,hrn:1,1.690,0.00,cap
+Restaurant Vrijmoed,Restaurant Vrijmoed,1,1,acast:1,1.690,0.00,caprun
+Ricardo Montalb,Ricardo Montalb,1,1,acast:1,1.690,0.00,caprun
+Ricciarelli,Ricciarelli,1,1,blog:1,1.690,0.00,cap
+Riingo,Riingo,1,1,blog:1,1.690,0.00,cap
+Rioseco,Rioseco,1,1,blog:1,1.690,0.00,cap
+Rishiri Kombu,Rishiri Kombu,2,1,blog:1,1.690,0.00,caprun
+Rob Crotchfelt,Rob Crotchfelt,1,1,blog:1,1.690,0.00,caprun
+Rose Levy Beranbaum,Rose Levy Beranbaum,2,1,acast:1,1.690,0.00,caprun
+Rotovap Ice-cream,Rotovap Ice-cream,1,1,hrn:1,1.690,0.00,caprun

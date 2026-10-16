@@ -19,6 +19,8 @@ dependencies = [
     "httpx",
     "feedparser",
     "anthropic",
+    "wordfreq>=3.1,<4",  # common-English test for the vocabulary builder and the correction guard
+    "jellyfish>=1.0",  # phonetic keys (metaphone) and edit distance for ciw.correct
 ]
 
 [project.optional-dependencies]

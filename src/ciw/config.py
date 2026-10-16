@@ -123,6 +123,12 @@ class AsrConfig(_Section):
     # Optional text file, one jargon term per line (# comments), used as Whisper's initial_prompt.
     vocabulary_file: Path | None = None
     initial_prompt_max_chars: int = Field(600, ge=0)
+    # Post-ASR correction against the vocabulary (ciw.correct). `aliases_file` holds explicit
+    # `heard => correct` pairs (the highest-confidence rule); `correct_min_confidence` is the
+    # bar for fuzzy (non-alias) fixes.
+    correct: bool = True
+    aliases_file: Path | None = None
+    correct_min_confidence: float = Field(0.86, ge=0, le=1)
 
 
 class LlmConfig(_Section):
@@ -202,7 +208,7 @@ class Config(_Section):
         cfg = self.model_copy(update=updates)
         asr_updates = {
             name: self.root / getattr(self.asr, name)
-            for name in ("hf_home", "vocabulary_file")
+            for name in ("hf_home", "vocabulary_file", "aliases_file")
             if getattr(self.asr, name) is not None and not getattr(self.asr, name).is_absolute()
         }
         if asr_updates:

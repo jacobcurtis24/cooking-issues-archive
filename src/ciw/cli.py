@@ -10,6 +10,7 @@ from typing import Annotated
 import typer
 
 from ciw import __version__, state
+from ciw.cli_vocab import vocab_app
 from ciw.config import load_config
 
 app = typer.Typer(
@@ -24,6 +25,7 @@ blog_app = typer.Typer(
 feeds_app = typer.Typer(help="Podcast feed tools.", no_args_is_help=True)
 app.add_typer(blog_app, name="blog")
 app.add_typer(feeds_app, name="feeds")
+app.add_typer(vocab_app, name="vocab")
 
 _STUB_CONTEXT = {"allow_extra_args": True, "ignore_unknown_options": True}
 
@@ -736,12 +738,6 @@ def transcribe(
     )
     if failed:
         raise typer.Exit(code=1)
-
-
-@app.command(context_settings=_STUB_CONTEXT)
-def vocab() -> None:
-    """Build the jargon vocabulary from show notes. (stub)"""
-    _stub("T6")
 
 
 @app.command(context_settings=_STUB_CONTEXT)

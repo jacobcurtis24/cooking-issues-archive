@@ -6,7 +6,7 @@ import sys
 
 import pytest
 from asrfake import FakeTranscriber
-from conftest import write_config
+from conftest import REPO_ROOT, write_config
 
 from ciw import state
 from ciw.asr import ASR_BACKENDS, available_backends, get_transcriber, register_backend
@@ -78,7 +78,7 @@ def test_repo_config_keeps_model_caches_off_the_home_disk(monkeypatch):
     monkeypatch.delenv("HF_TOKEN", raising=False)
     cfg = load_config(use_dotenv=False)
     assert str(cfg.asr.hf_home) == "/mnt/ssd0/ciw/hf_cache"
-    assert cfg.asr.vocabulary_file is None
+    assert cfg.asr.vocabulary_file == REPO_ROOT / "vocab" / "vocabulary.txt"
 
 
 def test_state_migration_3_adds_transcription_columns_to_an_old_db(tmp_path):
