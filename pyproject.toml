@@ -23,6 +23,21 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
+# Speech recognition (T5). Heavy, so never a core dependency; every import of these is lazy.
+# torch/torchaudio must be the CUDA 12.8 wheels from the PyTorch index (the PyPI wheels also
+# work with driver 580 but pull a different CUDA runtime), e.g.:
+#   pip install "torch==2.8.0" "torchaudio==2.8.0" "torchvision==0.23.0" \
+#       --index-url https://download.pytorch.org/whl/cu128
+#   pip install -e ".[asr]"
+# WhisperX 3.8.x pins torch~=2.8.0, so these bounds track its requirements.
+asr = [
+    "torch>=2.8,<2.9",
+    "torchaudio>=2.8,<2.9",
+    "whisperx>=3.8.6,<3.9",
+    "faster-whisper>=1.2.1",
+    "ctranslate2>=4.8.3",
+    "pyannote.audio>=4.0.7",
+]
 
 [project.scripts]
 ciw = "ciw.cli:app"
@@ -35,6 +50,10 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "gpu: needs the NVIDIA GPU, the downloaded ASR models and real audio (skipped by default; run with -m gpu)",
+]
+addopts = "-m 'not gpu'"
 filterwarnings = [
     "ignore:datetime.datetime.utcnow:DeprecationWarning",
 ]
