@@ -36,10 +36,11 @@ def fake(tmp_cfg, tmp_path):
         tr = FakeTranscriber(c, **kw)
         tr.fail_on = set(shared["fail_on"])
         tr.version_string = shared["version"]
+        tr.words = shared["words"]
         instances.append(tr)
         return tr
 
-    shared = {"fail_on": set(), "version": "fake 1.0", "instances": instances}
+    shared = {"fail_on": set(), "version": "fake 1.0", "instances": instances, "words": None}
     register_backend("fake", factory)
     yield cfg, shared
     ASR_BACKENDS.pop("fake", None)

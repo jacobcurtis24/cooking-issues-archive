@@ -122,7 +122,6 @@ Tanqueray
 aquavit
 Negroni
 daiquiri
-Sazerac
 HACCP
 ABV
 CO2

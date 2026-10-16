@@ -320,21 +320,54 @@ def episodes_list(
         str | None,
         typer.Option("--stage", help=f"{', '.join(state.STAGES)} (default: all)."),
     ] = None,
+    stale: Annotated[
+        bool,
+        typer.Option("--stale", help="Only transcripts whose vocabulary or corrections are stale."),
+    ] = False,
 ) -> None:
     """List episodes in state, newest first."""
     if stage is not None and stage not in state.STAGES:
         raise typer.BadParameter(f"must be one of {', '.join(state.STAGES)}", param_hint="--stage")
     cfg = load_config()
     with state.connect(cfg.state_db) as conn:
-        rows = state.list_episodes(conn, source, limit, stage)
+        rows = state.list_episodes(conn, source, None if stale else limit, stage)
         counts = state.count_episodes(conn)
+    from ciw import correct as correct_mod
+    from ciw import vocab as vocab_mod
+
+    now_prompt = vocab_mod.current_prompt_hash(
+        cfg.asr.vocabulary_file, cfg.asr.initial_prompt_max_chars
+    )
+    now_correction = None
+    if cfg.asr.correct:
+        vocabulary = correct_mod.Vocabulary.load(cfg.asr.vocabulary_file, cfg.asr.aliases_file)
+        now_correction = vocabulary.hash if vocabulary else None
+    shown = []
     for r in rows:
+        flag = _vocab_flag(r, now_prompt, now_correction)
+        if stale and flag not in ("STALE", "recorrect"):
+            continue
+        if len(shown) >= limit:
+            break
+        shown.append((r, flag))
         typer.echo(
             f"{r['episode_id']:<42} {r['source']:<8} {r['pub_date'][:10]} "
-            f"{_fmt_dur(r['duration_s']):>8} {r['stage']:<11} {r['title'][:60]}"
+            f"{_fmt_dur(r['duration_s']):>8} {r['stage']:<11} {flag:<9} {r['title'][:50]}"
         )
     summary = ", ".join(f"{k} {v}" for k, v in sorted(counts.items())) or "none"
-    typer.echo(f"({len(rows)} shown; in state: {summary})")
+    typer.echo(f"({len(shown)} shown; in state: {summary})")
+
+
+def _vocab_flag(row, now_prompt: str | None, now_correction: str | None) -> str:
+    """Vocabulary status of a stored transcript: - (none), ok, STALE (made with another Whisper
+    prompt: redo with `ciw transcribe --stale`) or recorrect (`ciw vocab correct`)."""
+    if row["stage"] in ("discovered", "downloaded") or not row["asr_model"]:
+        return "-"
+    if row["vocab_hash"] != now_prompt:
+        return "STALE"
+    if row["correction_hash"] != now_correction:
+        return "recorrect"
+    return "ok"
 
 
 def _fmt_bytes(n: float | None) -> str:
@@ -559,6 +592,32 @@ def _transcribe_detail(res) -> str:
     )
 
 
+def _print_quality(cfg, episode_ids: list[str]) -> None:
+    """``ciw transcribe --quality``: term recall for each selected episode that has a transcript."""
+    from ciw import quality as q
+    from ciw import transcribe as tx
+    from ciw import vocab as vocab_mod
+    from ciw.models import Transcript
+
+    terms = vocab_mod.read_terms(cfg.asr.vocabulary_file)
+    results = []
+    for eid in episode_ids:
+        path = tx.transcript_path(cfg, eid)
+        notes = tx.show_notes_text(cfg, eid)
+        if terms and notes is not None and path.is_file():
+            results.append(
+                q.measure(Transcript.load(path), terms, notes, episode_id=eid,
+                          title=notes.split("\n", 1)[0])
+            )  # fmt: skip
+    if not results:
+        typer.echo("quality: no transcribed episodes with show notes and a vocabulary")
+        return
+    for res in results:
+        typer.echo(q.render(res))
+    if len(results) > 1:
+        typer.echo(q.render_aggregate(q.aggregate(results)))
+
+
 @app.command()
 def transcribe(
     episode: Annotated[
@@ -589,7 +648,19 @@ def transcribe(
         bool, typer.Option("--force", help="Redo even if the transcript is current.")
     ] = False,
     stale: Annotated[
-        bool, typer.Option("--stale", help="Also redo transcripts made by another model/version.")
+        bool,
+        typer.Option(
+            "--stale",
+            help="Also redo transcripts made by another model, version or vocabulary prompt.",
+        ),
+    ] = False,
+    no_correct: Annotated[
+        bool,
+        typer.Option("--no-correct", help="Skip the post-ASR vocabulary correction pass."),
+    ] = False,
+    quality: Annotated[
+        bool,
+        typer.Option("--quality", help="Afterwards print term recall for the selected episodes."),
     ] = False,
     dry_run: Annotated[
         bool, typer.Option("--dry-run", help="Show what would run; load nothing, change nothing.")
@@ -617,12 +688,22 @@ def transcribe(
         raise typer.Exit(code=2)
 
     cfg = load_config()
+    correction = tx.load_correction(cfg, enabled=not no_correct)
     try:
         tr = get_transcriber(cfg, model=model, diarize=False if no_diarize else None)
     except ValueError as exc:
         typer.echo(f"error: {exc}", err=True)
         raise typer.Exit(code=2) from None
     typer.echo(f"backend: {tr.describe()} [{tr.version}]")
+    typer.echo(
+        f"vocabulary: prompt {tr.vocab_hash() or 'none'}; correction "
+        + (
+            f"on ({len(correction.vocabulary.terms)} terms, "
+            f"{len(correction.vocabulary.aliases)} aliases)"
+            if correction
+            else "off"
+        )
+    )
 
     tty = sys.stderr.isatty()
     last_tick: dict[str, tuple[str, int]] = {}
@@ -641,6 +722,8 @@ def transcribe(
         if tty:
             typer.echo("\r" + " " * 60 + "\r", nl=False, err=True)
         detail = _transcribe_detail(res) if res.outcome == "transcribed" else res.message
+        if res.transcript is not None and res.transcript.correction_hash:
+            detail += f"; {len(res.transcript.corrections)} corrections"
         typer.echo(
             f"{label:<12} {name:<30} {extra}{detail}",
             err=res.outcome in ("failed", "blocked"),
@@ -674,7 +757,7 @@ def transcribe(
         try:
             with tx.transcribe_lock(cfg):
                 res = tx.transcribe_file(
-                    audio, out, tr, force=force, stale=stale,
+                    audio, out, tr, force=force, stale=stale, correction=correction,
                     progress=lambda stage, frac: progress("file", stage, frac),
                 )  # fmt: skip
         except tx.TranscribeLocked as exc:
@@ -713,6 +796,7 @@ def transcribe(
         try:
             summary = tx.transcribe_batch(
                 cfg, conn, rows, tr, force=force, stale=stale, progress=progress,
+                correction=correction,
                 on_result=lambda row, res: show(
                     labels[res.outcome], row["episode_id"], res, f"{row['pub_date'][:10]}  "
                 ),
@@ -723,6 +807,8 @@ def transcribe(
 
     for hint in sorted(hints):
         typer.echo(hint, err=True)
+    if quality:
+        _print_quality(cfg, [r["episode_id"] for r in rows])
     failed = summary.failed + len(unknown)
     done = [r for r in summary.results if r.outcome == "transcribed" and r.transcript]
     audio_s = sum(r.transcript.audio_duration_s or 0 for r in done)

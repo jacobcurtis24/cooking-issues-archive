@@ -81,6 +81,7 @@ def in_dictionary(word: str) -> bool:
     return word.lower() in _dictionary()
 
 
+@lru_cache(maxsize=65536)
 def is_common_word(word: str) -> bool:
     """True for ordinary English words: frequent in ``wordfreq``, or in the system dictionary
     and at least occasionally seen (rare dictionary entries like "soxhlet" do not count)."""
@@ -457,3 +458,34 @@ def hash_text(*parts: str) -> str:
         h.update(p.encode("utf-8"))
         h.update(b"\0")
     return h.hexdigest()[:12]
+
+
+# ------------------------------------------------------------------------------ prompt
+
+
+def load_vocabulary_prompt(path: Path | None, max_chars: int = 600) -> str | None:
+    """Read a vocabulary file (one term per line, ``#`` comments) into an initial_prompt.
+
+    Returns ``None`` when no file is configured or it holds no terms. The prompt is the terms
+    joined by ", " (most valuable first) and cut at a term boundary to ``max_chars``: Whisper only
+    attends to the last 224 tokens of a prompt anyway.
+    """
+    terms = read_terms(path)
+    if not terms:
+        return None
+    prompt = ""
+    for term in terms:
+        piece = term if not prompt else f", {term}"
+        if max_chars and len(prompt) + len(piece) > max_chars:
+            break
+        prompt += piece
+    return prompt or None
+
+
+def prompt_hash(prompt: str | None) -> str | None:
+    """Identity of the prompt a transcript was made with (``Transcript.vocab_hash``)."""
+    return hashlib.sha256(prompt.encode()).hexdigest()[:12] if prompt else None
+
+
+def current_prompt_hash(vocabulary_file: Path | None, max_chars: int = 600) -> str | None:
+    return prompt_hash(load_vocabulary_prompt(vocabulary_file, max_chars))

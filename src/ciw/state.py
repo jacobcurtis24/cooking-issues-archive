@@ -68,6 +68,13 @@ MIGRATIONS: list[str] = [
     ALTER TABLE episodes ADD COLUMN asr_runtime_s REAL;
     ALTER TABLE episodes ADD COLUMN diarization INTEGER;
     """,
+    # 4: vocabulary (T6): prompt hash and correction hash of the stored transcript, so
+    # `ciw episodes list` can flag stale ones without parsing every transcript.json
+    """
+    ALTER TABLE episodes ADD COLUMN vocab_hash TEXT;
+    ALTER TABLE episodes ADD COLUMN correction_hash TEXT;
+    ALTER TABLE episodes ADD COLUMN corrections INTEGER;
+    """,
 ]
 
 
@@ -277,6 +284,9 @@ def mark_transcribed(
     asr_version: str,
     asr_runtime_s: float | None,
     diarization: bool,
+    vocab_hash: str | None = None,
+    correction_hash: str | None = None,
+    corrections: int | None = None,
 ) -> None:
     """Record a finished transcript: stage ``transcribed`` (unless already further along)."""
     stamp = now_iso()
@@ -284,10 +294,30 @@ def mark_transcribed(
     keep_stage = row is not None and row["stage"] in STAGES[STAGES.index("transcribed") :]
     conn.execute(
         "UPDATE episodes SET error=NULL, transcribed_at=?, asr_model=?, asr_version=?, "
-        "asr_runtime_s=?, diarization=?, updated_at=? "
-        + ("" if keep_stage else ", stage='transcribed' ")
-        + "WHERE episode_id=?",
-        (stamp, asr_model, asr_version, asr_runtime_s, int(diarization), stamp, episode_id),
+        "asr_runtime_s=?, diarization=?, vocab_hash=?, correction_hash=?, corrections=?, "
+        "updated_at=? " + ("" if keep_stage else ", stage='transcribed' ") + "WHERE episode_id=?",
+        (
+            stamp,
+            asr_model,
+            asr_version,
+            asr_runtime_s,
+            int(diarization),
+            vocab_hash,
+            correction_hash,
+            corrections,
+            stamp,
+            episode_id,
+        ),
+    )
+
+
+def set_correction(
+    conn: sqlite3.Connection, episode_id: str, *, correction_hash: str | None, corrections: int
+) -> None:
+    """Record the outcome of ``ciw vocab correct`` for an episode (the ASR columns stay)."""
+    conn.execute(
+        "UPDATE episodes SET correction_hash=?, corrections=?, updated_at=? WHERE episode_id=?",
+        (correction_hash, corrections, now_iso(), episode_id),
     )
 
 

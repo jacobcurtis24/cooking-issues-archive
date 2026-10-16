@@ -18,7 +18,14 @@ from pathlib import Path
 from typing import Any, Literal, Self
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
 
 Source = Literal["acast", "patreon", "hrn"]
 SegmentKind = Literal["listener_question", "guest_interview", "tangent", "recipe_or_spec", "other"]
@@ -109,12 +116,41 @@ class Word(_Model):
     start: float = Field(ge=0)
     end: float = Field(ge=0)
     speaker: str | None = None
+    # What the ASR heard, set ONLY when the post-ASR correction pass changed this word (a merge
+    # of "poly dextrose" into "polydextrose" stores "poly dextrose").
+    orig: str | None = None
+
+    @model_serializer(mode="wrap")
+    def _omit_unset_orig(self, handler: Any) -> dict[str, Any]:
+        data = handler(self)
+        if data.get("orig") is None:
+            data.pop("orig", None)  # ~10,000 words per episode: do not write `"orig":null` each
+        return data
 
     @model_validator(mode="after")
     def _end_after_start(self) -> Self:
         if self.end < self.start:
             raise ValueError(f"word {self.w!r}: end {self.end} < start {self.start}")
         return self
+
+
+class Correction(_Model):
+    """One change made by the correction pass (``ciw.correct``): the audit trail.
+
+    ``index`` is the position of the first corrected word in ``Transcript.words`` as it is now;
+    ``original_words`` are the replaced words exactly as the ASR produced them, so the change can
+    be undone (and the pass re-run with a different vocabulary) without re-running the ASR.
+    """
+
+    index: int = Field(ge=0)
+    original: str
+    corrected: str
+    start: float = Field(ge=0)
+    end: float = Field(ge=0)
+    rule: str  # alias | merge | case | fuzzy | fuzzy-merge | normalize
+    confidence: float = Field(ge=0, le=1)
+    term: str  # the vocabulary term (or alias target) that was applied
+    original_words: list[Word] = Field(default_factory=list)
 
 
 class StageStats(_Model):
@@ -159,6 +195,10 @@ class Transcript(_Model):
     notes: list[str] = Field(default_factory=list)  # fallbacks taken, interpolated words, ...
     words: list[Word] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=utcnow)
+    # Post-ASR correction (ciw.correct). `correction_hash` identifies the vocabulary + aliases +
+    # rules that were applied (None = never corrected); `corrections` is the audit list.
+    correction_hash: str | None = None
+    corrections: list[Correction] = Field(default_factory=list)
 
     @property
     def duration_s(self) -> float:

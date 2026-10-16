@@ -1,0 +1,20 @@
+# Known recurring mis-hearings: `heard => correct`, one per line, case-insensitive on the left,
+# written exactly as given on the right. The most trusted correction rule: applied whenever the
+# left side matches 1-4 adjacent words (punctuation inside the phrase blocks a match), with no
+# similarity test. Keep each line to something that is never legitimate English in this show.
+# Seen in real transcripts (T6):
+Soxlet => Soxhlet
+sockslet => Soxhlet
+socks let => Soxhlet
+sox let => Soxhlet
+Ashmeet's => Ashmead's
+Ashmeet => Ashmead
+ashmeat => Ashmead's
+Ashmeet's Colonel => Ashmead's Kernel
+sears all => Searzall
+Dave Aron => Dave Arnold
+Wiley Dufresne => Wylie Dufresne
+Nastassja => Nastassia
+# From the design doc's examples of what Whisper does to polydextrose:
+Polly Dexter => polydextrose
+Polly Dextrose => polydextrose

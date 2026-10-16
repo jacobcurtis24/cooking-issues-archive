@@ -26,7 +26,6 @@ from __future__ import annotations
 
 import contextlib
 import gc
-import hashlib
 import logging
 import os
 import sys
@@ -49,6 +48,7 @@ from ciw.asr.base import (
 )
 from ciw.config import AsrConfig, redact
 from ciw.models import StageStats, Transcript, Word
+from ciw.vocab import load_vocabulary_prompt, prompt_hash  # noqa: F401 (re-exported)
 
 if TYPE_CHECKING:
     from ciw.config import Config
@@ -190,38 +190,6 @@ def run_with_oom_backoff(
                 f"GPU out of memory at every setting tried ({tried})"
             ) from failure
     raise OutOfMemoryExhausted("empty back-off plan")  # pragma: no cover
-
-
-# ------------------------------------------------------------------------------ vocabulary
-
-
-def load_vocabulary_prompt(path: Path | None, max_chars: int = 600) -> str | None:
-    """Read a vocabulary file (one term per line, ``#`` comments) into an initial_prompt.
-
-    Returns ``None`` when no file is configured or it holds no terms. The prompt is the terms
-    joined by ", " and cut at a term boundary to ``max_chars`` (Whisper only attends to the last
-    224 tokens of the prompt anyway). T6 owns how the file is built.
-    """
-    if path is None or not Path(path).is_file():
-        return None
-    terms = []
-    for raw in Path(path).read_text(encoding="utf-8").splitlines():
-        term = raw.split("#", 1)[0].strip()
-        if term:
-            terms.append(term)
-    if not terms:
-        return None
-    prompt = ""
-    for term in terms:
-        piece = term if not prompt else f", {term}"
-        if max_chars and len(prompt) + len(piece) > max_chars:
-            break
-        prompt += piece
-    return prompt or None
-
-
-def prompt_hash(prompt: str | None) -> str | None:
-    return hashlib.sha256(prompt.encode()).hexdigest()[:12] if prompt else None
 
 
 # -------------------------------------------------------------------------------- words
@@ -418,6 +386,9 @@ class WhisperXTranscriber(Transcriber):
         if override is not None:
             return override or None
         return load_vocabulary_prompt(self.asr.vocabulary_file, self.asr.initial_prompt_max_chars)
+
+    def vocab_hash(self) -> str | None:
+        return prompt_hash(self._initial_prompt(None))
 
     def _diarization_plan(self) -> str | None:
         """Why speakers will be skipped, or None if diarization will be attempted."""

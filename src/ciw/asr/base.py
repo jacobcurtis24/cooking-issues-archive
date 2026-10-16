@@ -84,6 +84,13 @@ class Transcriber(ABC):
     ) -> Transcript:
         """Transcribe ``audio_path``. ``initial_prompt`` biases recognition toward jargon."""
 
+    def vocab_hash(self) -> str | None:
+        """Identity of the vocabulary prompt this backend would use now (None = no prompt).
+
+        Compared with ``Transcript.vocab_hash``: a transcript made with another prompt is stale.
+        """
+        return None
+
     def describe(self) -> str:
         """One line for ``--dry-run`` / logs: what this backend would do."""
         return f"{self.name} {self.model}"

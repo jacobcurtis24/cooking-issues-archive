@@ -19,10 +19,11 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+from ciw import correct as correct_mod
 from ciw import state
 from ciw.asr.base import ProgressFn, Transcriber
 from ciw.config import Config, guard_path, redact
-from ciw.ingest import episode_dir
+from ciw.ingest import episode_dir, meta_path
 from ciw.models import Transcript
 
 logger = logging.getLogger("ciw.transcribe")
@@ -99,6 +100,54 @@ def select_episodes(
     return ordered, unknown
 
 
+# ------------------------------------------------------------------------- correction
+
+
+@dataclass
+class CorrectionSettings:
+    """The vocabulary and threshold for the post-ASR correction pass (see ``ciw.correct``)."""
+
+    vocabulary: correct_mod.Vocabulary
+    min_confidence: float = correct_mod.DEFAULT_MIN_CONFIDENCE
+
+
+def load_correction(cfg: Config, *, enabled: bool = True) -> CorrectionSettings | None:
+    """The correction settings from config, or None when disabled or there is no vocabulary."""
+    if not enabled or not cfg.asr.correct:
+        return None
+    vocabulary = correct_mod.Vocabulary.load(cfg.asr.vocabulary_file, cfg.asr.aliases_file)
+    if not vocabulary:
+        return None
+    return CorrectionSettings(vocabulary, cfg.asr.correct_min_confidence)
+
+
+def show_notes_text(cfg: Config, episode_id: str) -> str | None:
+    """Title and description of an episode (what the correction guard checks terms against)."""
+    from ciw.models import EpisodeMeta
+
+    try:
+        meta = EpisodeMeta.load(meta_path(cfg, episode_id))
+    except (OSError, ValueError):
+        return None
+    return f"{meta.title}\n{meta.description or ''}"
+
+
+def apply_correction(
+    transcript: Transcript, correction: CorrectionSettings | None, show_notes: str | None
+) -> int:
+    """Run the correction pass on a fresh transcript. Returns the number of corrections."""
+    if correction is None:
+        return 0
+    return len(
+        correct_mod.apply_correction(
+            transcript,
+            correction.vocabulary,
+            show_notes=show_notes,
+            min_confidence=correction.min_confidence,
+        )
+    )
+
+
 # ------------------------------------------------------------------------------ plan
 
 
@@ -126,6 +175,15 @@ def plan_for_output(out: Path, tr: Transcriber, *, force: bool, stale: bool) -> 
     if tr.matches(existing):
         if force:
             return Plan("retranscribe", "forced")
+        current = tr.vocab_hash()
+        if existing.vocab_hash != current:
+            why = (
+                f"transcript made with vocabulary prompt {existing.vocab_hash or 'none'}, "
+                f"current is {current or 'none'}"
+            )
+            if stale:
+                return Plan("retranscribe", "stale: " + why)
+            return Plan("stale", why + "; re-run with --stale or --force")
         note = "up to date"
         if not existing.diarization and existing.diarization_skipped:
             note += f"; no speakers ({existing.diarization_skipped})"
@@ -189,6 +247,7 @@ def transcribe_file(
     force: bool = False,
     stale: bool = False,
     progress: ProgressFn | None = None,
+    correction: CorrectionSettings | None = None,
 ) -> Result:
     """Transcribe an arbitrary file to ``out``; touches no pipeline state."""
     plan = plan_for_output(out, tr, force=force, stale=stale)
@@ -200,6 +259,7 @@ def transcribe_file(
     t0 = time.perf_counter()
     try:
         transcript = _run_backend(tr, audio, progress)
+        apply_correction(transcript, correction, None)  # no episode, so no show notes
         transcript.save(out)
     except Exception as exc:
         logger.debug("transcription failed", exc_info=True)
@@ -218,6 +278,7 @@ def transcribe_episode(
     force: bool = False,
     stale: bool = False,
     progress: ProgressFn | None = None,
+    correction: CorrectionSettings | None = None,
 ) -> Result:
     eid = row["episode_id"]
     plan = plan_episode(cfg, row, tr, force=force, stale=stale)
@@ -235,6 +296,9 @@ def transcribe_episode(
                 asr_version=existing.asr_version,
                 asr_runtime_s=existing.runtime_s,
                 diarization=existing.diarization,
+                vocab_hash=existing.vocab_hash,
+                correction_hash=existing.correction_hash,
+                corrections=len(existing.corrections),
             )
             state.checkpoint(conn)
             plan.detail += "; state repaired"
@@ -243,6 +307,7 @@ def transcribe_episode(
     t0 = time.perf_counter()
     try:
         transcript = _run_backend(tr, Path(row["audio_path"]), progress)
+        apply_correction(transcript, correction, show_notes_text(cfg, eid) if correction else None)
         transcript.save(transcript_path(cfg, eid))
     except Exception as exc:
         message = redact(f"{type(exc).__name__}: {exc}")
@@ -257,6 +322,9 @@ def transcribe_episode(
         asr_version=transcript.asr_version,
         asr_runtime_s=transcript.runtime_s,
         diarization=transcript.diarization,
+        vocab_hash=transcript.vocab_hash,
+        correction_hash=transcript.correction_hash,
+        corrections=len(transcript.corrections),
     )
     state.checkpoint(conn)
     return Result(eid, "transcribed", "", time.perf_counter() - t0, transcript)
@@ -272,6 +340,7 @@ def transcribe_batch(
     stale: bool = False,
     progress: Callable[[str, str, float | None], None] | None = None,
     on_result: Callable[[sqlite3.Row, Result], None] | None = None,
+    correction: CorrectionSettings | None = None,
 ) -> Summary:
     """Transcribe ``rows`` one after another under the GPU lock; a failure never stops the batch."""
     summary = Summary()
@@ -282,7 +351,14 @@ def transcribe_batch(
                 (lambda stage, frac, eid=eid: progress(eid, stage, frac)) if progress else None
             )
             result = transcribe_episode(
-                cfg, conn, row, tr, force=force, stale=stale, progress=per_stage
+                cfg,
+                conn,
+                row,
+                tr,
+                force=force,
+                stale=stale,
+                progress=per_stage,
+                correction=correction,
             )
             summary.results.append(result)
             if on_result:
