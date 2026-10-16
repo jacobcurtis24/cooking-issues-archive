@@ -240,16 +240,25 @@ def probe_file(path: Path) -> AudioInfo:
     return AudioInfo(duration, audio[0].get("codec_name"))
 
 
-def check_duration(actual: float, expected: float | None) -> None:
+def check_duration(
+    actual: float,
+    expected: float | None,
+    tol_s: float = DURATION_TOLERANCE_S,
+    tol_pct: float = DURATION_TOLERANCE_PCT,
+) -> None:
     """Raise ``DownloadError`` if ``actual`` is further than max(120 s, 5%) from the feed's."""
     if not expected or expected <= 0:
         return
-    tol = max(DURATION_TOLERANCE_S, DURATION_TOLERANCE_PCT * expected)
+    tol = max(tol_s, tol_pct * expected)
     if abs(actual - expected) > tol:
         raise DownloadError(
             f"duration {actual:.0f}s differs from the feed's {expected:.0f}s "
             f"by more than {tol:.0f}s"
         )
+
+
+def _tolerance(cfg: Config) -> tuple[float, float]:
+    return cfg.download.duration_tolerance_s, cfg.download.duration_tolerance_pct
 
 
 def sha256_file(path: Path) -> str:
@@ -541,13 +550,13 @@ def _is_downloaded(row: sqlite3.Row) -> bool:
 
 
 def _adopt(
-    conn: sqlite3.Connection, client: HttpClient, meta: EpisodeMeta, final: Path
+    cfg: Config, conn: sqlite3.Connection, client: HttpClient, meta: EpisodeMeta, final: Path
 ) -> DownloadResult:
     """Accept a file already on disk if ffprobe and a Range probe agree with it. Read-only."""
     size = final.stat().st_size
     try:
         info = probe_file(final)
-        check_duration(info.duration_s, meta.duration_s)
+        check_duration(info.duration_s, meta.duration_s, *_tolerance(cfg))
     except (ProbeError, DownloadError) as exc:
         raise DownloadError(f"existing file {final.name} cannot be adopted: {exc}") from None
     remote = probe_audio(client, meta.enclosure_url, range_only=True)
@@ -561,6 +570,13 @@ def _adopt(
         )
     sha = sha256_file(final)
     _record(conn, meta, final, info, sha=sha)
+    log.info(
+        "%s: adopted %s (%d bytes, matches the server's size from a Range probe; "
+        "no audio body was fetched)",
+        meta.guid,
+        final.name,
+        size,
+    )
     return DownloadResult(
         meta.guid,
         "adopted",
@@ -573,7 +589,12 @@ def _adopt(
 
 
 def _verify_local(
-    conn: sqlite3.Connection, client: HttpClient, meta: EpisodeMeta, row: sqlite3.Row, path: Path
+    cfg: Config,
+    conn: sqlite3.Connection,
+    client: HttpClient,
+    meta: EpisodeMeta,
+    row: sqlite3.Row,
+    path: Path,
 ) -> DownloadResult:
     """``--verify``: re-check a downloaded file (size, hash if known, ffprobe, remote size)."""
     size = path.stat().st_size
@@ -584,7 +605,7 @@ def _verify_local(
         raise DownloadError(f"{path.name} sha256 differs from the recorded one")
     try:
         info = probe_file(path)
-        check_duration(info.duration_s, meta.duration_s)
+        check_duration(info.duration_s, meta.duration_s, *_tolerance(cfg))
     except ProbeError as exc:
         raise DownloadError(f"{path.name}: {exc}") from None
     note = ""
@@ -673,7 +694,7 @@ def _run(
                     row["audio_downloaded_from"],
                 )
             if verify:
-                return _verify_local(conn, client, meta, row, recorded)
+                return _verify_local(cfg, conn, client, meta, row, recorded)
             return DownloadResult(
                 episode_id, "skipped", "already downloaded", recorded, recorded.stat().st_size
             )
@@ -684,7 +705,7 @@ def _run(
         state.checkpoint(conn)
 
     if final.is_file() and not force:
-        return _adopt(conn, client, meta, final)
+        return _adopt(cfg, conn, client, meta, final)
 
     # ---- download
     check_disk(cfg, meta.enclosure_length_hint)
@@ -697,7 +718,7 @@ def _run(
         info = probe_file(part)
     except ProbeError as exc:
         raise DownloadError(f"downloaded file failed ffprobe: {exc}") from None
-    check_duration(info.duration_s, meta.duration_s)
+    check_duration(info.duration_s, meta.duration_s, *_tolerance(cfg))
     sha = sha256_file(part)
     _fsync_file(part)
     os.replace(part, final)  # atomic; for --redownload this swaps the verified file in
@@ -742,7 +763,8 @@ def select_episodes(
     """Choose episodes. Returns ``(rows newest first, unknown episode ids)``.
 
     ``--episode`` ids are taken as given (downloaded ones are then skipped or verified); the
-    other selectors only pick episodes that are not downloaded yet unless ``include_done``.
+    ``--all`` / ``--since`` only pick episodes that are not downloaded yet unless ``include_done``;
+    ``latest`` picks the N newest whatever their stage.
     """
     rows = state.list_episodes(conn)
     filtered = [
@@ -755,7 +777,9 @@ def select_episodes(
     if all_ or (since and latest is None and not episode_ids):
         chosen.update((r["episode_id"], r) for r in pending)
     if latest is not None:
-        chosen.update((r["episode_id"], r) for r in pending[:latest])
+        # The N newest episodes; the ones already downloaded are skipped when processed, so a
+        # second identical run does nothing (and never creeps on to older episodes).
+        chosen.update((r["episode_id"], r) for r in filtered[:latest])
     by_id = {r["episode_id"]: r for r in rows}
     unknown = []
     for eid in episode_ids:

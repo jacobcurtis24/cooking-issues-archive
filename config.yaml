@@ -28,6 +28,8 @@ notify:
 
 download:
   min_free_gb: 20   # refuse to start a download below this much free space on audio_dir's disk
+  duration_tolerance_s: 120    # ffprobe duration vs the feed's: max(this, pct of the duration)
+  duration_tolerance_pct: 0.05
 
 web:
   host: 127.0.0.1

@@ -313,13 +313,18 @@ app.add_typer(episodes_app, name="episodes")
 def episodes_list(
     source: Annotated[str | None, typer.Option("--source", help="acast, hrn or patreon.")] = None,
     limit: Annotated[int, typer.Option("--limit", "-n", help="Max rows.")] = 20,
+    stage: Annotated[
+        str | None, typer.Option("--stage", help="downloaded or discovered (default: all).")
+    ] = None,
 ) -> None:
     """List episodes in state, newest first."""
     from ciw import state
 
+    if stage not in (None, "discovered", "downloaded"):
+        raise typer.BadParameter("must be downloaded or discovered", param_hint="--stage")
     cfg = load_config()
     with state.connect(cfg.state_db) as conn:
-        rows = state.list_episodes(conn, source, limit)
+        rows = state.list_episodes(conn, source, limit, stage)
         counts = state.count_episodes(conn)
     for r in rows:
         typer.echo(
@@ -330,10 +335,196 @@ def episodes_list(
     typer.echo(f"({len(rows)} shown; in state: {summary})")
 
 
-@app.command(context_settings=_STUB_CONTEXT)
-def download() -> None:
-    """Download episode audio. (stub)"""
-    _stub("T4")
+def _fmt_bytes(n: float | None) -> str:
+    if n is None:
+        return "-"
+    for unit in ("B", "KB", "MB", "GB"):
+        if abs(n) < 1000 or unit == "GB":
+            return f"{n:.0f} {unit}" if unit == "B" else f"{n:.1f} {unit}"
+        n /= 1000
+    return f"{n:.1f} GB"
+
+
+def _fmt_speed(bps: float) -> str:
+    return f"{_fmt_bytes(bps)}/s" if bps else "-"
+
+
+@app.command()
+def download(
+    latest: Annotated[
+        int | None,
+        typer.Option(
+            "--latest", min=1, help="The N newest episodes (downloaded ones are skipped)."
+        ),
+    ] = None,
+    episode: Annotated[
+        list[str] | None, typer.Option("--episode", help="An episode id (repeatable).")
+    ] = None,
+    source: Annotated[
+        str | None, typer.Option("--source", help="Only acast, hrn or patreon episodes.")
+    ] = None,
+    since: Annotated[
+        str | None, typer.Option("--since", help="Not-yet-downloaded episodes from YYYY-MM-DD on.")
+    ] = None,
+    all_: Annotated[
+        bool, typer.Option("--all", help="Every not-yet-downloaded episode (large!).")
+    ] = False,
+    limit: Annotated[
+        int | None, typer.Option("--limit", min=1, help="Cap the number of episodes.")
+    ] = None,
+    dry_run: Annotated[
+        bool, typer.Option("--dry-run", help="Show what would be fetched; change nothing.")
+    ] = False,
+    redownload: Annotated[
+        bool, typer.Option("--redownload", help="Fetch again and replace the stored file.")
+    ] = False,
+    verify: Annotated[
+        bool, typer.Option("--verify", help="Re-check downloaded files (size, hash, ffprobe).")
+    ] = False,
+    verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Log at INFO.")] = False,
+) -> None:
+    """Download episode audio to the audio directory (resumable, verified, sequential)."""
+    import sys
+    from datetime import date
+
+    from ciw import download as dl
+    from ciw import state
+
+    _setup_logging(verbose)
+    if source is not None and source not in ("acast", "hrn", "patreon"):
+        raise typer.BadParameter("must be one of acast, hrn, patreon", param_hint="--source")
+    since_date = None
+    if since is not None:
+        try:
+            since_date = date.fromisoformat(since)
+        except ValueError:
+            raise typer.BadParameter("expected YYYY-MM-DD", param_hint="--since") from None
+    if latest is None and not episode and not all_ and since_date is None:
+        typer.echo(
+            "Nothing selected. Choose episodes with --latest N, --episode ID, --since YYYY-MM-DD "
+            "or --all\n(add --dry-run to preview; --source/--limit narrow the choice).",
+            err=True,
+        )
+        raise typer.Exit(code=2)
+
+    cfg = load_config()
+    with state.connect(cfg.state_db) as conn:
+        rows, unknown = dl.select_episodes(
+            conn,
+            latest=latest,
+            episode_ids=tuple(episode or ()),
+            source=source,
+            since=since_date,
+            all_=all_,
+            limit=limit,
+            include_done=redownload or verify,
+        )
+        for eid in unknown:
+            typer.echo(f"unknown episode id (not in state): {eid}", err=True)
+        if not rows:
+            typer.echo("nothing to do (no matching episodes)")
+            raise typer.Exit(code=1 if unknown else 0)
+        if dry_run:
+            _download_dry_run(cfg, rows, redownload, verify)
+            raise typer.Exit(code=1 if unknown else 0)
+
+        tty = sys.stderr.isatty()
+
+        def progress(eid: str, done: int, total: int | None, bps: float) -> None:
+            if tty:
+                of = f"/{_fmt_bytes(total)}" if total else ""
+                typer.echo(
+                    f"\r  {eid[:24]:<24} {_fmt_bytes(done)}{of}  {_fmt_speed(bps)}   ",
+                    nl=False,
+                    err=True,
+                )
+
+        def show(row, res) -> None:
+            if tty:
+                typer.echo("\r" + " " * 70 + "\r", nl=False, err=True)
+            label = {"downloaded": "downloaded", "adopted": "adopted", "skipped": "skipped"}.get(
+                res.outcome, "FAILED"
+            )
+            extra = ""
+            if res.outcome == "downloaded":
+                extra = f" in {res.elapsed_s:.1f}s ({_fmt_speed(res.speed)})"
+            detail = (
+                res.message
+                if res.outcome in ("failed", "adopted") or verify
+                else _fmt_bytes(res.size)
+            )
+            typer.echo(
+                f"{label:<10} {row['episode_id']:<30} {row['pub_date'][:10]} "
+                f"{_fmt_dur(res.duration_s):>8}  {detail}{extra}  {row['title'][:36]}",
+                err=res.outcome == "failed",
+            )
+
+        try:
+            summary = dl.download_batch(
+                cfg,
+                conn,
+                rows,
+                force=redownload,
+                verify=verify,
+                progress=progress,
+                on_result=show,
+            )
+        except dl.DownloadLocked as exc:
+            typer.echo(f"error: {exc}", err=True)
+            raise typer.Exit(code=3) from None
+
+    moved = sum(r.fetched for r in summary.results)
+    secs = sum(r.elapsed_s for r in summary.results if r.fetched)
+    failed = summary.failed + len(unknown)
+    if not (summary.count("downloaded") or summary.count("adopted") or failed):
+        typer.echo(f"nothing to do ({summary.count('skipped')} already downloaded)")
+        return
+    typer.echo(
+        f"downloaded {summary.count('downloaded')}, adopted {summary.count('adopted')}, "
+        f"skipped {summary.count('skipped')}, failed {failed}; "
+        f"transferred {_fmt_bytes(moved)}"
+        + (f" in {secs:.1f}s ({_fmt_speed(moved / secs)})" if moved and secs else "")
+    )
+    if failed:
+        raise typer.Exit(code=1)
+
+
+def _download_dry_run(cfg, rows, redownload: bool, verify: bool) -> None:
+    import shutil
+
+    from ciw import download as dl
+    from ciw.ingest import probe_audio
+
+    probe = len(rows) <= 10
+    client = dl.make_client(cfg) if probe else None
+    total = 0
+    try:
+        for row in rows:
+            plan, meta = dl.plan_episode(cfg, row, force=redownload, verify=verify)
+            size = "-"
+            if meta is not None and plan.action in ("download", "redownload"):
+                hint = meta.enclosure_length_hint
+                res = probe_audio(client, meta.enclosure_url, range_only=True) if client else None
+                if res is not None and res.ok and res.content_length:
+                    size, total = _fmt_bytes(res.content_length), total + res.content_length
+                elif hint:
+                    size, total = f"~{_fmt_bytes(hint)} (feed hint)", total + hint
+            typer.echo(
+                f"would {plan.action:<10} {row['episode_id']:<30} {row['pub_date'][:10]} "
+                f"{row['source']:<6} {size:>22}  {row['title'][:44]}"
+                + (f"  [{plan.detail}]" if plan.detail else "")
+            )
+    finally:
+        if client:
+            client.close()
+    probe_dir = cfg.audio_dir
+    while not probe_dir.exists() and probe_dir != probe_dir.parent:
+        probe_dir = probe_dir.parent
+    free = shutil.disk_usage(probe_dir).free
+    typer.echo(
+        f"{len(rows)} episode(s), about {_fmt_bytes(total)} to fetch; free on {cfg.audio_dir}: "
+        f"{free / 1024**3:.1f} GiB (min_free_gb {cfg.download.min_free_gb:g})"
+    )
 
 
 @app.command(context_settings=_STUB_CONTEXT)

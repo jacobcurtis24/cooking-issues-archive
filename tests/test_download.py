@@ -628,12 +628,10 @@ def ids(rows):
     return [r["episode_id"] for r in rows]
 
 
-def test_latest_picks_newest_not_yet_downloaded(many):
+def test_latest_picks_the_n_newest_so_a_rerun_does_nothing_new(many):
     with state.connect(many.state_db) as conn:
         rows, unknown = download.select_episodes(conn, latest=2)
-        assert ids(rows) == ["b" * 24, "c" * 24] and unknown == []
-        rows, _ = download.select_episodes(conn, latest=2, include_done=True)
-        assert ids(rows) == ["a" * 24, "b" * 24]
+        assert ids(rows) == ["a" * 24, "b" * 24] and unknown == []  # a is downloaded: skipped later
         rows, _ = download.select_episodes(conn, latest=1, source="hrn")
         assert ids(rows) == ["hrn-1"]
         rows, _ = download.select_episodes(conn, latest=5, source="patreon")
@@ -651,4 +649,15 @@ def test_selectors_combine(many):
         rows, unknown = download.select_episodes(conn, episode_ids=("a" * 24, "zzz"))
         assert ids(rows) == ["a" * 24] and unknown == ["zzz"]  # explicit ids may be downloaded
         rows, _ = download.select_episodes(conn, latest=1, since=date(2026, 1, 15))
-        assert ids(rows) == ["b" * 24]
+        assert ids(rows) == ["a" * 24]
+        rows, _ = download.select_episodes(conn, all_=True, include_done=True)
+        assert len(rows) == 5
+
+
+def test_duration_tolerance_comes_from_config(cfg, mp3):
+    add_episode(cfg, duration=900.0)
+    assert run(cfg, AudioWeb(mp3))[0].outcome == "failed"
+    loose = cfg.model_copy(
+        update={"download": DownloadConfig(min_free_gb=0, duration_tolerance_s=1000)}
+    )
+    assert run(loose, AudioWeb(mp3))[0].outcome == "downloaded"

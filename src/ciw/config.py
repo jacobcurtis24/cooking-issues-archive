@@ -74,6 +74,10 @@ class NotifyConfig(_Section):
 class DownloadConfig(_Section):
     # Refuse to start a download when the audio filesystem has less free space than this (GiB).
     min_free_gb: float = Field(20.0, ge=0)
+    # ffprobe duration must be within max(duration_tolerance_s, duration_tolerance_pct of the
+    # feed's duration). Acast's dynamic ad insertion makes real files up to ~5% longer.
+    duration_tolerance_s: float = Field(120.0, ge=0)
+    duration_tolerance_pct: float = Field(0.05, ge=0, le=1)
 
 
 class WebConfig(_Section):

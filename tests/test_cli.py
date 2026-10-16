@@ -16,7 +16,6 @@ TOP_LEVEL = [
 ]  # fmt: skip
 
 STUBS = [
-    (["download"], "T4"),
     (["transcribe"], "T5"),
     (["vocab"], "T6"),
     (["score"], "T9"),
@@ -50,7 +49,7 @@ def test_stubs_exit_2(args, task):
 
 
 def test_stub_ignores_extra_arguments():
-    result = runner.invoke(app, ["download", "--latest", "3"])
+    result = runner.invoke(app, ["transcribe", "--latest", "3"])
     assert result.exit_code == 2
     assert "not implemented yet" in result.output
 
