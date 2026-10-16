@@ -5,6 +5,7 @@ data_dir: data
 audio_dir: /mnt/ssd0/ciw/audio
 clips_dir: /mnt/ssd0/ciw/clips
 state_db: data/state.sqlite
+search_db: data/search.sqlite   # transcript + show-notes FTS5 index (`ciw index`); rebuildable
 
 apple_ids:
   acast: 1572356745

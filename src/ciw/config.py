@@ -50,7 +50,7 @@ def project_root() -> Path:
 # which sets ALLOW_REAL_PATHS_ENV. The blog database at the repo root is read-only and allowed.
 PYTEST_ENV_VAR = "PYTEST_CURRENT_TEST"
 ALLOW_REAL_PATHS_ENV = "CIW_TESTS_ALLOW_REAL_PATHS"
-GUARDED_PATHS = ("data_dir", "state_db", "audio_dir", "clips_dir")
+GUARDED_PATHS = ("data_dir", "state_db", "search_db", "audio_dir", "clips_dir")
 REAL_AUDIO_ROOT = Path("/mnt/ssd0/ciw")
 
 
@@ -182,6 +182,8 @@ class Config(_Section):
     audio_dir: Path = Path("/mnt/ssd0/ciw/audio")
     clips_dir: Path = Path("/mnt/ssd0/ciw/clips")
     state_db: Path = Path("data/state.sqlite")
+    # Transcript + show-notes full-text index (ciw.search_index); separate from the blog database.
+    search_db: Path = Path("data/search.sqlite")
     apple_ids: AppleIds = AppleIds()
     poll_interval_hours: float = Field(6, gt=0)
     asr: AsrConfig = AsrConfig()
@@ -206,7 +208,7 @@ class Config(_Section):
         """Return a copy with every relative path made absolute against ``root``."""
         updates = {
             name: self.root / getattr(self, name)
-            for name in ("blog_db", "data_dir", "audio_dir", "clips_dir", "state_db")
+            for name in ("blog_db", "data_dir", "audio_dir", "clips_dir", "state_db", "search_db")
             if not getattr(self, name).is_absolute()
         }
         cfg = self.model_copy(update=updates)

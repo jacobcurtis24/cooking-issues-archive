@@ -165,6 +165,7 @@ def correct_cmd(
     threshold = cfg.asr.correct_min_confidence if min_confidence is None else min_confidence
     total = 0
     failed = False
+    saved: list[str] = []
     for eid in ids:
         path, tr = _episode_transcript(cfg, eid, transcript)
         notes = tx.show_notes_text(cfg, eid)
@@ -196,6 +197,8 @@ def correct_cmd(
             typer.echo(f"error: cannot write {path}: {exc}", err=True)
             failed = True
             continue
+        if transcript is None:
+            saved.append(eid)
         if transcript is None and cfg.state_db.is_file():
             with state.connect(cfg.state_db) as conn:
                 if state.get_episode(conn, eid) is not None:
@@ -207,6 +210,10 @@ def correct_cmd(
                     )
     if len(ids) > 1:
         typer.echo(f"{total} corrections in {len(ids)} transcripts")
+    if saved:  # the displayed words changed: refresh the search index (best effort)
+        from ciw import search_index as si
+
+        si.index_best_effort(cfg, saved, echo=typer.echo)
     if failed:
         raise typer.Exit(code=1)
 

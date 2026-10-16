@@ -14,12 +14,17 @@ Grouping rules (:func:`utterances`): a new utterance starts when
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 
 from ciw.models import Transcript, Word
 
 UNKNOWN_SPEAKER = "SPEAKER_UNKNOWN"
+# A stretch this long with no words between two words is suspicious: dropped audio (T6).
+GAP_S = 10.0
+# Search index and transcript page cut utterances at this many words (see split_utterances).
+UTTERANCE_MAX_WORDS = 50
+MIN_CUT_PAUSE_S = 0.2
 _SENTENCE_END_CHARS = ".?!"
 _CLOSERS = "\"')]}”’»"
 
@@ -73,6 +78,52 @@ def utterances(
         current.words.append(word)
         current.end = max(current.end, word.end)
     return out
+
+
+def split_utterances(
+    words: Iterable[Word],
+    *,
+    max_words: int = 50,
+    pause_s: float = 1.5,
+    sentence_break_s: float = 15.0,
+) -> list[Utterance]:
+    """:func:`utterances`, with any utterance of more than ``max_words`` words cut into pieces.
+
+    Whisper often gives a long unpunctuated monologue; one block of 300 words is a poor search
+    hit and a poor seek target. A cut goes after the last sentence end in the second half of the
+    window, else at the longest pause there, else at ``max_words``.
+    """
+    out: list[Utterance] = []
+    for utt in utterances(words, pause_s=pause_s, sentence_break_s=sentence_break_s):
+        rest = utt.words
+        while len(rest) > max_words:
+            lo = max(1, max_words // 2)
+            cut = max_words
+            sentence_ends = [i for i in range(lo, max_words + 1) if ends_sentence(rest[i - 1].w)]
+            if sentence_ends:
+                cut = sentence_ends[-1]
+            else:
+                gaps = [(rest[i].start - rest[i - 1].end, i) for i in range(lo, max_words + 1)]
+                best_gap, best_i = max(gaps)
+                if best_gap >= MIN_CUT_PAUSE_S:  # a real pause, not timestamp jitter
+                    cut = best_i
+            out.append(_piece(rest[:cut], utt.speaker))
+            rest = rest[cut:]
+        out.append(_piece(rest, utt.speaker))
+    return out
+
+
+def _piece(words: list[Word], speaker: str | None) -> Utterance:
+    return Utterance(
+        start=words[0].start, end=max(w.end for w in words), speaker=speaker, words=words
+    )
+
+
+def silent_gaps(words: Sequence[Word], min_s: float = GAP_S) -> list[tuple[float, float]]:
+    """``(start, end)`` of every stretch of at least ``min_s`` seconds between two words."""
+    return [
+        (a.end, b.start) for a, b in zip(words, words[1:], strict=False) if b.start - a.end >= min_s
+    ]
 
 
 def render_utterances(

@@ -36,8 +36,7 @@ from difflib import SequenceMatcher
 from ciw import correct as correct_mod
 from ciw import vocab as vocab_mod
 from ciw.models import Transcript
-
-GAP_S = 10.0  # a stretch this long with no words inside the speech is suspicious (dropped audio)
+from ciw.transcript import GAP_S, silent_gaps  # GAP_S: dropped-audio threshold (10 s)
 
 _WORD = re.compile(r"[a-z0-9]+")
 _SUFFIXES = ("", "s", "es")
@@ -261,11 +260,7 @@ def measure(
         vocab_hash=transcript.vocab_hash,
         words=len(transcript.words),
     )
-    holes = [
-        b.start - a.end
-        for a, b in zip(transcript.words, transcript.words[1:], strict=False)
-        if b.start - a.end >= GAP_S
-    ]
+    holes = [end - start for start, end in silent_gaps(transcript.words, GAP_S)]
     result.gaps, result.gap_seconds = len(holes), round(sum(holes), 1)
     result.longest_gap_s = round(max(holes, default=0.0), 1)
     for term in named:

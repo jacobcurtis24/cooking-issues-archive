@@ -813,6 +813,10 @@ def transcribe(
 
     for hint in sorted(hints):
         typer.echo(hint, err=True)
+    if done_ids := [r.episode_id for r in summary.results if r.outcome == "transcribed"]:
+        from ciw import search_index as si
+
+        si.index_best_effort(cfg, done_ids, echo=typer.echo)
     if quality:
         _print_quality(cfg, [r["episode_id"] for r in rows])
     failed = summary.failed + len(unknown)
@@ -829,6 +833,55 @@ def transcribe(
         )
     )
     if failed:
+        raise typer.Exit(code=1)
+
+
+@app.command("index")
+def index_cmd(
+    episode: Annotated[
+        list[str] | None, typer.Option("--episode", help="Only this episode id (repeatable).")
+    ] = None,
+    all_: Annotated[
+        bool, typer.Option("--all", help="Every episode (the default; unchanged ones are skipped).")
+    ] = False,
+    rebuild: Annotated[
+        bool,
+        typer.Option("--rebuild", help="Throw the index away and build it again from scratch."),
+    ] = False,
+    verbose: Annotated[bool, typer.Option("--verbose", "-v", help="Log at INFO.")] = False,
+) -> None:
+    """Build or update the transcript + show-notes search index (`search_db`).
+
+    Incremental: an episode is re-indexed only when its transcript.json or show notes changed,
+    and rows of transcripts that were deleted are dropped. `ciw transcribe` and
+    `ciw vocab correct` call this for the episodes they change.
+    """
+    from ciw import search_index as si
+
+    _setup_logging(verbose)
+    if all_ and episode:
+        raise typer.BadParameter("--all and --episode are exclusive", param_hint="--all/--episode")
+    cfg = load_config()
+    if not cfg.state_db.is_file():
+        typer.echo(f"error: no state database at {cfg.state_db}; run `ciw poll` first", err=True)
+        raise typer.Exit(code=1)
+    if rebuild and episode:
+        raise typer.BadParameter("--rebuild rebuilds everything", param_hint="--rebuild")
+    try:
+        if rebuild:
+            report = si.rebuild_index(cfg)
+        else:
+            report = si.update_index(cfg, episode_ids=episode or None, force=bool(episode))
+    except Exception as exc:  # noqa: BLE001 - a clear message beats a traceback here
+        typer.echo(f"error: {type(exc).__name__}: {exc}", err=True)
+        raise typer.Exit(code=1) from None
+    typer.echo(f"{'rebuilt' if rebuild else 'updated'} {cfg.search_db}")
+    typer.echo(report.summary())
+    for err in report.errors:
+        typer.echo(f"  FAILED {err}", err=True)
+    if cfg.search_db.is_file():
+        typer.echo(f"index size: {cfg.search_db.stat().st_size / 1024 / 1024:.1f} MiB")
+    if report.errors:
         raise typer.Exit(code=1)
 
 

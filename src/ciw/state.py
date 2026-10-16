@@ -121,6 +121,23 @@ def connect(path: Path | str) -> Iterator[sqlite3.Connection]:
         conn.close()
 
 
+@contextmanager
+def connect_readonly(path: Path | str) -> Iterator[sqlite3.Connection]:
+    """Open the state DB read-only (no migration, no write lock): for the web app and the index.
+
+    Raises ``sqlite3.OperationalError`` if the file does not exist. Columns added by a newer
+    migration than the file's schema are missing; callers that need them run ``ciw poll`` first.
+    """
+    path = Path(path)
+    guard_path(path, "state database")
+    conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=30)
+    conn.row_factory = sqlite3.Row
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+
 # ------------------------------------------------------------------------ episodes
 
 
