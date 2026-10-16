@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{% if q %}{{ q }} — {% endif %}Search — Cooking Issues{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='episodes.css') }}">{% endblock %}
 
 {% block content %}
 
@@ -7,6 +8,7 @@
   <div class="container">
     <h1>Search</h1>
     <form class="search-form-lg" action="/search" method="get">
+      {% if q and scope != 'all' %}<input type="hidden" name="scope" value="{{ scope }}">{% endif %}
       <input name="q" type="search" value="{{ q }}" placeholder="Try: agar, centrifuge, sous vide…" autocomplete="off" autofocus>
       <button type="submit">Search</button>
     </form>
@@ -15,7 +17,14 @@
 
 <div class="container" style="padding-top:0; padding-bottom: 3rem;">
   {% if q %}
-    {% if error %}
+    <div class="scope-tabs" id="scope-tabs">
+      <a href="{{ url_for('blog.search', q=q) }}" class="{{ 'active' if scope == 'all' }}">All</a>
+      <a href="{{ url_for('blog.search', q=q, scope='blog') }}" class="{{ 'active' if scope == 'blog' }}">Blog posts{% if not error %} ({{ count }}){% endif %}</a>
+      <a href="{{ url_for('blog.search', q=q, scope='episodes') }}" class="{{ 'active' if scope == 'episodes' }}">Episodes{% if ep and ep.status == 'ok' %} ({{ ep.total_episodes }}){% endif %}</a>
+    </div>
+    {% if scope == 'all' %}<h2 class="search-section-title" id="blog-results">Blog posts</h2>{% endif %}
+    {% if scope == 'episodes' %}
+    {% elif error %}
     <p class="result-count" style="color:#c0392b">Search error: {{ error }}</p>
     {% elif count == 0 %}
     <p class="result-count">No results for "<strong>{{ q }}</strong>". Try fewer or simpler terms.</p>
@@ -45,6 +54,37 @@
       </div>
       {% endfor %}
     </div>
+    {% endif %}
+    {% if scope != 'blog' and ep %}
+    <h2 class="search-section-title" id="episode-results">In episodes</h2>
+    {% if ep.status != 'ok' %}
+    <p class="result-count" id="episode-notice">{{ ep.message }}</p>
+    {% elif not ep.groups %}
+    <p class="result-count">No episode transcripts or show notes mention "<strong>{{ q }}</strong>".</p>
+    {% else %}
+    <p class="result-count">{{ ep.total_episodes }} episode{% if ep.total_episodes != 1 %}s{% endif %} for "<strong>{{ q }}</strong>" ({{ ep.total_hits }} transcript passage{% if ep.total_hits != 1 %}s{% endif %}{% if ep.shown < ep.total_episodes %}; showing the top {{ ep.shown }} episodes{% endif %})</p>
+    <div class="ep-hit-list">
+      {% for g in ep.groups %}
+      <div class="ep-hit" data-episode-id="{{ g.episode_id }}">
+        <div class="result-meta">
+          <span>{{ g.date | fmt_date }}</span><span>·</span><span>{{ g.source_label }}</span><span>·</span><span>{{ g.stage_label }}</span>
+        </div>
+        <h3><a href="{{ g.href }}">{{ g.title_snippet or g.title }}</a></h3>
+        {% if g.notes_snippet %}<div class="notes-snip">Show notes: {{ g.notes_snippet }}</div>{% endif %}
+        {% if g.hits %}
+        <ul>
+          {% for h in g.hits %}
+          <li><a class="ts" href="{{ h.href }}">[{{ h.clock }}]</a><span class="hit-snippet">{{ h.snippet }}</span></li>
+          {% endfor %}
+        </ul>
+        {% if g.n_hits > g.hits | length %}
+        <div class="more"><a href="{{ g.href }}">{{ g.n_hits - g.hits | length }} more passage{% if g.n_hits - g.hits | length != 1 %}s{% endif %} in this episode</a></div>
+        {% endif %}
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% endif %}
   {% else %}
   <p style="margin-top:2rem; color:var(--muted)">

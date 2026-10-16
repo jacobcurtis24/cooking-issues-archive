@@ -6,15 +6,25 @@ come from ``meta.json`` and are sanitised before they reach a page (:mod:`ciw.ht
 
 from __future__ import annotations
 
+import logging
 import re
 import sqlite3
 import unicodedata
-from contextlib import contextmanager
-from dataclasses import dataclass
+from contextlib import ExitStack, contextmanager
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from flask import Blueprint, Response, abort, current_app, render_template, request, send_file
+from flask import (
+    Blueprint,
+    Response,
+    abort,
+    current_app,
+    render_template,
+    request,
+    send_file,
+    url_for,
+)
 from markupsafe import Markup, escape
 
 from ciw import search_index as si
@@ -60,31 +70,32 @@ def int_arg(name: str, default: int, lo: int = 1, hi: int = 10**6) -> int:
 
 
 @contextmanager
+def _optional(factory):
+    """Yield the connection ``factory()`` opens, or None if it cannot be opened (missing,
+    unreadable or incompatible file). Errors raised in the ``with`` body are not swallowed."""
+    with ExitStack() as stack:
+        try:
+            conn = stack.enter_context(factory())
+        except sqlite3.Error:
+            conn = None
+        yield conn
+
+
 def state_conn():
     """Read-only state connection, or ``None`` when there is no (readable) state DB."""
     path = cfg().state_db
-    if not path.is_file():
-        yield None
-        return
-    try:
-        with state.connect_readonly(path) as conn:
-            yield conn
-    except sqlite3.Error:
-        yield None
+    return _optional(lambda: state.connect_readonly(path)) if path.is_file() else _none()
 
 
-@contextmanager
 def index_conn():
     """Read-only search-index connection, or ``None`` when it is missing/incompatible."""
     path = cfg().search_db
-    if not path.is_file():
-        yield None
-        return
-    try:
-        with si.open_readonly(path) as conn:
-            yield conn
-    except sqlite3.Error:
-        yield None
+    return _optional(lambda: si.open_readonly(path)) if path.is_file() else _none()
+
+
+@contextmanager
+def _none():
+    yield None
 
 
 _META_CACHE: dict[str, tuple[tuple[int, int], EpisodeMeta | None]] = {}
@@ -489,3 +500,137 @@ def transcript_txt(episode_id: str):
     resp.headers["Content-Disposition"] = f'attachment; filename="{episode_id}.txt"'
     resp.headers["Cache-Control"] = "private, no-cache"
     return resp
+
+
+# ------------------------------------------------------------------ unified search (episodes)
+
+log = logging.getLogger("ciw.web.episodes")
+SNIPPETS_PER_EPISODE = 3
+MAX_EPISODE_GROUPS = 20
+
+
+@dataclass
+class HitView:
+    start: float
+    clock: str
+    snippet: Markup
+    href: str
+
+
+@dataclass
+class EpisodeGroup:
+    episode_id: str
+    title: str
+    date: str
+    source_label: str
+    stage_label: str
+    notes_snippet: Markup
+    title_snippet: Markup
+    hits: list[HitView]
+    n_hits: int  # utterances matching in this episode (may exceed len(hits))
+    href: str
+
+
+@dataclass
+class EpisodeSearch:
+    status: str = "ok"  # ok | no_index | bad_query | error
+    message: str = ""
+    groups: list[EpisodeGroup] = field(default_factory=list)
+    total_hits: int = 0  # matching utterances
+    total_episodes: int = 0  # episodes with a matching utterance or show notes
+    shown: int = 0
+
+    @property
+    def count(self) -> int:
+        return self.total_episodes
+
+
+def hit_href(episode_id: str, q: str, start: float) -> str:
+    """Link to an utterance: the episode page with the query highlighted, seeking to ``start``."""
+    return url_for("episodes.episode", episode_id=episode_id, q=q, _anchor=f"t={int(start)}")
+
+
+def search_episodes(q: str) -> EpisodeSearch:
+    """Transcript and show-notes hits for ``q``, grouped by episode. Never raises: problems
+    come back as a friendly ``status``/``message``."""
+    fts = blog.safe_fts(" ".join(q.split()[:8]))
+    if not fts:
+        return EpisodeSearch(
+            status="bad_query", message="Use at least one letter or number to search episodes."
+        )
+    try:
+        with index_conn() as ic:
+            if ic is None:
+                return EpisodeSearch(
+                    status="no_index",
+                    message=(
+                        "Episode search is not available yet: the transcript index has not been "
+                        "built. Run `ciw index`."
+                    ),
+                )
+            utt_hits = si.search_utterances(ic, fts)
+            total_hits, utt_episodes = si.count_utterance_hits(ic, fts)
+            per_episode = {
+                r[0]: r[1]
+                for r in ic.execute(
+                    "SELECT episode_id, COUNT(*) FROM utterances_fts "
+                    "WHERE utterances_fts MATCH ? GROUP BY episode_id",
+                    (fts,),
+                )
+            }
+            note_hits = si.search_notes(ic, fts)
+    except sqlite3.Error:
+        log.exception("episode search failed for %r", q)
+        return EpisodeSearch(status="error", message="Episode search is unavailable right now.")
+
+    by_episode: dict[str, list[si.UtteranceHit]] = {}
+    for h in utt_hits:  # already in rank order, so the first hit decides the episode's rank
+        by_episode.setdefault(h.episode_id, []).append(h)
+    notes = {h.episode_id: h for h in note_hits}
+    order = list(by_episode) + [e for e in notes if e not in by_episode]
+
+    rows: dict[str, sqlite3.Row] = {}
+    with state_conn() as conn:
+        if conn is not None:
+            for eid in order:
+                row = state.get_episode(conn, eid)
+                if row is not None:
+                    rows[eid] = row
+    order = [e for e in order if e in rows]  # an index entry for a forgotten episode is skipped
+
+    groups = []
+    for eid in order[:MAX_EPISODE_GROUPS]:
+        row = rows[eid]
+        best = sorted(by_episode.get(eid, [])[:SNIPPETS_PER_EPISODE], key=lambda h: h.start)
+        note = notes.get(eid)
+        stage = stage_of(row)
+        groups.append(
+            EpisodeGroup(
+                episode_id=eid,
+                title=row["title"],
+                date=row["pub_date"],
+                source_label=SOURCES.get(row["source"], row["source"]),
+                stage_label=STAGE_LABELS[stage],
+                notes_snippet=Markup(note.notes_snippet) if note else Markup(""),
+                title_snippet=Markup(note.title_snippet) if note else Markup(""),
+                hits=[
+                    HitView(
+                        h.start,
+                        format_timestamp(h.start),
+                        Markup(h.snippet),
+                        url_for(
+                            "episodes.episode", episode_id=eid, q=q, _anchor=f"t={int(h.start)}"
+                        ),
+                    )
+                    for h in best
+                ],
+                n_hits=per_episode.get(eid, 0),
+                href=url_for("episodes.episode", episode_id=eid, q=q),
+            )
+        )
+    return EpisodeSearch(
+        groups=groups,
+        total_hits=total_hits,
+        total_episodes=max(len(order), utt_episodes),
+        shown=len(groups),
+    )

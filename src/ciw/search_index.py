@@ -513,17 +513,20 @@ def search_utterances(
 
 
 def search_notes(conn: sqlite3.Connection, fts: str, *, limit: int = 100) -> list[NotesHit]:
+    """Episodes whose title or show notes match. A snippet is only returned for a column that
+    actually contains a match (FTS5 would otherwise return the column's first words)."""
     rows = conn.execute(
         "SELECT episode_id, rank, "
-        "snippet(episodes_fts, 0, ?, ?, '…', 12) AS t, "
+        "snippet(episodes_fts, 0, ?, ?, '…', 60) AS t, "
         "snippet(episodes_fts, 1, ?, ?, '…', 28) AS n "
         "FROM episodes_fts WHERE episodes_fts MATCH ? ORDER BY rank LIMIT ?",
         (MARK_OPEN, MARK_CLOSE, MARK_OPEN, MARK_CLOSE, fts, limit),
     ).fetchall()
-    return [
-        NotesHit(r["episode_id"], render_snippet(r["t"]), render_snippet(r["n"]), r["rank"])
-        for r in rows
-    ]
+
+    def marked(raw: str) -> str:
+        return render_snippet(raw) if MARK_OPEN in raw else ""
+
+    return [NotesHit(r["episode_id"], marked(r["t"]), marked(r["n"]), r["rank"]) for r in rows]
 
 
 def notes_match_ids(conn: sqlite3.Connection, fts: str) -> set[str]:

@@ -91,7 +91,16 @@ def search():
         except Exception as e:
             error = str(e)
         db.close()
-    return render_template("search.html", q=q, results=results, count=count, error=error)
+    scope = request.args.get("scope", "all")
+    scope = scope if scope in ("all", "blog", "episodes") else "all"
+    ep = None
+    if q:  # transcripts and show notes (new in T7); never raises
+        from ciw.web import episodes
+
+        ep = episodes.search_episodes(q)
+    return render_template(
+        "search.html", q=q, results=results, count=count, error=error, scope=scope, ep=ep
+    )
 
 
 @bp.route("/primers")
