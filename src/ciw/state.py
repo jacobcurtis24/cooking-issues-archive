@@ -59,6 +59,14 @@ MIGRATIONS: list[str] = [
     CREATE INDEX episodes_stage ON episodes(stage);
     ALTER TABLE feeds ADD COLUMN alert_status TEXT;
     """,
+    # 3: transcription columns (T5)
+    """
+    ALTER TABLE episodes ADD COLUMN transcribed_at TEXT;
+    ALTER TABLE episodes ADD COLUMN asr_model TEXT;
+    ALTER TABLE episodes ADD COLUMN asr_version TEXT;
+    ALTER TABLE episodes ADD COLUMN asr_runtime_s REAL;
+    ALTER TABLE episodes ADD COLUMN diarization INTEGER;
+    """,
 ]
 
 
@@ -252,6 +260,32 @@ def mark_downloaded(
             stamp,
             episode_id,
         ),
+    )
+
+
+# Pipeline stages in order; a stage helper never moves an episode backwards.
+STAGES = ("discovered", "downloaded", "transcribed", "segmented", "scored")
+
+
+def mark_transcribed(
+    conn: sqlite3.Connection,
+    episode_id: str,
+    *,
+    asr_model: str,
+    asr_version: str,
+    asr_runtime_s: float | None,
+    diarization: bool,
+) -> None:
+    """Record a finished transcript: stage ``transcribed`` (unless already further along)."""
+    stamp = now_iso()
+    row = get_episode(conn, episode_id)
+    keep_stage = row is not None and row["stage"] in STAGES[STAGES.index("transcribed") :]
+    conn.execute(
+        "UPDATE episodes SET error=NULL, transcribed_at=?, asr_model=?, asr_version=?, "
+        "asr_runtime_s=?, diarization=?, updated_at=? "
+        + ("" if keep_stage else ", stage='transcribed' ")
+        + "WHERE episode_id=?",
+        (stamp, asr_model, asr_version, asr_runtime_s, int(diarization), stamp, episode_id),
     )
 
 

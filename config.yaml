@@ -12,9 +12,19 @@ apple_ids:
 poll_interval_hours: 6
 
 asr:
-  backend: whisperx
+  backend: whisperx           # registry key (ciw.asr); parakeet may follow in T13
   model: large-v3
-  batch_size: 8
+  batch_size: 8               # first batch size tried; halved on CUDA OOM down to min_batch_size,
+  min_batch_size: 2           # then the same ladder again with fallback_compute_type
+  compute_type: float16
+  fallback_compute_type: int8_float16
+  device: cuda
+  vad: pyannote               # VAD is always on; pyannote or silero
+  language: en
+  diarize: true               # needs HF_TOKEN in .env; without it speakers are skipped, not fatal
+  diarization_model: pyannote/speaker-diarization-community-1
+  hf_home: /mnt/ssd0/ciw/hf_cache   # HF_HOME; TORCH_HOME is <hf_home>/torch (not ~/.cache)
+  vocabulary_file: null       # one jargon term per line; becomes Whisper's initial_prompt (T6)
 
 llm:
   model: claude-sonnet-5-5

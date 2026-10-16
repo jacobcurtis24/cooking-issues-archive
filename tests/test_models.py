@@ -110,7 +110,7 @@ def test_word_end_before_start_rejected():
 def test_transcript_helpers():
     t = make_transcript()
     assert t.duration_s == 0.9
-    assert t.text == "Hello there"
+    assert t.text() == "Hello there"
 
 
 @pytest.mark.parametrize("bad", [-0.1, 10.1, 11])

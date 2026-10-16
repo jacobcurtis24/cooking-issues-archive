@@ -53,9 +53,23 @@ class AppleIds(_Section):
 
 
 class AsrConfig(_Section):
-    backend: str = "whisperx"
+    backend: str = "whisperx"  # registry key, see ciw.asr
     model: str = "large-v3"
-    batch_size: int = Field(8, ge=1)
+    batch_size: int = Field(8, ge=1)  # first batch size tried; halved on CUDA OOM
+    min_batch_size: int = Field(2, ge=1)  # smallest batch tried before changing compute_type
+    compute_type: str = "float16"
+    fallback_compute_type: str | None = "int8_float16"  # tried (batch 8 -> 2 again) after OOM
+    device: str = "cuda"
+    vad: str = "pyannote"  # WhisperX VAD method: pyannote or silero (VAD is always on)
+    language: str = "en"
+    diarize: bool = True  # needs HF_TOKEN; without it the run proceeds without speakers
+    diarization_model: str = "pyannote/speaker-diarization-community-1"
+    # Model caches (HF_HOME, and TORCH_HOME=<hf_home>/torch) live on the big disk, not ~/.cache.
+    # A real HF_HOME / TORCH_HOME in the environment wins over this.
+    hf_home: Path = Path("/mnt/ssd0/ciw/hf_cache")
+    # Optional text file, one jargon term per line (# comments), used as Whisper's initial_prompt.
+    vocabulary_file: Path | None = None
+    initial_prompt_max_chars: int = Field(600, ge=0)
 
 
 class LlmConfig(_Section):
@@ -132,7 +146,15 @@ class Config(_Section):
             for name in ("blog_db", "data_dir", "audio_dir", "clips_dir", "state_db")
             if not getattr(self, name).is_absolute()
         }
-        return self.model_copy(update=updates)
+        cfg = self.model_copy(update=updates)
+        asr_updates = {
+            name: self.root / getattr(self.asr, name)
+            for name in ("hf_home", "vocabulary_file")
+            if getattr(self.asr, name) is not None and not getattr(self.asr, name).is_absolute()
+        }
+        if asr_updates:
+            cfg = cfg.model_copy(update={"asr": self.asr.model_copy(update=asr_updates)})
+        return cfg
 
 
 # ------------------------------------------------------------------------ loading

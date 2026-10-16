@@ -117,10 +117,46 @@ class Word(_Model):
         return self
 
 
+class StageStats(_Model):
+    """Wall time and GPU memory of one transcription stage (asr, align, diarize)."""
+
+    name: str
+    seconds: float = Field(ge=0)
+    # Highest GPU memory in use on the device during the stage, above what was in use before it
+    # started (so the desktop's own usage is excluded). Includes CTranslate2's allocations,
+    # which torch's allocator statistics cannot see. None when no GPU is involved.
+    peak_vram_mb: float | None = None
+    # torch.cuda.max_memory_allocated() for the stage (torch tensors only).
+    peak_torch_mb: float | None = None
+    skipped: str | None = None  # reason, when the stage did not run
+
+
 class Transcript(_Model):
+    """transcript.json: the words of one episode plus how they were produced.
+
+    ``asr_model`` is the model id (``large-v3``) and ``asr_version`` the software stack
+    (``whisperx 3.8.6; faster-whisper 1.2.1; ctranslate2 4.8.3``); together with ``asr_backend``
+    they decide whether a transcript is stale and the ASR stage should be re-run.
+    """
+
     asr_model: str
     asr_version: str
+    asr_backend: str = "whisperx"
     language: str = "en"
+    device: str | None = None
+    compute_type: str | None = None  # the one actually used (after any OOM fallback)
+    batch_size: int | None = None  # the one actually used
+    vad: str | None = None
+    diarization: bool = False  # True when words carry real speaker labels
+    diarization_model: str | None = None
+    diarization_skipped: str | None = None  # why speakers are missing (no token, gated, ...)
+    num_speakers: int | None = None
+    initial_prompt: str | None = None
+    vocab_hash: str | None = None
+    audio_duration_s: float | None = Field(None, ge=0)
+    runtime_s: float | None = Field(None, ge=0)
+    stages: list[StageStats] = Field(default_factory=list)
+    notes: list[str] = Field(default_factory=list)  # fallbacks taken, interpolated words, ...
     words: list[Word] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=utcnow)
 
@@ -128,9 +164,25 @@ class Transcript(_Model):
     def duration_s(self) -> float:
         return max((w.end for w in self.words), default=0.0)
 
-    @property
     def text(self) -> str:
+        """The words joined with single spaces (no timestamps, no speakers)."""
         return " ".join(w.w for w in self.words)
+
+    def utterances(self, **kwargs: Any) -> list[Any]:
+        """Words grouped into utterances; see :func:`ciw.transcript.utterances`."""
+        from ciw.transcript import utterances
+
+        return utterances(self.words, **kwargs)
+
+    def render(self, **kwargs: Any) -> str:
+        """``[mm:ss] SPEAKER_01: text`` lines; see :func:`ciw.transcript.render_utterances`."""
+        from ciw.transcript import render_utterances
+
+        return render_utterances(self.words, **kwargs)
+
+    def to_json(self, indent: int | None = None) -> str:
+        # Compact by default: a one-hour episode is ~10k words and pretty-printing triples it.
+        return self.model_dump_json(indent=indent)
 
 
 # ------------------------------------------------------------------- segments.json
