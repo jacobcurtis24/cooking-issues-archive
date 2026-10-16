@@ -460,4 +460,6 @@ $P/ciw backfill run --yes --max-hours 14 2>&1 | tee -a /mnt/ssd0/ciw/backfill.ou
 
 - Later the same day: re-downloaded the 7 matched episodes from the Patreon copy and re-transcribed all 9 transcribed episodes with speakers (23 min, 24.4x realtime, 0 failures; term recall 100% after correction). Measured speed with diarization is ~24.5x, so the full backfill is about 26 GPU h and ~58 GB of downloads, not 19 h and 38 GB.
 
+- Pinned the six look-alike pairs (`feeds/pins.txt`, tracked; `<acast guid> <patreon guid>  # note`). Pins are passed to `match_feeds` as `locked` pairs by `ciw poll` and `ciw feeds diff` (config `pins_file`), so they beat the rules; a pin that matches nothing logs a warning. Applied to the real state (backup `data/state.sqlite.bak-before-pins`): 241 pairs, 0 ambiguous, 6 more duplicates merged, 2 genuine Patreon exclusives left ("No Show, No Call, No Tangent" 2025-08-14, "Fireplaces, Crisco Mysteries & Live-Fire Cooking" 2026-02-04). Note: "Quinn's Return" is the one pair where Acast came 4 days BEFORE Patreon. All 241 matched episodes have `audio_source=patreon`. 878 tests.
+
 Next: T9 LLM segment + score (needs ANTHROPIC_API_KEY in .env; $25/month cap)
