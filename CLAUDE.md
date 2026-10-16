@@ -25,7 +25,7 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 ## Downloader (T4)
 
 - `ciw download` needs a selector (`--latest N` | `--episode ID` | `--since DATE` | `--all`); `--dry-run` previews; `--redownload` replaces, `--verify` re-checks. Files: `<audio_dir>/<episode_id>.<mp3|m4a>`, `.part` while downloading (never touch other files in `audio_dir`, e.g. `test_excerpt_60s.mp3`). State columns `audio_path/audio_bytes/audio_sha256/audio_duration_s/downloaded_at/audio_downloaded_from`; stage `downloaded`.
-- Sizes: Acast stitches ads dynamically, so the served size/duration drifts (and real durations run up to ~5% above the feed's). Never compare against `enclosure_length_hint`; resume uses ETag/If-Range. Config `download.min_free_gb`, `download.duration_tolerance_*`.
+- Sizes: Acast stitches ads dynamically, so the served size/duration drifts (and real durations run up to ~5% above the feed's). Never compare against `enclosure_length_hint`; resume uses ETag/If-Range. Config `download.min_free_gb`, `download.duration_tolerance_*` (tolerance = max(120 s, 10%) since T8).
 - Tests that invoke the CLI against the real repo config would hit the network and `/mnt/ssd0`: use `tmp_cfg` + a `config.yaml` with a tmp `audio_dir` (see `tests/test_cli_download.py`).
 - Feed health alerts: `ciw.health` (called by `ciw poll`), `ciw.notify.send_ntfy` (no topic -> log only, never raises).
 
@@ -51,3 +51,12 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 - Show notes come from the feed (untrusted): always through `ciw.htmlsafe.sanitize_html` (allow-list p br ul ol li a[http(s)] strong em b i h2-h4 blockquote). Never mark feed HTML safe any other way.
 - Frontend: `src/ciw/web/static/episode.js` + `episodes.css`, no frameworks/CDN. `tests/test_web_episode_page.py` pins the HTML hooks the JS uses (`#player`, `#transcript .utt[data-start][data-end]`, `a.ts`, `#find*`, `#follow`). Test fixtures: `tests/webfake.py` (synthetic episodes, transcripts, audio in tmp dirs).
 - Related posts (`ciw/related.py`): vocabulary terms in the episode ranked by tf x idf over the blog FTS, boilerplate terms (in >30% of episodes) and near-universal ones (>40% of posts) skipped, capitalised-phrase fallback, one FTS5 OR query ranked by bm25.
+
+## Backfill (T8)
+
+- `ciw backfill plan|run|status|stop|retry` (`ciw/backfill.py`, `cli_backfill.py`). `run` needs `--yes` for more than 10 episodes or without any selector (`--source/--since/--until/--limit`); `--download-only` / `--transcribe-only` split the phases; `--max-hours H`; `--retry-failed` ignores cool-downs. Never start a bulk run from an agent session: the user starts the long run. Verification runs are capped by `--limit`.
+- Order: `backfill.order` (acast, hrn), newest first (`--oldest-first`); `--limit` counts episodes that still need work. Done = transcript current + indexed (`done but not indexed` is just re-indexed). Failures: `attempts`, `last_error_stage`, `next_retry_at` (migration 5), backoff `backfill.retry_backoff_minutes`, parked after `max_attempts` until `ciw backfill retry`. A disk-guard failure stops the run (exit 4) without counting against the episode.
+- It holds `data/transcribe.lock` and `data/download.lock` (exit 3 with a message if another run has them). Stop: SIGINT/SIGTERM or `data/STOP` finish the current episode; a second signal aborts at once (a watcher thread reads the signal wakeup fd, because the main thread is stuck inside torch). A STOP file older than the process is removed at start.
+- State writes must not read before they write (SQLite stale-snapshot error when the downloader thread commits in between): `mark_transcribed` and `record_failure` are single UPDATEs first; `download_episode` ends its read transaction before the transfer.
+- Tests use `tests/test_backfill.py`'s `env` fixture (fake ASR + `FakeDownloads`); never call the real downloader or transcriber against real paths. `download.duration_tolerance_pct` is a fraction (0.10); `backfill.suspect_gap_pct` is a percent (5).
+

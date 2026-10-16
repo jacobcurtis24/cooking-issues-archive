@@ -140,6 +140,17 @@ ciw episodes list --stale                        # transcripts made with another
 
 `asr.vocabulary_file` becomes Whisper's `initial_prompt` (cut at 600 characters); `vocab/aliases.txt` holds explicit `heard => correct` pairs. A transcript made with a different prompt is stale (`ciw transcribe --stale` redoes it).
 
+## Backfill (resumable download + transcribe of the whole catalog)
+
+```bash
+ciw backfill plan [--source acast|hrn|all] [--since D] [--until D] [--limit N]   # counts, GB, GPU hours, disk; no side effects
+ciw backfill run  [same selectors] [--yes] [--max-hours H] [--download-only | --transcribe-only] [--retry-failed] [--dry-run]
+ciw backfill status        # per source x stage, failures, suspect episodes, ETA, disk
+ciw backfill stop          # finish the current episode, then exit      ciw backfill retry   # clear cool-downs
+```
+
+The queue is the state: `run` (acast first, then hrn, newest first) downloads up to `backfill.prefetch` episodes ahead of the single GPU transcriber, isolates failures (cool-down 10 min / 1 h / 6 h, 3 attempts), stops after the current episode on Ctrl-C, SIGTERM, `ciw backfill stop` or `--max-hours`, and a re-run continues where it stopped. More than 10 episodes, or no selector at all, needs `--yes`. Events go to `data/logs/backfill-YYYYMMDD.jsonl`. Details: docs/progress.md (T8).
+
 ## Configuration
 
 Non-secret settings live in `config.yaml` (paths, feed IDs, models, web host/port). Relative paths resolve against the project root, so commands work from any directory (override the root with `CIW_ROOT`). Secrets go only in `.env` (git-ignored); copy `.env.example`.
@@ -178,6 +189,8 @@ cooking-issues-archive/
     ├── state.py           # data/state.sqlite (versioned migrations)
     ├── download.py        # resumable verified audio downloader, selection, lock
     ├── transcribe.py      # transcription orchestration: selection, staleness, lock, state
+    ├── backfill.py        # resumable backfill: plan, estimates, prefetching pipeline, stop, JSONL log
+    ├── cli_backfill.py    # `ciw backfill plan|run|status|stop|retry`
     ├── transcript.py      # utterance grouping + `[mm:ss] SPEAKER_01: text` renderer
     ├── vocab.py           # mine candidate jargon, read vocabulary/aliases, build the prompt
     ├── correct.py         # conservative post-ASR correction against the vocabulary
