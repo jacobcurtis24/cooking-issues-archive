@@ -693,6 +693,10 @@ def download_episode(
     started = time.monotonic()
     if row is None:
         return DownloadResult(episode_id, "failed", "unknown episode (not in state)")
+    # End the read transaction now: a long transfer must not keep a stale snapshot, or the write
+    # at the end would fail with SQLITE_BUSY_SNAPSHOT when another process (the backfill's
+    # transcriber) committed meanwhile.
+    state.checkpoint(conn)
     own_client = client is None
     client = client or make_client(cfg)
     final: Path | None = None
