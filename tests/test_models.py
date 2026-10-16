@@ -31,7 +31,7 @@ def make_meta():
         description="Home carbonation and more",
         pub_date=T0,
         enclosure_url="https://sphinx.acast.com/x/media.mp3",
-        enclosure_length=147403780,
+        enclosure_length_hint=147403780,
         duration_s=3685.04,
     )
 

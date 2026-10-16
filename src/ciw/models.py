@@ -53,21 +53,52 @@ class _Model(BaseModel):
 # ----------------------------------------------------------------------- meta.json
 
 
+class FeedItem(_Model):
+    """One audio item as published by a single feed (acast, patreon or hrn)."""
+
+    source: Source
+    guid: str = Field(min_length=1)
+    title: str
+    title_norm: str = ""
+    description: str = ""  # HTML-stripped show notes
+    description_html: str = ""  # raw HTML as published
+    pub_date: datetime  # UTC
+    duration_s: float | None = Field(None, ge=0)
+    enclosure_url: str
+    enclosure_type: str = ""
+    # ``length`` attribute from the feed. UNRELIABLE (Acast says 147403780 for a file that is
+    # really 58960972 bytes); never use it to validate a download.
+    enclosure_length_hint: int | None = Field(None, ge=0)
+    link: str | None = None
+    episode_number: int | None = None
+
+
 class EpisodeMeta(_Model):
-    """A feed item (meta.json). ``guid`` is the folder key; ``guids`` maps feed -> its guid."""
+    """An episode (meta.json), merged from one or two feed items.
+
+    ``guid`` is the stable episode_id and the folder key; ``guids`` maps feed -> its guid.
+    ``source`` is the episode's identity (``acast`` also for an Acast item matched to a Patreon
+    one); ``audio_source`` is the feed whose enclosure is downloaded (Patreon when matched).
+    The flat fields below come from that merge; ``items`` keeps every feed's own view.
+    """
 
     guid: str = Field(min_length=1)
     guids: dict[str, str] = Field(default_factory=dict)
     source: Source
+    audio_source: Source | None = None
     title: str
+    title_norm: str = ""
     description: str = ""
+    description_html: str = ""
     pub_date: datetime
+    duration_s: float | None = Field(None, ge=0)  # of the audio source
     enclosure_url: str
-    enclosure_length: int | None = Field(None, ge=0)
-    duration_s: float | None = Field(None, ge=0)
+    enclosure_type: str = ""
+    enclosure_length_hint: int | None = Field(None, ge=0)  # unreliable, see FeedItem
     link: str | None = None
     episode_number: int | None = None
     audio_file: str = "audio.mp3"
+    items: dict[str, FeedItem] = Field(default_factory=dict)
 
 
 # ------------------------------------------------------------------ transcript.json
