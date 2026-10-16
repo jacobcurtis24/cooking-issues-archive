@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ciw"
+version = "0.1.0"
+description = "Cooking Issues archive site plus podcast segment watcher"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask",
+    "typer",
+    "pydantic>=2",
+    "pyyaml",
+    "requests",
+    "beautifulsoup4",
+    "lxml",
+    "httpx",
+    "feedparser",
+    "anthropic",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[project.scripts]
+ciw = "ciw.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"ciw.web" = ["templates/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore:datetime.datetime.utcnow:DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = [
+    "B008",  # typer uses function calls in argument defaults
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ciw"]

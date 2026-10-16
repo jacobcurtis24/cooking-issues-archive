@@ -629,9 +629,9 @@ mark { background: var(--mark-bg); color: inherit; border-radius: 2px; padding: 
   <div class="container header-inner">
     <a class="site-logo" href="/">Cooking <span>Issues</span></a>
     <nav class="site-nav">
-      <a href="/" {% if request.endpoint == 'index' %}class="active"{% endif %}>Home</a>
-      <a href="/primers" {% if request.endpoint == 'primers' %}class="active"{% endif %}>Primers</a>
-      <a href="/browse" {% if request.endpoint == 'browse' %}class="active"{% endif %}>All Posts</a>
+      <a href="/" {% if request.endpoint == 'blog.index' %}class="active"{% endif %}>Home</a>
+      <a href="/primers" {% if request.endpoint == 'blog.primers' %}class="active"{% endif %}>Primers</a>
+      <a href="/browse" {% if request.endpoint == 'blog.browse' %}class="active"{% endif %}>All Posts</a>
     </nav>
     <form class="header-search" action="/search" method="get">
       <input name="q" type="search" placeholder="Search 224 posts…"

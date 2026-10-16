@@ -1,9 +1,9 @@
-"""scrape.py helpers: fix_mojibake (and friends). Pure functions, no network."""
+"""ciw.blog.scrape helpers: fix_mojibake (and friends). Pure functions, no network."""
 
 import pytest
 from bs4 import BeautifulSoup
 
-import scrape
+from ciw.blog import encoding, scrape
 
 
 @pytest.mark.parametrize(
@@ -62,16 +62,18 @@ def test_fix_mojibake_lone_lead_byte_chars_are_left_alone():
 
 
 def test_cp1252_reverse_map_is_complete():
-    assert len(scrape._CP1252_REVERSE) == 256
-    assert scrape._CP1252_REVERSE["’"] == 0x92
-    assert scrape._CP1252_REVERSE["€"] == 0x80
-    assert scrape._CP1252_REVERSE["\x81"] == 0x81  # undefined cp1252 byte -> latin-1
+    assert len(encoding._CP1252_REVERSE) == 256
+    assert encoding._CP1252_REVERSE["’"] == 0x92
+    assert encoding._CP1252_REVERSE["€"] == 0x80
+    assert encoding._CP1252_REVERSE["\x81"] == 0x81  # undefined cp1252 byte -> latin-1
 
 
-def test_fix_encoding_module_agrees_with_scrape():
-    """fix_encoding.py carries its own copy of fix_mojibake; they must agree."""
-    import fix_encoding
+def test_fix_mojibake_has_a_single_source():
+    """scrape.py and fix_encoding.py import the one implementation in ciw.blog.encoding."""
+    from ciw.blog import fix_encoding
 
+    assert scrape.fix_mojibake is encoding.fix_mojibake
+    assert fix_encoding.fix_mojibake is encoding.fix_mojibake
     for s in ["donâ€™t", "â€œhiâ€\x9d", "cafÃ©", "clean ’ text", "Ã", "", "x â€” y"]:
         assert fix_encoding.fix_mojibake(s) == scrape.fix_mojibake(s)
 

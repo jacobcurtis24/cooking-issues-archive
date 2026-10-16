@@ -1,18 +1,15 @@
 """Shared fixtures for the characterization tests.
 
-These tests pin the behaviour of the blog archive viewer (app.py) and the
-scraper helpers (scrape.py) against the real, tracked cooking_issues.db. The
+These tests pin the behaviour of the blog archive viewer (``ciw.web``) and the
+scraper helpers (``ciw.blog``) against the real, tracked cooking_issues.db. The
 database is only ever read.
 
-app.py uses a cwd-relative DB_PATH, so every test runs with cwd = repo root,
-set explicitly here rather than depending on how pytest was launched.
-
-NOTE for the restructure (T2): REPO_ROOT / sys.path / the `app` and `scrape`
-imports below are the only places that know where the code lives.
+The package is installed in editable mode (``pip install -e .``). Every test
+still runs with cwd = repo root, set explicitly here rather than depending on
+how pytest was launched.
 """
 
 import hashlib
-import sys
 from pathlib import Path
 
 import pytest
@@ -20,13 +17,10 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DB_FILE = REPO_ROOT / "cooking_issues.db"
 
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
 
 @pytest.fixture(autouse=True)
 def _repo_cwd(monkeypatch):
-    """Run every test with cwd = repo root (app.py's DB_PATH is relative)."""
+    """Run every test with cwd = repo root (independent of how pytest was launched)."""
     monkeypatch.chdir(REPO_ROOT)
 
 
@@ -41,10 +35,11 @@ def _db_untouched():
 
 @pytest.fixture
 def flask_app():
-    import app as app_module
+    from ciw.web import create_app
 
-    app_module.app.config["TESTING"] = True
-    return app_module.app
+    app = create_app()
+    app.config["TESTING"] = True
+    return app
 
 
 @pytest.fixture

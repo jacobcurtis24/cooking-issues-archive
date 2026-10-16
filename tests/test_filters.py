@@ -1,13 +1,13 @@
-"""Template filters registered in app.py: fmt_date and short_excerpt."""
+"""Template filters registered by the app factory: fmt_date and short_excerpt."""
 
 import pytest
 
-import app as app_module
-from app import fmt_date, short_excerpt
+from ciw.web import create_app
+from ciw.web.blog import fmt_date, short_excerpt
 
 
 def test_filters_are_registered_under_their_names():
-    filters = app_module.app.jinja_env.filters
+    filters = create_app().jinja_env.filters
     assert filters["fmt_date"] is fmt_date
     assert filters["short_excerpt"] is short_excerpt
 

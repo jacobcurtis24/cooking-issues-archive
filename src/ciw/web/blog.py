@@ -1,19 +1,16 @@
-#!/usr/bin/env python3
-"""Cooking Issues local viewer.  Run: python3 app.py → http://localhost:5000"""
+"""Blog archive blueprint: the original Cooking Issues viewer routes and template filters."""
 
 import re
 import sqlite3
 from datetime import datetime
-from pathlib import Path
 
-from flask import Flask, abort, render_template, request
+from flask import Blueprint, abort, current_app, render_template, request
 
-DB_PATH = Path("cooking_issues.db")
-app = Flask(__name__)
+bp = Blueprint("blog", __name__)
 
 
 def get_db() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(current_app.config["BLOG_DB"])
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -23,7 +20,6 @@ def safe_fts(q: str) -> str:
     return " ".join(f'"{w}"*' for w in words)
 
 
-@app.template_filter("fmt_date")
 def fmt_date(s: str) -> str:
     if not s:
         return ""
@@ -34,7 +30,6 @@ def fmt_date(s: str) -> str:
         return s[:10]
 
 
-@app.template_filter("short_excerpt")
 def short_excerpt(text: str, n: int = 220) -> str:
     if not text:
         return ""
@@ -42,7 +37,7 @@ def short_excerpt(text: str, n: int = 220) -> str:
     return text if len(text) <= n else text[:n].rsplit(" ", 1)[0] + "…"
 
 
-@app.route("/")
+@bp.route("/")
 def index():
     db = get_db()
     primers = db.execute(
@@ -57,7 +52,7 @@ def index():
     return render_template("index.html", primers=primers, recent=recent, total=total)
 
 
-@app.route("/post/<int:post_id>")
+@bp.route("/post/<int:post_id>")
 def post(post_id: int):
     db = get_db()
     p = db.execute("SELECT * FROM posts WHERE id = ?", (post_id,)).fetchone()
@@ -75,7 +70,7 @@ def post(post_id: int):
     return render_template("post.html", post=p, prev_post=prev_p, next_post=next_p)
 
 
-@app.route("/search")
+@bp.route("/search")
 def search():
     q = request.args.get("q", "").strip()
     results, count, error = [], 0, None
@@ -99,7 +94,7 @@ def search():
     return render_template("search.html", q=q, results=results, count=count, error=error)
 
 
-@app.route("/primers")
+@bp.route("/primers")
 def primers():
     db = get_db()
     rows = db.execute(
@@ -109,7 +104,7 @@ def primers():
     return render_template("primers.html", primers=rows)
 
 
-@app.route("/browse")
+@bp.route("/browse")
 def browse():
     page = max(1, int(request.args.get("page", 1)))
     tag = request.args.get("tag", "").strip()
@@ -148,7 +143,3 @@ def browse():
         posts=posts, page=page, total_pages=total_pages, total=total,
         tag=tag, all_tags=sorted(all_tags),
     )
-
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)

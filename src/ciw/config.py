@@ -1,0 +1,203 @@
+"""Configuration: ``config.yaml`` (non-secret) plus ``.env`` (secrets).
+
+Paths in ``config.yaml`` may be relative; they are resolved against the project root so the
+tools work from any working directory. The project root is ``$CIW_ROOT`` if set, else the
+nearest ancestor of this package containing ``pyproject.toml``.
+"""
+
+from __future__ import annotations
+
+import os
+import re
+from collections.abc import Iterable, Mapping
+from pathlib import Path
+from typing import Any
+
+import yaml
+from pydantic import BaseModel, ConfigDict, Field, SecretStr
+
+ROOT_ENV_VAR = "CIW_ROOT"
+CONFIG_FILENAME = "config.yaml"
+REDACTED = "***"
+
+# Environment variables holding secrets; never log their values.
+SECRET_ENV_VARS = ("PATREON_FEED_URL", "HF_TOKEN", "ANTHROPIC_API_KEY", "NTFY_TOPIC")
+
+
+# --------------------------------------------------------------------------- root
+
+
+def project_root() -> Path:
+    """Locate the project root: ``$CIW_ROOT`` or the nearest ancestor with pyproject.toml."""
+    env = os.environ.get(ROOT_ENV_VAR)
+    if env:
+        return Path(env).expanduser().resolve()
+    for parent in Path(__file__).resolve().parents:
+        if (parent / "pyproject.toml").is_file():
+            return parent
+    raise RuntimeError(
+        f"Cannot locate the project root (no pyproject.toml above {__file__}); "
+        f"set {ROOT_ENV_VAR}."
+    )
+
+
+# ------------------------------------------------------------------------- models
+
+
+class _Section(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+class AppleIds(_Section):
+    acast: int = 1572356745
+    hrn: int = 380317598
+
+
+class AsrConfig(_Section):
+    backend: str = "whisperx"
+    model: str = "large-v3"
+    batch_size: int = Field(8, ge=1)
+
+
+class LlmConfig(_Section):
+    model: str = "claude-sonnet-5-5"
+    monthly_budget_usd: float = Field(25.0, ge=0)
+
+
+class NotifyConfig(_Section):
+    server: str = "https://ntfy.sh"
+    # The topic itself is a secret: it is read from the environment (NTFY_TOPIC), not YAML.
+    topic_env: str = "NTFY_TOPIC"
+    threshold: int = Field(7, ge=0, le=10)
+    clip_threshold: int = Field(9, ge=0, le=10)
+
+
+class WebConfig(_Section):
+    host: str = "127.0.0.1"
+    port: int = Field(5000, ge=1, le=65535)
+    debug: bool = False
+
+
+class Secrets(BaseModel):
+    """Secret values from the environment / ``.env``. Reprs are masked by SecretStr."""
+
+    patreon_feed_url: SecretStr | None = None
+    hf_token: SecretStr | None = None
+    anthropic_api_key: SecretStr | None = None
+    ntfy_topic: SecretStr | None = None
+
+    def secret_values(self) -> list[str]:
+        return [v.get_secret_value() for v in self.__dict__.values() if v is not None]
+
+
+class Config(_Section):
+    root: Path = Field(default_factory=project_root)
+    blog_db: Path = Path("cooking_issues.db")
+    data_dir: Path = Path("data")
+    audio_dir: Path = Path("/mnt/ssd0/ciw/audio")
+    clips_dir: Path = Path("/mnt/ssd0/ciw/clips")
+    state_db: Path = Path("data/state.sqlite")
+    apple_ids: AppleIds = AppleIds()
+    poll_interval_hours: float = Field(6, gt=0)
+    asr: AsrConfig = AsrConfig()
+    llm: LlmConfig = LlmConfig()
+    notify: NotifyConfig = NotifyConfig()
+    web: WebConfig = WebConfig()
+    secrets: Secrets = Field(default_factory=Secrets, repr=False)
+
+    @property
+    def episodes_dir(self) -> Path:
+        return self.data_dir / "episodes"
+
+    @property
+    def ntfy_topic(self) -> str | None:
+        """The ntfy topic, read from the env var named by ``notify.topic_env``."""
+        if self.notify.topic_env == "NTFY_TOPIC" and self.secrets.ntfy_topic:
+            return self.secrets.ntfy_topic.get_secret_value()
+        return os.environ.get(self.notify.topic_env) or None
+
+    def resolve_paths(self) -> Config:
+        """Return a copy with every relative path made absolute against ``root``."""
+        updates = {
+            name: self.root / getattr(self, name)
+            for name in ("blog_db", "data_dir", "audio_dir", "clips_dir", "state_db")
+            if not getattr(self, name).is_absolute()
+        }
+        return self.model_copy(update=updates)
+
+
+# ------------------------------------------------------------------------ loading
+
+
+def parse_dotenv(text: str) -> dict[str, str]:
+    """Parse ``KEY=value`` lines (``#`` comments, optional ``export``, optional quotes)."""
+    out: dict[str, str] = {}
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        if line.startswith("export "):
+            line = line[len("export ") :].lstrip()
+        key, _, value = line.partition("=")
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
+            value = value[1:-1]
+        out[key.strip()] = value
+    return out
+
+
+def load_dotenv(path: Path, environ: dict[str, str] | None = None) -> dict[str, str]:
+    """Load ``path`` into ``environ`` (default ``os.environ``) without overriding real env vars.
+
+    Returns the keys that were set. A missing file is not an error.
+    """
+    env = os.environ if environ is None else environ
+    if not path.is_file():
+        return {}
+    added = {}
+    for key, value in parse_dotenv(path.read_text(encoding="utf-8")).items():
+        if value and not env.get(key):
+            env[key] = value
+            added[key] = value
+    return added
+
+
+def load_config(root: Path | None = None, *, use_dotenv: bool = True) -> Config:
+    """Load ``<root>/config.yaml`` (defaults if absent) and ``<root>/.env`` secrets."""
+    root = (root or project_root()).resolve()
+    path = root / CONFIG_FILENAME
+    data: dict[str, Any] = {}
+    if path.is_file():
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if not isinstance(data, dict):
+            raise ValueError(f"{path} must contain a YAML mapping")
+    if use_dotenv:
+        load_dotenv(root / ".env")
+    secrets = Secrets(**{k.lower(): os.environ.get(k) or None for k in SECRET_ENV_VARS})
+    return Config(root=root, secrets=secrets, **data).resolve_paths()
+
+
+# ---------------------------------------------------------------------- redaction
+
+_SECRET_PARAM = re.compile(
+    r"(?i)\b([\w-]*(?:token|key|secret|password|auth|sig)[\w-]*)=([^&\s\"']+)"
+)
+
+
+def redact(text: object, secrets: Iterable[str] | Mapping[str, str] | None = None) -> str:
+    """Return ``text`` with secret values masked, safe for logs.
+
+    Masks (1) any literal secret passed in ``secrets``, (2) current values of the known secret
+    environment variables, and (3) the value of ``token=``/``key=``/``auth=``-style URL or
+    query parameters.
+    """
+    s = str(text)
+    literals: list[str] = []
+    if isinstance(secrets, Mapping):
+        literals.extend(secrets.values())
+    elif secrets is not None:
+        literals.extend(secrets)
+    literals.extend(os.environ.get(k, "") for k in SECRET_ENV_VARS)
+    for lit in sorted({x for x in literals if x and len(x) >= 4}, key=len, reverse=True):
+        s = s.replace(lit, REDACTED)
+    return _SECRET_PARAM.sub(lambda m: f"{m.group(1)}={REDACTED}", s)

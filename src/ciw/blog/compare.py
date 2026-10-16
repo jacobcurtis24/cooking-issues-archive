@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Compare existing cooking_issues.db against a fresh scrape of sampled posts.
 
@@ -11,13 +10,12 @@ and encoding quality.
 import sqlite3
 import sys
 import time
-from pathlib import Path
 
-sys.argv = ["scrape.py"]  # prevent argparse from firing on import
-import scrape
+from ciw.blog import scrape
+from ciw.config import project_root
 
-EXISTING_DB = Path("cooking_issues.db")
-TEMP_DB     = Path("cooking_issues_compare.db")
+EXISTING_DB = scrape.DB_PATH
+TEMP_DB     = project_root() / "cooking_issues_compare.db"
 DELAY       = 0.5  # faster than production — this is a test run
 
 scrape.DELAY = DELAY

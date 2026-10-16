@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
 """
 Scrape cookingissues.com into a local SQLite database with full-text search.
 
 Usage:
-  python scrape.py            # scrape everything (resumable)
-  python scrape.py --search "sous vide chicken"
-  python scrape.py --search "agar" --limit 5
+  ciw blog scrape                      # scrape everything (resumable)
+  ciw blog search "sous vide chicken"
+  ciw blog search "agar" --limit 5
+  ciw blog stats
 """
 
 import argparse
@@ -21,64 +21,11 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
-# ---------------------------------------------------------------------------
-# Encoding fix  (cp1252 mojibake → correct UTF-8)
-# ---------------------------------------------------------------------------
-# Build a complete cp1252 byte→char reverse map. The five bytes undefined in
-# cp1252 (0x81, 0x8D, 0x8F, 0x90, 0x9D) are mapped to their Latin-1 char
-# equivalents by Python's codec, so ord(char) == byte for those five.
-_CP1252_REVERSE: dict[str, int] = {}
-for _b in range(256):
-    try:
-        _char = bytes([_b]).decode("cp1252")
-    except UnicodeDecodeError:
-        _char = chr(_b)
-    _CP1252_REVERSE[_char] = _b
-
-
-def _fix_chunk(chunk: str) -> str:
-    """Try to convert a non-ASCII run from cp1252 chars back to UTF-8 text.
-
-    Handles two tricky cases:
-    1. Adjacent mojibake sequences whose combined bytes form invalid UTF-8
-       (e.g. â€\x9d followed by Â whose continuation byte is ASCII): falls
-       back to greedy prefix matching.
-    2. A correctly-decoded Unicode char (e.g. " U+201D → cp1252 byte 0x94)
-       sitting adjacent to mojibake: its cp1252 byte is a UTF-8 continuation
-       byte, so no prefix decode can start there. Detected by checking whether
-       the first byte would be a UTF-8 continuation byte (0x80–0xBF), in which
-       case we leave that char in place and recurse on the rest.
-    """
-    if not chunk:
-        return chunk
-    raw = bytes(_CP1252_REVERSE.get(c, ord(c) & 0xFF) for c in chunk)
-    # If the first byte is a UTF-8 continuation byte, the leading character is
-    # already a correctly-stored Unicode scalar — pass it through and recurse.
-    if 0x80 <= raw[0] <= 0xBF:
-        return chunk[0] + _fix_chunk(chunk[1:])
-    try:
-        return raw.decode("utf-8")
-    except UnicodeDecodeError:
-        pass
-    # Greedy: find the longest valid UTF-8 prefix, fix it, recurse on remainder
-    for n in range(len(raw) - 1, 0, -1):
-        try:
-            head = raw[:n].decode("utf-8")
-            tail = _fix_chunk(chunk[n:])
-            return head + tail
-        except UnicodeDecodeError:
-            continue
-    return chunk  # nothing decoded — leave unchanged
-
-
-def fix_mojibake(text: str) -> str:
-    """Fix cp1252-misread UTF-8 sequences in a string. Idempotent."""
-    if not text:
-        return text
-    return re.sub(r"[^\x00-\x7f]+", lambda m: _fix_chunk(m.group()), text)
+from ciw.blog.encoding import fix_mojibake
+from ciw.config import project_root
 
 BASE_URL = "https://cookingissues.com"
-DB_PATH = Path("cooking_issues.db")
+DB_PATH = project_root() / "cooking_issues.db"
 DELAY = 1.5  # seconds between requests — be polite
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; personal-archiver/1.0; +https://github.com/personal)"
@@ -370,11 +317,11 @@ def search(conn: sqlite3.Connection, query: str, limit: int = 10) -> None:
 # Stats
 # ---------------------------------------------------------------------------
 
-def print_stats(conn: sqlite3.Connection) -> None:
+def print_stats(conn: sqlite3.Connection, db_path: Path | None = None) -> None:
     total = conn.execute("SELECT COUNT(*) FROM posts").fetchone()[0]
     primers = conn.execute("SELECT COUNT(*) FROM posts WHERE post_type='primer'").fetchone()[0]
     pages_done = conn.execute("SELECT COUNT(*) FROM scraped_index_pages").fetchone()[0]
-    print(f"Database: {DB_PATH}")
+    print(f"Database: {db_path or DB_PATH}")
     print(f"  Total posts scraped : {total} ({primers} primers)")
     print(f"  Index pages done    : {pages_done}")
 
@@ -383,6 +330,34 @@ def print_stats(conn: sqlite3.Connection) -> None:
 # CLI
 # ---------------------------------------------------------------------------
 
+def run_stats(db_path: Path | None = None) -> None:
+    db_path = db_path or DB_PATH
+    conn = sqlite3.connect(db_path)
+    init_db(conn)
+    print_stats(conn, db_path)
+    conn.close()
+
+
+def run_search(query: str, limit: int = 10, db_path: Path | None = None) -> None:
+    conn = sqlite3.connect(db_path or DB_PATH)
+    init_db(conn)
+    search(conn, query, limit)
+    conn.close()
+
+
+def run_scrape(db_path: Path | None = None) -> None:
+    db_path = db_path or DB_PATH
+    conn = sqlite3.connect(db_path)
+    init_db(conn)
+    print(f"Starting scrape — saving to {db_path}")
+    print("(Re-run at any time; already-scraped posts are skipped)\n")
+    scrape_all_posts(conn)
+    scrape_primers(conn)
+    print("\nDone.")
+    print_stats(conn, db_path)
+    conn.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Cooking Issues scraper & search")
     parser.add_argument("--search", "-s", metavar="QUERY", help="Full-text search query")
@@ -390,27 +365,12 @@ def main() -> None:
     parser.add_argument("--stats", action="store_true", help="Show database stats")
     args = parser.parse_args()
 
-    conn = sqlite3.connect(DB_PATH)
-    init_db(conn)
-
     if args.stats:
-        print_stats(conn)
-        conn.close()
-        return
-
-    if args.search:
-        search(conn, args.search, args.limit)
-        conn.close()
-        return
-
-    # Default: scrape
-    print(f"Starting scrape — saving to {DB_PATH}")
-    print("(Re-run at any time; already-scraped posts are skipped)\n")
-    scrape_all_posts(conn)
-    scrape_primers(conn)
-    print("\nDone.")
-    print_stats(conn)
-    conn.close()
+        run_stats()
+    elif args.search:
+        run_search(args.search, args.limit)
+    else:
+        run_scrape()
 
 
 if __name__ == "__main__":
