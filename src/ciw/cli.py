@@ -335,9 +335,7 @@ def episodes_list(
     from ciw import correct as correct_mod
     from ciw import vocab as vocab_mod
 
-    now_prompt = vocab_mod.current_prompt_hash(
-        cfg.asr.vocabulary_file, cfg.asr.initial_prompt_max_chars
-    )
+    now_prompt = vocab_mod.configured_prompt_hash(cfg.asr)
     now_correction = None
     if cfg.asr.correct:
         vocabulary = correct_mod.Vocabulary.load(cfg.asr.vocabulary_file, cfg.asr.aliases_file)
@@ -696,7 +694,15 @@ def transcribe(
         raise typer.Exit(code=2) from None
     typer.echo(f"backend: {tr.describe()} [{tr.version}]")
     typer.echo(
-        f"vocabulary: prompt {tr.vocab_hash() or 'none'}; correction "
+        "vocabulary: "
+        + (
+            f"whisper prompt {tr.vocab_hash()}"
+            if tr.vocab_hash()
+            else "no whisper prompt (asr.vocabulary_prompt is off)"
+            if cfg.asr.vocabulary_file
+            else "none"
+        )
+        + "; correction "
         + (
             f"on ({len(correction.vocabulary.terms)} terms, "
             f"{len(correction.vocabulary.aliases)} aliases)"

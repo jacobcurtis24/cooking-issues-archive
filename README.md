@@ -119,6 +119,21 @@ ciw transcribe --episode ID --no-diarize --model large-v3
 
 Output is `data/episodes/<id>/transcript.json` (compact JSON, atomic write): words with start/end/speaker plus the model, versions, compute type, batch size, per-stage seconds and peak VRAM. `ciw.models.Transcript.render()` gives `[mm:ss] SPEAKER_01: text` lines. Model caches live on `/mnt/ssd0/ciw/hf_cache` (`asr.hf_home`). Speaker labels need a Hugging Face token: create a read token, accept the terms at https://huggingface.co/pyannote/speaker-diarization-community-1 and put `HF_TOKEN=...` in `.env`; without it transcription still runs, with no speakers and a one-line hint. One run at a time (`data/transcribe.lock`). `python -m pytest -m gpu` runs the real-model test on the 60 s excerpt.
 
+### Vocabulary, correction and quality (T6)
+
+Whisper mangles the show's jargon ("Polly Dexter" for polydextrose, "sockslet" for Soxhlet), and the scorer keys on those terms, so the transcripts get a vocabulary prompt and a conservative correction pass. `vocab/vocabulary.txt` is hand-curated (one term per line, most valuable first) and is the knob to edit; see `vocab/README.md`.
+
+```bash
+ciw vocab build                                  # mine vocab/candidates.csv from show notes + the blog (no LLM, no network)
+ciw vocab correct EPISODE [--dry-run | --revert] # fix an existing transcript.json in place, no ASR re-run (idempotent)
+ciw vocab corrections EPISODE [--json]           # the audit list of every change made
+ciw vocab quality EPISODE... [--aggregate] [--json]   # term recall before/after correction, misses and what they were heard as, runtime, real-time factor
+ciw transcribe --episode ID --no-correct --quality    # skip the correction pass / print recall afterwards
+ciw episodes list --stale                        # transcripts made with another vocabulary prompt (STALE) or older rules (recorrect)
+```
+
+`asr.vocabulary_file` becomes Whisper's `initial_prompt` (cut at 600 characters); `vocab/aliases.txt` holds explicit `heard => correct` pairs. A transcript made with a different prompt is stale (`ciw transcribe --stale` redoes it).
+
 ## Configuration
 
 Non-secret settings live in `config.yaml` (paths, feed IDs, models, web host/port). Relative paths resolve against the project root, so commands work from any directory (override the root with `CIW_ROOT`). Secrets go only in `.env` (git-ignored); copy `.env.example`.
@@ -158,6 +173,9 @@ cooking-issues-archive/
     ├── download.py        # resumable verified audio downloader, selection, lock
     ├── transcribe.py      # transcription orchestration: selection, staleness, lock, state
     ├── transcript.py      # utterance grouping + `[mm:ss] SPEAKER_01: text` renderer
+    ├── vocab.py           # mine candidate jargon, read vocabulary/aliases, build the prompt
+    ├── correct.py         # conservative post-ASR correction against the vocabulary
+    ├── quality.py         # term-recall report; cli_vocab.py holds the `ciw vocab` commands
     ├── asr/               # Transcriber interface + registry, WhisperX backend (lazy torch)
     ├── notify.py          # minimal ntfy sender (T10 extends)
     ├── health.py          # feed health alerts (deduped per status change)

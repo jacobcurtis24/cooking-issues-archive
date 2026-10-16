@@ -6,7 +6,7 @@ from pathlib import Path
 
 from ciw.asr.base import ProgressFn, Transcriber
 from ciw.models import StageStats, Transcript, Word
-from ciw.vocab import current_prompt_hash
+from ciw.vocab import configured_prompt_hash
 
 
 class FakeTranscriber(Transcriber):
@@ -35,9 +35,7 @@ class FakeTranscriber(Transcriber):
         """Like the real backend: the hash of the prompt the configured vocabulary gives."""
         if self.cfg is None:
             return None
-        return current_prompt_hash(
-            self.cfg.asr.vocabulary_file, self.cfg.asr.initial_prompt_max_chars
-        )
+        return configured_prompt_hash(self.cfg.asr)
 
     def transcribe(
         self,

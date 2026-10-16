@@ -488,11 +488,19 @@ def test_vocabulary_file_from_config_is_used_when_no_prompt_is_passed(
     vocab = tmp_path / "vocab.txt"
     vocab.write_text("Searzall\nkansui\n")
     cfg = tmp_cfg.model_copy(
-        update={"asr": tmp_cfg.asr.model_copy(update={"vocabulary_file": vocab})}
+        update={
+            "asr": tmp_cfg.asr.model_copy(
+                update={"vocabulary_file": vocab, "vocabulary_prompt": True}
+            )
+        }
     )
     stack = FakeStack(monkeypatch)
     wb.WhisperXTranscriber(cfg, diarize=False).transcribe(audio)
     assert stack.events("asr")[0][3] == "Searzall, kansui"
+    off = cfg.model_copy(update={"asr": cfg.asr.model_copy(update={"vocabulary_prompt": False})})
+    stack_off = FakeStack(monkeypatch)
+    wb.WhisperXTranscriber(off, diarize=False).transcribe(audio)  # vocabulary only corrects
+    assert stack_off.events("asr")[0][3] is None
     stack2 = FakeStack(monkeypatch)
     make(tmp_cfg, None).transcribe(audio)  # no vocabulary_file configured
     assert stack2.events("asr")[0][3] is None

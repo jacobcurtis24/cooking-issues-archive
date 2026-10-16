@@ -48,7 +48,11 @@ from ciw.asr.base import (
 )
 from ciw.config import AsrConfig, redact
 from ciw.models import StageStats, Transcript, Word
-from ciw.vocab import load_vocabulary_prompt, prompt_hash  # noqa: F401 (re-exported)
+from ciw.vocab import (
+    configured_prompt,
+    load_vocabulary_prompt,  # noqa: F401 (re-exported)
+    prompt_hash,
+)
 
 if TYPE_CHECKING:
     from ciw.config import Config
@@ -385,7 +389,7 @@ class WhisperXTranscriber(Transcriber):
     def _initial_prompt(self, override: str | None) -> str | None:
         if override is not None:
             return override or None
-        return load_vocabulary_prompt(self.asr.vocabulary_file, self.asr.initial_prompt_max_chars)
+        return configured_prompt(self.asr)
 
     def vocab_hash(self) -> str | None:
         return prompt_hash(self._initial_prompt(None))

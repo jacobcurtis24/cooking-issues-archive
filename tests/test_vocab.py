@@ -3,6 +3,7 @@
 import csv
 import json
 import sqlite3
+from pathlib import Path
 
 from conftest import write_config
 from typer.testing import CliRunner
@@ -194,3 +195,53 @@ def test_build_cli_writes_candidates_but_never_the_curated_vocabulary(tmp_cfg, t
 def test_build_cli_without_show_notes_is_an_error(tmp_cfg):
     result = runner.invoke(app, ["vocab", "build", "--no-blog"])
     assert result.exit_code == 1 and "no show notes" in result.output
+
+
+# ---------------------------------------------------- the tracked vocab/ files (hand-edited)
+
+VOCAB_DIR = Path(__file__).resolve().parent.parent / "vocab"
+DESIGN_DOC_SEEDS = [
+    "Searzall", "Spinzall", "polydextrose", "methylcellulose", "kansui", "Flavacol", "Pacojet",
+    "Soxhlet", "rotovap", "hydrocolloids", "compensator", "sous vide", "Dave Arnold",
+    "Nastassia", "Quinn", "Heritage Radio Network", "Cooking Issues",
+]  # fmt: skip
+
+
+def test_tracked_vocabulary_is_sane_and_ordered_by_importance():
+    terms = vocab.read_terms(VOCAB_DIR / "vocabulary.txt")
+    assert 100 <= len(terms) <= 200
+    keys = [vocab.norm_term(t) for t in terms]
+    assert len(set(keys)) == len(keys)
+    for seed in DESIGN_DOC_SEEDS:
+        assert vocab.norm_term(seed) in keys, seed
+    # the seeds are the most valuable terms: they sit inside the first 600 characters
+    prompt = vocab.load_vocabulary_prompt(VOCAB_DIR / "vocabulary.txt", 600)
+    assert len(prompt) <= 600 and "Searzall" in prompt and "Dave Arnold" in prompt
+    assert "kansui" in prompt and "polydextrose" in prompt
+
+
+def test_tracked_seeds_candidates_and_aliases_are_consistent():
+    assert set(vocab.read_terms(VOCAB_DIR / "seeds.txt")) >= {"Searzall", "kansui", "Flavacol"}
+    rows = list(csv.DictReader((VOCAB_DIR / "candidates.csv").open(encoding="utf-8")))
+    assert list(rows[0]) == vocab.CANDIDATE_COLUMNS and 1000 <= len(rows) <= 5000
+    scores = [float(r["score"]) for r in rows]
+    assert scores == sorted(scores, reverse=True)
+    aliases = vocab.read_aliases(VOCAB_DIR / "aliases.txt")
+    assert ("sockslet", "Soxhlet") in aliases and ("Soxlet", "Soxhlet") in aliases
+    terms = {vocab.norm_term(t) for t in vocab.read_terms(VOCAB_DIR / "vocabulary.txt")}
+    for heard, correct in aliases:
+        assert vocab.norm_term(heard) not in terms, f"{heard!r} is itself a vocabulary term"
+        assert heard.casefold() != correct.casefold()
+
+
+def test_prompt_is_cut_at_a_term_boundary_and_hashes_the_prompt(tmp_path):
+    f = tmp_path / "v.txt"
+    f.write_text("# c\nSearzall\nSpinzall\nkansui\n")
+    assert vocab.load_vocabulary_prompt(f) == "Searzall, Spinzall, kansui"
+    assert vocab.load_vocabulary_prompt(f, 20) == "Searzall, Spinzall"
+    assert vocab.load_vocabulary_prompt(None) is None
+    assert vocab.load_vocabulary_prompt(tmp_path / "missing.txt") is None
+    h = vocab.current_prompt_hash(f)
+    assert h == vocab.prompt_hash("Searzall, Spinzall, kansui") and len(h) == 12
+    assert vocab.current_prompt_hash(f, 20) != h  # a different prompt is a different hash
+    assert vocab.current_prompt_hash(None) is None and vocab.prompt_hash("") is None

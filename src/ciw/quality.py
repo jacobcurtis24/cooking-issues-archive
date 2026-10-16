@@ -37,6 +37,8 @@ from ciw import correct as correct_mod
 from ciw import vocab as vocab_mod
 from ciw.models import Transcript
 
+GAP_S = 10.0  # a stretch this long with no words inside the speech is suspicious (dropped audio)
+
 _WORD = re.compile(r"[a-z0-9]+")
 _SUFFIXES = ("", "s", "es")
 
@@ -146,6 +148,11 @@ class EpisodeQuality:
     audio_s: float | None = None
     vocab_hash: str | None = None
     words: int = 0
+    # Silent stretches >= GAP_S between two words: Whisper sometimes drops whole 30 s windows
+    # (seen with a vocabulary prompt), and those show up as holes in the word timeline.
+    gaps: int = 0
+    gap_seconds: float = 0.0
+    longest_gap_s: float = 0.0
 
     @property
     def n(self) -> int:
@@ -252,6 +259,13 @@ def measure(
         vocab_hash=transcript.vocab_hash,
         words=len(transcript.words),
     )
+    holes = [
+        b.start - a.end
+        for a, b in zip(transcript.words, transcript.words[1:], strict=False)
+        if b.start - a.end >= GAP_S
+    ]
+    result.gaps, result.gap_seconds = len(holes), round(sum(holes), 1)
+    result.longest_gap_s = round(max(holes, default=0.0), 1)
     for term in named:
         n_after, n_before = len(mentions(term, toks_after)), len(mentions(term, toks_before))
         result.mentions_after += n_after
@@ -281,6 +295,8 @@ class Aggregate:
     mentions_after: int = 0
     suspects_before: int = 0
     suspects_after: int = 0
+    gaps: int = 0
+    gap_seconds: float = 0.0
 
     @property
     def mention_recall_before(self) -> float | None:
@@ -331,6 +347,8 @@ def aggregate(results: Sequence[EpisodeQuality]) -> Aggregate:
         mentions_after=sum(r.mentions_after for r in results),
         suspects_before=sum(r.n_suspects_before for r in results),
         suspects_after=sum(r.n_suspects_after for r in results),
+        gaps=sum(r.gaps for r in results),
+        gap_seconds=sum(r.gap_seconds for r in results),
     )
 
 
@@ -373,6 +391,12 @@ def render(result: EpisodeQuality) -> str:
         f"  asr: {result.asr_model or '?'}, {run}; {result.words} words; "
         f"prompt hash {result.vocab_hash or 'none'}"
     )
+    if result.gaps:
+        lines.append(
+            f"  WARNING: {result.gaps} silent gaps >= {GAP_S:g} s in the transcript "
+            f"({result.gap_seconds:.0f} s in all, longest {result.longest_gap_s:.0f} s): "
+            "audio may have been dropped"
+        )
     return "\n".join(lines)
 
 
@@ -385,4 +409,5 @@ def render_aggregate(agg: Aggregate) -> str:
         f"{agg.suspects_after} suspect = {_pct(agg.mention_recall_after)} after, "
         f"{agg.mentions_before} + {agg.suspects_before} = {_pct(agg.mention_recall_before)} "
         f"before; asr {agg.runtime_s:.0f} s for {agg.audio_s / 60:.1f} min{speed}"
+        + (f"; {agg.gaps} gaps >= {GAP_S:g} s ({agg.gap_seconds:.0f} s)" if agg.gaps else "")
     )

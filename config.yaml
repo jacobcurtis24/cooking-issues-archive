@@ -24,9 +24,10 @@ asr:
   diarize: true               # needs HF_TOKEN in .env; without it speakers are skipped, not fatal
   diarization_model: pyannote/speaker-diarization-community-1
   hf_home: /mnt/ssd0/ciw/hf_cache   # HF_HOME; TORCH_HOME is <hf_home>/torch (not ~/.cache)
-  vocabulary_file: vocab/vocabulary.txt   # one jargon term per line, most valuable first:
-                                          # becomes Whisper's initial_prompt (cut at 600 chars)
-                                          # and drives the correction pass (ciw.correct)
+  vocabulary_file: vocab/vocabulary.txt   # one jargon term per line, most valuable first;
+                                          # drives the correction pass (ciw.correct)
+  vocabulary_prompt: false    # also feed it to Whisper as initial_prompt (cut at 600 chars). OFF:
+                              # it fixes jargon but makes large-v3 drop 7-18% of the speech (T6)
   aliases_file: vocab/aliases.txt         # `heard => correct` pairs (known recurring mis-hearings)
   correct: true               # run the post-ASR correction pass after transcribing
   correct_min_confidence: 0.86  # bar for fuzzy (non-alias) corrections

@@ -120,8 +120,12 @@ class AsrConfig(_Section):
     # Model caches (HF_HOME, and TORCH_HOME=<hf_home>/torch) live on the big disk, not ~/.cache.
     # A real HF_HOME / TORCH_HOME in the environment wins over this.
     hf_home: Path = Path("/mnt/ssd0/ciw/hf_cache")
-    # Optional text file, one jargon term per line (# comments), used as Whisper's initial_prompt.
+    # Optional text file, one jargon term per line (# comments): the vocabulary. It always drives
+    # the correction pass; it is ALSO Whisper's initial_prompt only when `vocabulary_prompt` is
+    # true. Off by default: in the T6 experiment the prompt fixed jargon but made large-v3 drop
+    # 7-18% of the speech (whole 30 s windows), see docs/progress.md.
     vocabulary_file: Path | None = None
+    vocabulary_prompt: bool = False
     initial_prompt_max_chars: int = Field(600, ge=0)
     # Post-ASR correction against the vocabulary (ciw.correct). `aliases_file` holds explicit
     # `heard => correct` pairs (the highest-confidence rule); `correct_min_confidence` is the

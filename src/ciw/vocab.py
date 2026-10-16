@@ -489,3 +489,14 @@ def prompt_hash(prompt: str | None) -> str | None:
 
 def current_prompt_hash(vocabulary_file: Path | None, max_chars: int = 600) -> str | None:
     return prompt_hash(load_vocabulary_prompt(vocabulary_file, max_chars))
+
+
+def configured_prompt(asr) -> str | None:  # asr: ciw.config.AsrConfig
+    """The initial_prompt the configuration asks for: None unless ``asr.vocabulary_prompt``."""
+    if not asr.vocabulary_prompt:
+        return None
+    return load_vocabulary_prompt(asr.vocabulary_file, asr.initial_prompt_max_chars)
+
+
+def configured_prompt_hash(asr) -> str | None:
+    return prompt_hash(configured_prompt(asr))

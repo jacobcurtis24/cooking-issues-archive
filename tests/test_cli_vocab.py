@@ -43,7 +43,7 @@ def env(tmp_cfg, tmp_path):
     write_config(
         tmp_path,
         "asr:\n  backend: fake\n  model: fake-model\n  vocabulary_file: vocab/vocabulary.txt\n"
-        "  aliases_file: vocab/aliases.txt\n",
+        "  vocabulary_prompt: true\n  aliases_file: vocab/aliases.txt\n",
     )
     cfg = load_config(tmp_path, use_dotenv=False)
     shared = {"fail_on": set(), "version": "fake 1.0", "instances": [], "words": None}
@@ -227,10 +227,8 @@ def test_transcribe_runs_the_correction_pass_and_records_it(env):
     ]
     result = invoke("--episode", A)
     assert result.exit_code == 0, result.output
-    assert (
-        "vocabulary: prompt" in result.output
-        and "correction on (4 terms, 1 aliases)" in result.output
-    )
+    assert "vocabulary: whisper prompt " in result.output
+    assert "correction on (4 terms, 1 aliases)" in result.output
     assert "2 corrections" in result.output
     t = Transcript.load(transcribe.transcript_path(cfg, A))
     assert t.text() == "Searzall polydextrose." and t.words[1].orig == "poly dextrose."
@@ -337,3 +335,31 @@ def test_episodes_list_flags_vocabulary_status(env, tmp_path):
     (tmp_path / "vocab" / "vocabulary.txt").write_text(VOCAB + "Pacojet\n")
     assert "STALE" in listing() and A in listing("--stale")
     assert B not in listing("--stale")  # nothing transcribed, nothing stale
+
+
+def test_prompt_is_off_by_default_so_vocabulary_edits_never_make_transcripts_stale(
+    tmp_cfg, tmp_path
+):
+    (tmp_path / "vocab").mkdir()
+    (tmp_path / "vocab" / "vocabulary.txt").write_text(VOCAB)
+    write_config(
+        tmp_path,
+        "asr:\n  backend: fake\n  model: fake-model\n  vocabulary_file: vocab/vocabulary.txt\n",
+    )
+    cfg = load_config(tmp_path, use_dotenv=False)
+    register_backend("fake", lambda c, **kw: FakeTranscriber(c, **kw))
+    try:
+        add_episode(cfg, A, (2026, 3, 1))
+        first = invoke("--episode", A)
+        assert first.exit_code == 0
+        assert "no whisper prompt (asr.vocabulary_prompt is off)" in first.output
+        assert "correction on (4 terms" in first.output  # the vocabulary still corrects
+        t = Transcript.load(transcribe.transcript_path(cfg, A))
+        assert t.vocab_hash is None and t.initial_prompt is None
+        (tmp_path / "vocab" / "vocabulary.txt").write_text(VOCAB + "Pacojet\n")
+        again = invoke("--episode", A)
+        assert "skipped" in again.output and "STALE" not in again.output
+        listing = runner.invoke(app, ["episodes", "list"]).output
+        assert "recorrect" in listing and "STALE" not in listing  # only the corrections are old
+    finally:
+        ASR_BACKENDS.pop("fake", None)

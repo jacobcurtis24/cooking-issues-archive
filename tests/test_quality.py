@@ -128,3 +128,15 @@ def test_ordinary_look_alikes_are_not_suspects():
     t = transcript("carbonation and carbonate and carbonators in a carbonator")
     res = quality.measure(t, ["carbonator"], "A carbonator.", episode_id="e")
     assert res.mentions_after == 2 and res.n_suspects_after == 0  # carbonation is a real word
+
+
+def test_silent_gaps_flag_dropped_audio():
+    ws = [Word(w="a", start=0, end=1), Word(w="b", start=30, end=31), Word(w="c", start=35, end=36)]
+    ws.append(Word(w="d", start=60.5, end=61))  # 24.5 s hole
+    t = Transcript(asr_model="m", asr_version="v", words=ws, runtime_s=1, audio_duration_s=61)
+    res = quality.measure(t, TERMS, NOTES, episode_id="e")
+    assert (res.gaps, res.gap_seconds, res.longest_gap_s) == (2, 53.5, 29.0)
+    assert "WARNING: 2 silent gaps >= 10 s" in quality.render(res)
+    assert quality.aggregate([res]).gaps == 2
+    clean = quality.measure(transcript(TEXT), TERMS, NOTES)
+    assert clean.gaps == 0 and "WARNING" not in quality.render(clean)

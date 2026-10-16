@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `transcribe.py`, `transcript.py`, `asr/`, `notify.py`, `health.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
+Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `transcribe.py`, `transcript.py`, `asr/`, `vocab.py`, `correct.py`, `quality.py`, `cli_vocab.py`, `notify.py`, `health.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
 
 ## Environment
 
@@ -36,3 +36,10 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 - Tests must never run a real `ciw transcribe` against the real config (T5's old stub test did, by accident, and transcribed an episode): use `tmp_cfg` + a tmp `config.yaml` with `asr.backend: fake` (`tests/asrfake.py`, `tests/test_cli_transcribe.py`). Default suite needs no GPU/network/HF token; `pytest -m gpu` runs the real-model test.
 - Model caches: `HF_HOME=/mnt/ssd0/ciw/hf_cache`, `TORCH_HOME=<that>/torch` (set by the backend unless already in the environment). Speakers need `HF_TOKEN` in `.env` plus accepting the pyannote model terms; without them transcription runs with `speaker=None` and `diarization_skipped` set.
 - Render transcripts for prompts/UI with `Transcript.render()` / `ciw.transcript.render_utterances`.
+
+## Vocabulary, correction, quality (T6)
+
+- `vocab/vocabulary.txt` (hand-curated, one term per line, most valuable first) is Whisper's `initial_prompt` (cut at a term boundary to 600 chars) and the correction pass's term list; `vocab/aliases.txt` holds `heard => correct` pairs; `vocab/candidates.csv` is machine-mined (`ciw vocab build`, no LLM, never touches vocabulary.txt); `vocab/README.md` explains it. Config: `asr.vocabulary_file`, `asr.aliases_file`, `asr.correct` (default true), `asr.correct_min_confidence`.
+- `ciw/correct.py`: conservative post-ASR fixes (alias > exact merge/case/normalize > guarded fuzzy merge/fuzzy). Every change is in `Transcript.corrections` with the original words, `Word.orig` is set only on changed words, it is idempotent (reverts, then re-applies) and a transcript with no vocabulary is never touched. Prefer a missed fix to a corrupted word; tune with the false-positive stress test described in docs/progress.md (T6).
+- Commands: `ciw vocab build|correct EPISODE [--dry-run|--revert]|corrections EPISODE|quality EPISODE... [--aggregate] [--json]`; `ciw transcribe --no-correct --quality`. A transcript made with a different prompt (`vocab_hash`) is STALE (redo with `ciw transcribe --stale`); `ciw episodes list` shows `ok|STALE|recorrect|-` and `--stale` filters. State columns `vocab_hash/correction_hash/corrections` (migration 4).
+- Test safety guard (T6): under pytest `ciw.config.load_config`, `state.connect` and the locks raise `UnsafeTestPathError` if a path resolves into the real `data/` or `/mnt/ssd0/ciw`. Use `tmp_cfg` (its config.yaml has tmp audio/clips dirs), `write_config(tmp_path, extra)` from conftest for custom configs, `blog_cfg` when only the read-only blog DB is needed, and `allow_real_paths` / `@pytest.mark.real_paths` only for tests that must read the real paths.
