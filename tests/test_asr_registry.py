@@ -131,3 +131,13 @@ def test_diarization_hint_names_the_exact_steps_without_secrets():
 
 def test_word_model_unchanged():
     assert Word(w="x", start=0, end=0).speaker is None
+
+
+def test_cli_and_web_import_without_torch_or_whisperx():
+    code = (
+        "import sys; import ciw.cli, ciw.web, ciw.transcribe, ciw.transcript;"
+        "from ciw.web import create_app; create_app();"
+        "bad = [m for m in ('torch', 'whisperx', 'ctranslate2', 'faster_whisper', 'pyannote')"
+        " if m in sys.modules]; assert not bad, bad"
+    )
+    subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)

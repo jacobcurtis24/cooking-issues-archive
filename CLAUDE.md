@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `notify.py`, `health.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
+Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `transcribe.py`, `transcript.py`, `asr/`, `notify.py`, `health.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
 
 ## Environment
 
@@ -28,3 +28,11 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 - Sizes: Acast stitches ads dynamically, so the served size/duration drifts (and real durations run up to ~5% above the feed's). Never compare against `enclosure_length_hint`; resume uses ETag/If-Range. Config `download.min_free_gb`, `download.duration_tolerance_*`.
 - Tests that invoke the CLI against the real repo config would hit the network and `/mnt/ssd0`: use `tmp_cfg` + a `config.yaml` with a tmp `audio_dir` (see `tests/test_cli_download.py`).
 - Feed health alerts: `ciw.health` (called by `ciw poll`), `ciw.notify.send_ntfy` (no topic -> log only, never raises).
+
+## Transcription (T5)
+
+- `ciw transcribe` needs a selector (`--episode ID` | `--latest N` | `--all-downloaded`) or `--audio PATH --out PATH` (no state); `--dry-run`, `--force`, `--stale`, `--no-diarize`, `--model`. Writes `data/episodes/<id>/transcript.json`, sets stage `transcribed` (state columns `transcribed_at/asr_model/asr_version/asr_runtime_s/diarization`). Lock: `data/transcribe.lock`. A transcript is current when `asr_backend`/`asr_model`/`asr_version` equal the backend's; otherwise it is `STALE` (redo with `--stale`/`--force`).
+- ASR deps are the optional `asr` extra (torch 2.8.0+cu128 from the PyTorch index, whisperx 3.8.x). Never import torch/whisperx at module level outside `ciw/asr/whisperx_backend.py`'s functions; `ciw --help` and the web app must stay torch-free (a test enforces it for the registry). Backends register in `ciw.asr` (`asr.backend` in config.yaml).
+- Tests must never run a real `ciw transcribe` against the real config (T5's old stub test did, by accident, and transcribed an episode): use `tmp_cfg` + a tmp `config.yaml` with `asr.backend: fake` (`tests/asrfake.py`, `tests/test_cli_transcribe.py`). Default suite needs no GPU/network/HF token; `pytest -m gpu` runs the real-model test.
+- Model caches: `HF_HOME=/mnt/ssd0/ciw/hf_cache`, `TORCH_HOME=<that>/torch` (set by the backend unless already in the environment). Speakers need `HF_TOKEN` in `.env` plus accepting the pyannote model terms; without them transcription runs with `speaker=None` and `diarization_skipped` set.
+- Render transcripts for prompts/UI with `Transcript.render()` / `ciw.transcript.render_utterances`.

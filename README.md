@@ -2,7 +2,7 @@
 
 A local archive of [cookingissues.com](https://cookingissues.com) — 216 blog posts and 8 technical primers by Dave Arnold, stored in a searchable SQLite database with a web viewer.
 
-A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. It is in progress: the CLI has stub commands for it today. The design is in `Cooking Issues Segment Watcher — Plan.md` (PLAN) and progress is logged in [docs/progress.md](docs/progress.md).
+A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. It is in progress: ingest, download and transcription work; the scoring/notify commands are still stubs. The design is in `Cooking Issues Segment Watcher — Plan.md` (PLAN) and progress is logged in [docs/progress.md](docs/progress.md).
 
 ## Requirements
 
@@ -98,6 +98,27 @@ ciw download --episode ID --redownload | --verify         # replace the stored f
 
 Episodes land in `data/state.sqlite` and `data/episodes/<episode_id>/meta.json` (git-ignored). A second `ciw poll` with unchanged feeds changes nothing.
 
+## Transcription (WhisperX, local GPU)
+
+The ASR stack is an optional extra, not a core dependency (it needs an NVIDIA GPU, about 8 GB of packages and 3.3 GB of models). In the `py312` env:
+
+```bash
+pip install torch==2.8.0 torchaudio==2.8.0 torchvision==0.23.0 --index-url https://download.pytorch.org/whl/cu128
+pip install -e ".[asr]"
+python -c "import torch; print(torch.cuda.is_available())"     # must print True
+```
+
+```bash
+ciw transcribe --episode ID [--episode ID ...]            # one or more downloaded episodes
+ciw transcribe --latest 2 | --all-downloaded              # a selector is required (no accidental backfill)
+ciw transcribe --episode ID --dry-run                     # what would run; loads nothing
+ciw transcribe --episode ID --force | --stale             # redo a current transcript | one made by another model/version
+ciw transcribe --audio some.mp3 --out /tmp/t.json         # any file, no pipeline state touched
+ciw transcribe --episode ID --no-diarize --model large-v3
+```
+
+Output is `data/episodes/<id>/transcript.json` (compact JSON, atomic write): words with start/end/speaker plus the model, versions, compute type, batch size, per-stage seconds and peak VRAM. `ciw.models.Transcript.render()` gives `[mm:ss] SPEAKER_01: text` lines. Model caches live on `/mnt/ssd0/ciw/hf_cache` (`asr.hf_home`). Speaker labels need a Hugging Face token: create a read token, accept the terms at https://huggingface.co/pyannote/speaker-diarization-community-1 and put `HF_TOKEN=...` in `.env`; without it transcription still runs, with no speakers and a one-line hint. One run at a time (`data/transcribe.lock`). `python -m pytest -m gpu` runs the real-model test on the 60 s excerpt.
+
 ## Configuration
 
 Non-secret settings live in `config.yaml` (paths, feed IDs, models, web host/port). Relative paths resolve against the project root, so commands work from any directory (override the root with `CIW_ROOT`). Secrets go only in `.env` (git-ignored); copy `.env.example`.
@@ -135,6 +156,9 @@ cooking-issues-archive/
     ├── ingest.py          # poll / diff / audio-probe orchestration
     ├── state.py           # data/state.sqlite (versioned migrations)
     ├── download.py        # resumable verified audio downloader, selection, lock
+    ├── transcribe.py      # transcription orchestration: selection, staleness, lock, state
+    ├── transcript.py      # utterance grouping + `[mm:ss] SPEAKER_01: text` renderer
+    ├── asr/               # Transcriber interface + registry, WhisperX backend (lazy torch)
     ├── notify.py          # minimal ntfy sender (T10 extends)
     ├── health.py          # feed health alerts (deduped per status change)
     ├── blog/              # scrape.py, encoding.py, fix_encoding.py, compare.py
