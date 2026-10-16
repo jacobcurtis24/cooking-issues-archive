@@ -51,6 +51,7 @@ MAX_RESTARTS = 3  # clean restarts per episode (Range ignored / changed file / 4
 PROGRESS_INTERVAL_S = 0.5
 DURATION_TOLERANCE_S = 120.0  # tolerance = max(this, DURATION_TOLERANCE_PCT of the feed duration)
 DURATION_TOLERANCE_PCT = 0.05
+ADOPT_EXACT_S = 5.0  # duration match needed to adopt a file whose size differs from the server's
 GIB = 1024**3
 
 Progress = Callable[[str, int, "int | None", float], None]  # id, bytes done, total, bytes/s
@@ -238,6 +239,39 @@ def probe_file(path: Path) -> AudioInfo:
     if duration is None or duration <= 0:
         raise ProbeError("ffprobe found no usable duration")
     return AudioInfo(duration, audio[0].get("codec_name"))
+
+
+def ffmpeg_exe() -> str:
+    beside = Path(sys.executable).parent / "ffmpeg"
+    if beside.is_file():
+        return str(beside)
+    return shutil.which("ffmpeg") or "ffmpeg"
+
+
+def check_decodes_fully(path: Path, header_duration: float) -> None:
+    """Decode the whole file (a few seconds per hour of audio) and compare the decoded length
+    with the container's claimed duration. Catches truncation that a size-less ffprobe misses,
+    since Xing/Info headers state the full duration even when the tail is gone."""
+    cmd = [ffmpeg_exe(), "-v", "error", "-nostats", "-i", str(path), "-vn", "-f", "null", "-"]
+    cmd += ["-progress", "pipe:1"]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=900, check=False)
+    except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
+        raise ProbeError(f"could not decode {path.name}: {type(exc).__name__}") from exc
+    decoded = None
+    for line in proc.stdout.splitlines():
+        if line.startswith("out_time_us="):
+            try:
+                decoded = int(line.split("=", 1)[1]) / 1e6
+            except ValueError:
+                pass
+    if proc.returncode != 0 or decoded is None:
+        raise DownloadError(f"{path.name} did not decode cleanly: {proc.stderr.strip()[:200]}")
+    if header_duration - decoded > max(0.5, 0.001 * header_duration):
+        raise DownloadError(
+            f"{path.name} is truncated: it decodes to {decoded:.1f}s of the "
+            f"{header_duration:.1f}s its header claims"
+        )
 
 
 def check_duration(
@@ -563,24 +597,41 @@ def _adopt(
     if not remote.ok:
         reason = remote.error or f"HTTP {remote.status} {remote.content_type}"
         raise DownloadError(f"could not confirm {final.name} with the server ({reason})")
+    note = "size matches the server"
     if remote.content_length is not None and remote.content_length != size:
-        raise DownloadError(
-            f"existing file {final.name} is {size} bytes but the server says "
-            f"{remote.content_length}; not adopted (use --redownload to replace it)"
+        # Acast stitches ads in dynamically, so the size it serves drifts over time (the same
+        # episode came out at 58960972, 62894486 and 62927375 bytes on different days). A
+        # different size is therefore only accepted when ffprobe's duration matches the feed's
+        # almost exactly, which a truncated or foreign file will not do.
+        tight = min(ADOPT_EXACT_S, 0.005 * (meta.duration_s or 0))
+        if not meta.duration_s or abs(info.duration_s - meta.duration_s) > tight:
+            raise DownloadError(
+                f"existing file {final.name} is {size} bytes but the server says "
+                f"{remote.content_length}, and its duration does not match the feed closely "
+                "enough to adopt it (use --redownload to replace it)"
+            )
+        try:
+            check_decodes_fully(final, info.duration_s)
+        except ProbeError as exc:
+            raise DownloadError(f"existing file {final.name} cannot be adopted: {exc}") from None
+        note = (
+            f"server now serves {remote.content_length} bytes (dynamic ad stitching); "
+            f"duration matches the feed to {abs(info.duration_s - meta.duration_s):.2f}s; "
+            "full decode ok"
         )
     sha = sha256_file(final)
     _record(conn, meta, final, info, sha=sha)
     log.info(
-        "%s: adopted %s (%d bytes, matches the server's size from a Range probe; "
-        "no audio body was fetched)",
+        "%s: adopted %s (%d bytes; %s; only a Range 0-0 probe was made, no audio body fetched)",
         meta.guid,
         final.name,
         size,
+        note,
     )
     return DownloadResult(
         meta.guid,
         "adopted",
-        f"adopted existing file ({size} bytes, {info.duration_s:.0f}s, size matches the server)",
+        f"adopted existing file ({size} bytes, {info.duration_s:.0f}s; {note})",
         final,
         size,
         0,
@@ -719,6 +770,11 @@ def _run(
     except ProbeError as exc:
         raise DownloadError(f"downloaded file failed ffprobe: {exc}") from None
     check_duration(info.duration_s, meta.duration_s, *_tolerance(cfg))
+    if total is None:  # nothing to compare the size with: make sure the whole file decodes
+        try:
+            check_decodes_fully(part, info.duration_s)
+        except ProbeError as exc:
+            raise DownloadError(str(exc)) from None
     sha = sha256_file(part)
     _fsync_file(part)
     os.replace(part, final)  # atomic; for --redownload this swaps the verified file in

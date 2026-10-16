@@ -130,6 +130,15 @@ def test_unknown_length_skips_size_check_but_still_probes(cfg, mp3):
     assert row["stage"] == "downloaded"
 
 
+def test_unknown_length_and_truncated_body_is_caught_by_the_decode_check(cfg, mp3):
+    add_episode(cfg)
+    web = AudioWeb(mp3[:-5000])
+    web.chunked = True
+    res, row = run(cfg, web)
+    assert res.outcome == "failed" and "truncated" in res.message
+    assert row["stage"] == "discovered" and not list(cfg.audio_dir.glob("*.part*"))
+
+
 # ----------------------------------------------------------------------------- resume
 
 
@@ -407,11 +416,30 @@ def test_adoption_refuses_a_file_whose_size_differs_from_the_server(cfg, mp3):
     add_episode(cfg)
     cfg.audio_dir.mkdir(parents=True)
     final = cfg.audio_dir / f"{EID}.mp3"
-    final.write_bytes(mp3[:-500])  # truncated copy
+    final.write_bytes(mp3[:-5000])  # truncated copy (its Xing header still claims 3.0 s)
     res, row = run(cfg, AudioWeb(mp3))
-    assert res.outcome == "failed" and "not adopted" in res.message
+    assert res.outcome == "failed" and "truncated" in res.message
     assert row["stage"] == "discovered"
-    assert final.read_bytes() == mp3[:-500]  # never deleted or touched
+    assert final.read_bytes() == mp3[:-5000]  # never deleted or touched
+
+
+def test_adoption_with_other_size_needs_a_close_duration_match(cfg, mp3):
+    add_episode(cfg, duration=3.1)  # the feed says 3.1 s, the file is 3.0 s: not "exact"
+    cfg.audio_dir.mkdir(parents=True)
+    (cfg.audio_dir / f"{EID}.mp3").write_bytes(mp3)
+    res, row = run(cfg, AudioWeb(mp3 + b"\0" * 4000))
+    assert res.outcome == "failed" and "does not match the feed closely" in res.message
+    assert row["stage"] == "discovered"
+
+
+def test_adoption_accepts_a_different_size_when_duration_matches_exactly(cfg, mp3):
+    add_episode(cfg, duration=3.0)
+    cfg.audio_dir.mkdir(parents=True)
+    final = cfg.audio_dir / f"{EID}.mp3"
+    final.write_bytes(mp3)
+    res, row = run(cfg, AudioWeb(mp3 + b"\0" * 4000))  # server serves another stitched variant
+    assert res.outcome == "adopted" and "dynamic ad stitching" in res.message
+    assert final.read_bytes() == mp3 and row["audio_bytes"] == len(mp3)
 
 
 def test_adoption_refuses_a_file_with_wrong_duration(cfg, mp3):
