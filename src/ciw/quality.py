@@ -114,6 +114,8 @@ def suspects(
             key = vocab_mod.squash("".join(chunk))
             if not key or abs(len(key) - len(want)) > 3 or not correct_mod._same_start(key, want):
                 continue
+            if span == 1 and key == want:
+                continue  # a closed spelling ("cookingissues" in a URL), not a mis-hearing
             if key != want and (key in known or key.startswith(want) or want.startswith(key)):
                 continue  # another term, a plural/-ed form of this one, or a truncation
             if mentions(term, tokens(" ".join(chunk))):

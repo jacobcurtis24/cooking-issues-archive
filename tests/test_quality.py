@@ -140,3 +140,9 @@ def test_silent_gaps_flag_dropped_audio():
     assert quality.aggregate([res]).gaps == 2
     clean = quality.measure(transcript(TEXT), TERMS, NOTES)
     assert clean.gaps == 0 and "WARNING" not in quality.render(clean)
+
+
+def test_a_closed_spelling_in_a_url_is_not_a_suspect():
+    t = transcript("go to patreon.com slash cookingissues now")
+    res = quality.measure(t, ["Cooking Issues"], "Cooking Issues", episode_id="e")
+    assert res.mentions_after == 0 and res.n_suspects_after == 0
