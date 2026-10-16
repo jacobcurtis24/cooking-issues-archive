@@ -649,8 +649,6 @@ class Backfill:
     def stop_reason(self) -> str | None:
         if self._signal_name:
             return f"signal {self._signal_name}"
-        if self._fatal.is_set():
-            return "fatal error"
         if self.cfg.backfill.stop_file.exists():
             self._stop_file_seen = True
             return f"stop file {self.cfg.backfill.stop_file.name}"
@@ -693,9 +691,9 @@ class Backfill:
         try:
             for item in self.plan.items:
                 while not self._slots.acquire(timeout=0.2):
-                    if self.stop_reason():
+                    if self.stop_reason() or self._fatal.is_set():
                         return
-                if self.stop_reason():
+                if self.stop_reason() or self._fatal.is_set():
                     self._slots.release()
                     return
                 with self._count_lock:
@@ -777,19 +775,21 @@ class Backfill:
         attempts = item.attempts
         retry_at = None
         if penalize:
+            holder: list[str | None] = [None]
+
+            def backoff(n: int) -> str:
+                holder[0] = (datetime.now(UTC) + self._backoff(n)).strftime("%Y-%m-%dT%H:%M:%SZ")
+                return holder[0]
+
             with state.connect(self.cfg.state_db) as conn:
-                row = state.get_episode(conn, item.episode_id)
-                attempts = (row["attempts"] if row else 0) + 1
-                retry_at = (datetime.now(UTC) + self._backoff(attempts)).strftime(
-                    "%Y-%m-%dT%H:%M:%SZ"
-                )
-                state.record_failure(
+                attempts = state.record_failure(
                     conn,
                     item.episode_id,
                     stage=stage,
                     error=f"{stage}: {message}"[:500],
-                    next_retry_at=retry_at,
+                    backoff=backoff,
                 )
+            retry_at = holder[0]
         parked = penalize and attempts >= self.cfg.backfill.max_attempts
         self.summary.failed += 1
         self.summary.failures.append((item.episode_id, stage, message))
@@ -995,6 +995,9 @@ class Backfill:
                 self._slots.release()
                 if result is not None:
                     self._handle_download(item, result)
+                if self.summary.fatal:  # e.g. the disk guard: stop cleanly, nothing was lost
+                    self._note_stop("fatal error")
+                    break
                 if reason := self.stop_reason():
                     self._note_stop(reason)
                     break

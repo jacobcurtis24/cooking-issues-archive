@@ -7,7 +7,7 @@ Schema changes are versioned migrations keyed on ``PRAGMA user_version``; add a 
 from __future__ import annotations
 
 import sqlite3
-from collections.abc import Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
@@ -325,16 +325,17 @@ def mark_transcribed(
 
     Also clears the backfill failure bookkeeping (attempts, cool-down) and stores the silent-gap
     statistics (``asr_gap_s`` total seconds of gaps, ``asr_gap_count``, ``suspect`` flag)."""
+    # One UPDATE with no read before it: a read-then-write transaction would fail with a stale
+    # snapshot if another connection (the backfill's downloader thread) committed in between.
     stamp = now_iso()
-    row = get_episode(conn, episode_id)
-    keep_stage = row is not None and row["stage"] in STAGES[STAGES.index("transcribed") :]
+    later = ", ".join(f"'{s}'" for s in STAGES[STAGES.index("transcribed") :])
     conn.execute(
         "UPDATE episodes SET error=NULL, transcribed_at=?, asr_model=?, asr_version=?, "
         "asr_runtime_s=?, diarization=?, vocab_hash=?, correction_hash=?, corrections=?, "
         "asr_gap_s=?, asr_gap_count=?, suspect=?, attempts=0, last_error_stage=NULL, "
-        "next_retry_at=NULL, updated_at=? "
-        + ("" if keep_stage else ", stage='transcribed' ")
-        + "WHERE episode_id=?",
+        "next_retry_at=NULL, updated_at=?, "
+        f"stage=CASE WHEN stage IN ({later}) THEN stage ELSE 'transcribed' END "
+        "WHERE episode_id=?",
         (
             stamp,
             asr_model,
@@ -374,17 +375,25 @@ def record_failure(
     *,
     stage: str,
     error: str,
-    next_retry_at: str | None,
+    next_retry_at: str | None = None,
+    backoff: Callable[[int], str | None] | None = None,
 ) -> int:
     """Backfill failure: store the error, ``attempts += 1``, the failing stage (``download`` or
-    ``transcribe``) and the cool-down end. Returns the new attempt count."""
+    ``transcribe``) and the cool-down end (``next_retry_at``, or ``backoff(new_attempts)``).
+    Returns the new attempt count. Writes first, so it never holds a stale read snapshot."""
     conn.execute(
         "UPDATE episodes SET error=?, attempts=attempts+1, last_error_stage=?, next_retry_at=?, "
         "updated_at=? WHERE episode_id=?",
         (error, stage, next_retry_at, now_iso(), episode_id),
     )
     row = get_episode(conn, episode_id)
-    return int(row["attempts"]) if row else 0
+    attempts = int(row["attempts"]) if row else 0
+    if backoff is not None and row is not None:
+        conn.execute(
+            "UPDATE episodes SET next_retry_at=? WHERE episode_id=?",
+            (backoff(attempts), episode_id),
+        )
+    return attempts
 
 
 def clear_failure(conn: sqlite3.Connection, episode_id: str) -> None:
