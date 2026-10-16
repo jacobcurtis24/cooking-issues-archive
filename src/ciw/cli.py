@@ -188,6 +188,11 @@ def poll(
                 rep.status, "error"
             )
             typer.echo(f"WARNING: {rep.name} feed: {kind}: {rep.error}", err=True)
+    from ciw import health, state
+
+    with state.connect(cfg.state_db) as conn:
+        for line in health.alert_feed_health(cfg, conn, report):
+            typer.echo(f"ntfy: {line} sent")
     if report.all_failed:
         raise typer.Exit(code=1)
 
