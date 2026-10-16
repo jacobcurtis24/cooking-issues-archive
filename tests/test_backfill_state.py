@@ -26,7 +26,7 @@ def tr(**kw):
 
 def test_backfill_defaults(tmp_cfg):
     b = tmp_cfg.backfill
-    assert b.order == ["acast", "hrn"] and b.prefetch == 2 and b.max_attempts == 3
+    assert b.order == ["acast", "patreon", "hrn"] and b.prefetch == 2 and b.max_attempts == 3
     assert b.retry_backoff_minutes == [10, 60, 360] and b.suspect_gap_pct == 5
     assert b.log_dir == tmp_cfg.root / "data" / "logs"
     assert b.stop_file == tmp_cfg.root / "data" / "STOP"

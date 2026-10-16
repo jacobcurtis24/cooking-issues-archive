@@ -163,7 +163,7 @@ class DownloadConfig(_Section):
 class BackfillConfig(_Section):
     """``ciw backfill``: the resumable download + transcribe queue (see ciw.backfill)."""
 
-    order: list[str] = ["acast", "hrn"]  # sources in the order they are processed
+    order: list[str] = ["acast", "patreon", "hrn"]  # sources in the order they are processed
     prefetch: int = Field(2, ge=1)  # episodes downloaded ahead of the one being transcribed
     max_attempts: int = Field(3, ge=1)  # failures before an episode is parked (see `retry`)
     # Cool-down after the n-th failure of an episode (the last value is reused after that).

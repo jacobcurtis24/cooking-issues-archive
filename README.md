@@ -151,7 +151,7 @@ ciw backfill status        # per source x stage, failures, suspect episodes, ETA
 ciw backfill stop          # finish the current episode, then exit      ciw backfill retry   # clear cool-downs
 ```
 
-The queue is the state: `run` (the order is `backfill.order`, default acast then hrn, so Patreon-only episodes are not included unless you add `patreon`; newest first) downloads up to `backfill.prefetch` episodes ahead of the single GPU transcriber, isolates failures (cool-down 10 min / 1 h / 6 h, 3 attempts), stops after the current episode on Ctrl-C, SIGTERM, `ciw backfill stop` or `--max-hours`, and a re-run continues where it stopped. More than 10 episodes, or no selector at all, needs `--yes`. Events go to `data/logs/backfill-YYYYMMDD.jsonl`. Details: docs/progress.md (T8).
+The queue is the state: `run` (the order is `backfill.order`, default acast, then the Patreon-only exclusives, then hrn; newest first) downloads up to `backfill.prefetch` episodes ahead of the single GPU transcriber, isolates failures (cool-down 10 min / 1 h / 6 h, 3 attempts), stops after the current episode on Ctrl-C, SIGTERM, `ciw backfill stop` or `--max-hours`, and a re-run continues where it stopped. More than 10 episodes, or no selector at all, needs `--yes`. Events go to `data/logs/backfill-YYYYMMDD.jsonl`. Details: docs/progress.md (T8).
 
 ## Configuration
 

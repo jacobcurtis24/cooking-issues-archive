@@ -49,7 +49,7 @@ download:
   duration_tolerance_pct: 0.10   # a fraction (0.10 = 10%); real audio runs up to ~5% over the feed
 
 backfill:                 # `ciw backfill plan|run|status|stop|retry`
-  order: [acast, hrn]     # source order; newest first within a source
+  order: [acast, patreon, hrn]   # source order; newest first within a source (patreon = Patreon-only episodes)
   prefetch: 2             # episodes downloaded ahead of the one being transcribed
   max_attempts: 3         # failures before an episode is parked (`ciw backfill retry` resets)
   retry_backoff_minutes: [10, 60, 360]   # cool-down after the 1st, 2nd, 3rd+ failure
