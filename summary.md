@@ -29,7 +29,7 @@ Most posts are tagged "Uncategorized" in categories. Tags are more useful — sp
 
 ---
 
-## Phase 2: Scraper (`scrape.py`)
+## Phase 2: Scraper (`src/ciw/blog/scrape.py`)
 
 ### Design decisions
 
@@ -59,7 +59,7 @@ Most posts are tagged "Uncategorized" in categories. Tags are more useful — sp
 
 ---
 
-## Phase 3: Web Viewer (`app.py` + templates)
+## Phase 3: Web Viewer (`src/ciw/web/` + templates)
 
 ### Tech stack
 
@@ -104,7 +104,7 @@ Responsive breakpoint at 700px hides the nav (accessible via header search) and 
 
 ---
 
-## Phase 4: Encoding Fix (`fix_encoding.py` + integrated into `scrape.py`)
+## Phase 4: Encoding Fix (`src/ciw/blog/encoding.py`, used by `fix_encoding.py` and `scrape.py`)
 
 ### Root cause
 
@@ -122,7 +122,7 @@ The obvious round-trip `text.encode('cp1252').decode('utf-8')` fails for 217/224
 
 ### Fix: complete reverse map + per-chunk processing
 
-`fix_encoding.py` builds a full 256-entry reverse map (Unicode char → byte value) by iterating over all byte values, using `chr(b)` as the fallback for the five undefined bytes. It then applies the fix only to non-ASCII runs via regex, leaving ASCII untouched:
+`src/ciw/blog/encoding.py` builds a full 256-entry reverse map (Unicode char → byte value) by iterating over all byte values, using `chr(b)` as the fallback for the five undefined bytes. It then applies the fix only to non-ASCII runs via regex, leaving ASCII untouched:
 
 ```python
 _CP1252_REVERSE: dict[str, int] = {}
@@ -141,31 +141,42 @@ The one-time fix run corrected 207 posts across 377 fields (title, author, categ
 
 ### Integration into scraper
 
-Two changes made to `scrape.py` so future scrapes are clean from the start:
+Two changes made to `scrape.py` (now `src/ciw/blog/scrape.py`) so future scrapes are clean from the start:
 
 1. **Root cause fix** — `fetch()` now sets `resp.encoding = 'utf-8'` before accessing `resp.text`, overriding requests' cp1252 default.
 2. **Belt-and-suspenders** — `fix_mojibake()` is applied to all text fields in `parse_post()` before insertion, catching any edge cases.
 
-`fix_encoding.py` remains as a standalone tool for re-fixing the DB without re-scraping.
+`fix_encoding.py` (now `src/ciw/blog/fix_encoding.py`, run as `ciw blog fix-encoding`) remains as a standalone tool for re-fixing the DB without re-scraping.
 
 ---
 
 ## File Layout
 
 ```
-cooking_issues/
-├── scrape.py          # scraper + CLI search tool (encoding fix integrated)
-├── fix_encoding.py    # standalone DB encoding fix tool
-├── app.py             # Flask web server
-├── cooking_issues.db  # SQLite database (224 posts, encoding corrected)
-├── summary.md         # this file
-└── templates/
-    ├── base.html      # shared layout + all CSS
-    ├── index.html     # homepage
-    ├── post.html      # single post reader
-    ├── search.html    # search results
-    ├── browse.html    # archive with pagination
-    └── primers.html   # primers landing page
+cooking-issues-archive/
+├── cooking_issues.db      # SQLite database (224 posts, encoding corrected)
+├── summary.md             # this file
+├── pyproject.toml         # package `ciw`, CLI entry point, ruff/pytest config
+├── config.yaml            # settings (paths, feeds, models, web)
+└── src/ciw/
+    ├── cli.py             # `ciw` command line
+    ├── config.py          # config loader
+    ├── models.py          # pydantic models for the podcast pipeline
+    ├── blog/
+    │   ├── scrape.py      # scraper + CLI search tool (encoding fix integrated)
+    │   ├── encoding.py    # cp1252 mojibake repair (single source)
+    │   ├── fix_encoding.py  # standalone DB encoding fix tool
+    │   └── compare.py     # verify DB against the live site
+    └── web/
+        ├── __init__.py    # create_app() factory
+        ├── blog.py        # blog blueprint (routes + template filters)
+        └── templates/
+            ├── base.html      # shared layout + all CSS
+            ├── index.html     # homepage
+            ├── post.html      # single post reader
+            ├── search.html    # search results
+            ├── browse.html    # archive with pagination
+            └── primers.html   # primers landing page
 ```
 
 ---
@@ -173,16 +184,18 @@ cooking_issues/
 ## Running
 
 ```bash
+# One-time: pip install -e .
+
 # Start the viewer
-python3 app.py
+ciw web
 # → http://localhost:5000
 
 # Re-scrape (resumable, skips already-scraped posts)
-python3 scrape.py
+ciw blog scrape
 
 # CLI search (no server needed)
-python3 scrape.py --search "agar clarification"
-python3 scrape.py --stats
+ciw blog search "agar clarification"
+ciw blog stats
 ```
 
 ---
@@ -199,4 +212,4 @@ python3 scrape.py --stats
 
 - **Comments not scraped.** WordPress comment threads are ignored. Some posts have active technical Q&A in comments that's worth preserving.
 
-- **Site may have more posts.** The scraper stops at page 45 (404). If posts were added after the scrape, re-running `scrape.py` will pick them up (the FTS index is updated on insert).
+- **Site may have more posts.** The scraper stops at page 45 (404). If posts were added after the scrape, re-running `ciw blog scrape` will pick them up (the FTS index is updated on insert).

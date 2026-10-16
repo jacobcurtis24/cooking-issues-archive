@@ -56,3 +56,6 @@ known-first-party = ["ciw"]
 [tool.ruff.lint.per-file-ignores]
 # Long SQL strings in the moved scraper are left as-is (behavior-neutral move).
 "src/ciw/blog/scrape.py" = ["E501"]
+
+[tool.ruff.format]
+exclude = ["*.md"]  # don't reformat code blocks inside docs
