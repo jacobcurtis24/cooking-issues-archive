@@ -75,6 +75,15 @@ MIGRATIONS: list[str] = [
     ALTER TABLE episodes ADD COLUMN correction_hash TEXT;
     ALTER TABLE episodes ADD COLUMN corrections INTEGER;
     """,
+    # 5: backfill runner (T8): failure bookkeeping and silent-gap statistics of the transcript
+    """
+    ALTER TABLE episodes ADD COLUMN attempts INTEGER NOT NULL DEFAULT 0;
+    ALTER TABLE episodes ADD COLUMN last_error_stage TEXT;
+    ALTER TABLE episodes ADD COLUMN next_retry_at TEXT;
+    ALTER TABLE episodes ADD COLUMN asr_gap_s REAL;
+    ALTER TABLE episodes ADD COLUMN asr_gap_count INTEGER;
+    ALTER TABLE episodes ADD COLUMN suspect INTEGER NOT NULL DEFAULT 0;
+    """,
 ]
 
 
@@ -275,7 +284,11 @@ def mark_downloaded(
     conn.execute(
         "UPDATE episodes SET stage='downloaded', error=NULL, audio_path=?, audio_bytes=?, "
         "audio_duration_s=?, audio_sha256=?, audio_downloaded_from=?, downloaded_at=?, "
-        "updated_at=? WHERE episode_id=?",
+        "updated_at=?, "
+        "attempts=CASE WHEN last_error_stage='download' THEN 0 ELSE attempts END, "
+        "next_retry_at=CASE WHEN last_error_stage='download' THEN NULL ELSE next_retry_at END, "
+        "last_error_stage=CASE WHEN last_error_stage='download' THEN NULL "
+        "ELSE last_error_stage END WHERE episode_id=?",
         (
             audio_path,
             audio_bytes,
@@ -304,15 +317,24 @@ def mark_transcribed(
     vocab_hash: str | None = None,
     correction_hash: str | None = None,
     corrections: int | None = None,
+    asr_gap_s: float | None = None,
+    asr_gap_count: int | None = None,
+    suspect: bool = False,
 ) -> None:
-    """Record a finished transcript: stage ``transcribed`` (unless already further along)."""
+    """Record a finished transcript: stage ``transcribed`` (unless already further along).
+
+    Also clears the backfill failure bookkeeping (attempts, cool-down) and stores the silent-gap
+    statistics (``asr_gap_s`` total seconds of gaps, ``asr_gap_count``, ``suspect`` flag)."""
     stamp = now_iso()
     row = get_episode(conn, episode_id)
     keep_stage = row is not None and row["stage"] in STAGES[STAGES.index("transcribed") :]
     conn.execute(
         "UPDATE episodes SET error=NULL, transcribed_at=?, asr_model=?, asr_version=?, "
         "asr_runtime_s=?, diarization=?, vocab_hash=?, correction_hash=?, corrections=?, "
-        "updated_at=? " + ("" if keep_stage else ", stage='transcribed' ") + "WHERE episode_id=?",
+        "asr_gap_s=?, asr_gap_count=?, suspect=?, attempts=0, last_error_stage=NULL, "
+        "next_retry_at=NULL, updated_at=? "
+        + ("" if keep_stage else ", stage='transcribed' ")
+        + "WHERE episode_id=?",
         (
             stamp,
             asr_model,
@@ -322,9 +344,55 @@ def mark_transcribed(
             vocab_hash,
             correction_hash,
             corrections,
+            asr_gap_s,
+            asr_gap_count,
+            int(suspect),
             stamp,
             episode_id,
         ),
+    )
+
+
+def set_gap_stats(
+    conn: sqlite3.Connection,
+    episode_id: str,
+    *,
+    asr_gap_s: float,
+    asr_gap_count: int,
+    suspect: bool,
+) -> None:
+    """Store the silent-gap statistics of an existing transcript (backfill of old rows)."""
+    conn.execute(
+        "UPDATE episodes SET asr_gap_s=?, asr_gap_count=?, suspect=? WHERE episode_id=?",
+        (asr_gap_s, asr_gap_count, int(suspect), episode_id),
+    )
+
+
+def record_failure(
+    conn: sqlite3.Connection,
+    episode_id: str,
+    *,
+    stage: str,
+    error: str,
+    next_retry_at: str | None,
+) -> int:
+    """Backfill failure: store the error, ``attempts += 1``, the failing stage (``download`` or
+    ``transcribe``) and the cool-down end. Returns the new attempt count."""
+    conn.execute(
+        "UPDATE episodes SET error=?, attempts=attempts+1, last_error_stage=?, next_retry_at=?, "
+        "updated_at=? WHERE episode_id=?",
+        (error, stage, next_retry_at, now_iso(), episode_id),
+    )
+    row = get_episode(conn, episode_id)
+    return int(row["attempts"]) if row else 0
+
+
+def clear_failure(conn: sqlite3.Connection, episode_id: str) -> None:
+    """Forget failures: attempts 0, no cool-down, no failing stage (the error text stays)."""
+    conn.execute(
+        "UPDATE episodes SET attempts=0, last_error_stage=NULL, next_retry_at=NULL "
+        "WHERE episode_id=?",
+        (episode_id,),
     )
 
 

@@ -288,11 +288,11 @@ def test_unknown_feed_duration_skips_the_comparison(cfg, mp3):
     assert run(cfg, AudioWeb(mp3))[0].outcome == "downloaded"
 
 
-def test_duration_tolerance_is_max_of_120s_and_5_percent():
-    download.check_duration(3700.0, 3600.0)  # 100 s < 180 s (5%)
-    download.check_duration(3779.0, 3600.0)
+def test_duration_tolerance_is_max_of_120s_and_10_percent():
+    download.check_duration(3700.0, 3600.0)  # 100 s < 360 s (10%)
+    download.check_duration(3955.0, 3600.0)  # +9.9%: the old 5% default would have refused it
     with pytest.raises(download.DownloadError):
-        download.check_duration(3790.0, 3600.0)
+        download.check_duration(3965.0, 3600.0)
     download.check_duration(1115.0, 1000.0)  # 115 s < 120 s floor
     with pytest.raises(download.DownloadError):
         download.check_duration(1125.0, 1000.0)
@@ -680,6 +680,12 @@ def test_selectors_combine(many):
         assert ids(rows) == ["a" * 24]
         rows, _ = download.select_episodes(conn, all_=True, include_done=True)
         assert len(rows) == 5
+
+
+def test_default_tolerance_is_ten_percent(cfg):
+    assert cfg.download.duration_tolerance_pct == 0.10
+    assert download.DURATION_TOLERANCE_PCT == 0.10
+    assert cfg.download.duration_tolerance_s == 120.0
 
 
 def test_duration_tolerance_comes_from_config(cfg, mp3):

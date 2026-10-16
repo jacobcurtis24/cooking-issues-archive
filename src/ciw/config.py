@@ -91,6 +91,8 @@ def guard_path(path: Path | str, what: str = "path") -> None:
 def guard_config(cfg: Config) -> None:
     for name in GUARDED_PATHS:
         guard_path(getattr(cfg, name), f"config {name}")
+    for name in ("log_dir", "stop_file"):
+        guard_path(getattr(cfg.backfill, name), f"config backfill.{name}")
 
 
 # ------------------------------------------------------------------------- models
@@ -152,9 +154,28 @@ class DownloadConfig(_Section):
     # Refuse to start a download when the audio filesystem has less free space than this (GiB).
     min_free_gb: float = Field(20.0, ge=0)
     # ffprobe duration must be within max(duration_tolerance_s, duration_tolerance_pct of the
-    # feed's duration). Acast's dynamic ad insertion makes real files up to ~5% longer.
+    # feed's duration). Real files run up to ~5% longer than the feed says (Acast's dynamic ad
+    # insertion, HRN too), so 10% leaves headroom for the whole backfill.
     duration_tolerance_s: float = Field(120.0, ge=0)
-    duration_tolerance_pct: float = Field(0.05, ge=0, le=1)
+    duration_tolerance_pct: float = Field(0.10, ge=0, le=1)  # a fraction: 0.10 = 10%
+
+
+class BackfillConfig(_Section):
+    """``ciw backfill``: the resumable download + transcribe queue (see ciw.backfill)."""
+
+    order: list[str] = ["acast", "hrn"]  # sources in the order they are processed
+    prefetch: int = Field(2, ge=1)  # episodes downloaded ahead of the one being transcribed
+    max_attempts: int = Field(3, ge=1)  # failures before an episode is parked (see `retry`)
+    # Cool-down after the n-th failure of an episode (the last value is reused after that).
+    retry_backoff_minutes: list[float] = [10, 60, 360]
+    # An episode is "suspect" when silent gaps (>= 10 s without words) add up to more than this
+    # percentage (5 = 5%) of its audio: the ASR may have dropped speech.
+    suspect_gap_pct: float = Field(5.0, ge=0, le=100)
+    log_dir: Path = Path("data/logs")  # backfill-YYYYMMDD.jsonl, one file per day
+    log_keep_files: int = Field(14, ge=1)
+    log_max_mb: float = Field(20.0, gt=0)  # per-file cap; later events of that day are dropped
+    stop_file: Path = Path("data/STOP")  # `ciw backfill stop` creates it; the run exits after
+    # the current episode
 
 
 class WebConfig(_Section):
@@ -190,6 +211,7 @@ class Config(_Section):
     llm: LlmConfig = LlmConfig()
     notify: NotifyConfig = NotifyConfig()
     download: DownloadConfig = DownloadConfig()
+    backfill: BackfillConfig = BackfillConfig()
     web: WebConfig = WebConfig()
     secrets: Secrets = Field(default_factory=Secrets, repr=False)
 
@@ -219,6 +241,13 @@ class Config(_Section):
         }
         if asr_updates:
             cfg = cfg.model_copy(update={"asr": self.asr.model_copy(update=asr_updates)})
+        bf_updates = {
+            name: self.root / getattr(self.backfill, name)
+            for name in ("log_dir", "stop_file")
+            if not getattr(self.backfill, name).is_absolute()
+        }
+        if bf_updates:
+            cfg = cfg.model_copy(update={"backfill": self.backfill.model_copy(update=bf_updates)})
         return cfg
 
 

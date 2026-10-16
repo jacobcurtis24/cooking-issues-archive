@@ -126,6 +126,33 @@ def silent_gaps(words: Sequence[Word], min_s: float = GAP_S) -> list[tuple[float
     ]
 
 
+@dataclass(frozen=True)
+class GapStats:
+    """How much of an episode is silent gaps (>= ``GAP_S`` s between words)."""
+
+    gap_s: float
+    count: int
+    suspect: bool  # the gaps add up to more than ``suspect_pct`` percent of the audio
+
+
+def gap_stats(
+    transcript: Transcript, audio_duration_s: float | None, suspect_pct: float
+) -> GapStats:
+    """Total silent-gap seconds and count, and whether they exceed ``suspect_pct`` percent of the
+    audio (``audio_duration_s``, else the transcript's own, else its last word's end). Gaps are
+    signals, not errors: music and ads are legitimately wordless."""
+    gaps = silent_gaps(transcript.words)
+    total = sum(b - a for a, b in gaps)
+    duration = (
+        audio_duration_s
+        or transcript.audio_duration_s
+        or (transcript.words[-1].end if transcript.words else 0.0)
+    )
+    return GapStats(
+        round(total, 2), len(gaps), bool(duration) and total > suspect_pct / 100 * duration
+    )
+
+
 def render_utterances(
     source: Transcript | Iterable[Word],
     *,

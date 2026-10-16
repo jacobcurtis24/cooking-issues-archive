@@ -46,7 +46,18 @@ notify:
 download:
   min_free_gb: 20   # refuse to start a download below this much free space on audio_dir's disk
   duration_tolerance_s: 120    # ffprobe duration vs the feed's: max(this, pct of the duration)
-  duration_tolerance_pct: 0.05
+  duration_tolerance_pct: 0.10   # a fraction (0.10 = 10%); real audio runs up to ~5% over the feed
+
+backfill:                 # `ciw backfill plan|run|status|stop|retry`
+  order: [acast, hrn]     # source order; newest first within a source
+  prefetch: 2             # episodes downloaded ahead of the one being transcribed
+  max_attempts: 3         # failures before an episode is parked (`ciw backfill retry` resets)
+  retry_backoff_minutes: [10, 60, 360]   # cool-down after the 1st, 2nd, 3rd+ failure
+  suspect_gap_pct: 5      # silent gaps (>= 10 s) over this % of the audio flag the episode
+  log_dir: data/logs      # backfill-YYYYMMDD.jsonl (rotated daily, 14 kept, 20 MB cap each)
+  log_keep_files: 14
+  log_max_mb: 20
+  stop_file: data/STOP    # `ciw backfill stop` creates it; the run exits after the current episode
 
 web:
   host: 127.0.0.1

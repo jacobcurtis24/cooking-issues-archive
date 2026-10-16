@@ -50,7 +50,7 @@ MAX_RETRY_AFTER_S = 300.0
 MAX_RESTARTS = 3  # clean restarts per episode (Range ignored / changed file / 416)
 PROGRESS_INTERVAL_S = 0.5
 DURATION_TOLERANCE_S = 120.0  # tolerance = max(this, DURATION_TOLERANCE_PCT of the feed duration)
-DURATION_TOLERANCE_PCT = 0.05
+DURATION_TOLERANCE_PCT = 0.10  # real audio runs up to ~5% over the feed; 10% leaves headroom
 ADOPT_EXACT_S = 5.0  # duration match needed to adopt a file whose size differs from the server's
 GIB = 1024**3
 
@@ -281,7 +281,7 @@ def check_duration(
     tol_s: float = DURATION_TOLERANCE_S,
     tol_pct: float = DURATION_TOLERANCE_PCT,
 ) -> None:
-    """Raise ``DownloadError`` if ``actual`` is further than max(120 s, 5%) from the feed's."""
+    """Raise ``DownloadError`` if ``actual`` is further than max(120 s, 10%) from the feed's."""
     if not expected or expected <= 0:
         return
     tol = max(tol_s, tol_pct * expected)

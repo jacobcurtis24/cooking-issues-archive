@@ -25,6 +25,7 @@ from ciw.asr.base import ProgressFn, Transcriber
 from ciw.config import Config, guard_path, redact
 from ciw.ingest import episode_dir, meta_path
 from ciw.models import Transcript
+from ciw.transcript import gap_stats
 
 logger = logging.getLogger("ciw.transcribe")
 
@@ -146,6 +147,12 @@ def apply_correction(
             min_confidence=correction.min_confidence,
         )
     )
+
+
+def gap_columns(cfg: Config, transcript: Transcript, row: sqlite3.Row) -> dict[str, object]:
+    """The ``mark_transcribed`` keyword arguments for the transcript's silent-gap statistics."""
+    stats = gap_stats(transcript, row["audio_duration_s"], cfg.backfill.suspect_gap_pct)
+    return {"asr_gap_s": stats.gap_s, "asr_gap_count": stats.count, "suspect": stats.suspect}
 
 
 # ------------------------------------------------------------------------------ plan
@@ -299,6 +306,7 @@ def transcribe_episode(
                 vocab_hash=existing.vocab_hash,
                 correction_hash=existing.correction_hash,
                 corrections=len(existing.corrections),
+                **gap_columns(cfg, existing, row),
             )
             state.checkpoint(conn)
             plan.detail += "; state repaired"
@@ -325,6 +333,7 @@ def transcribe_episode(
         vocab_hash=transcript.vocab_hash,
         correction_hash=transcript.correction_hash,
         corrections=len(transcript.corrections),
+        **gap_columns(cfg, transcript, row),
     )
     state.checkpoint(conn)
     return Result(eid, "transcribed", "", time.perf_counter() - t0, transcript)
