@@ -2,7 +2,7 @@
 
 A local archive of [cookingissues.com](https://cookingissues.com) — 216 blog posts and 8 technical primers by Dave Arnold, stored in a searchable SQLite database with a web viewer.
 
-A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. It is in progress: ingest, download and transcription work; the scoring/notify commands are still stubs. The design is in `Cooking Issues Segment Watcher — Plan.md` (PLAN) and progress is logged in [docs/progress.md](docs/progress.md).
+A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. It is in progress: ingest, download, transcription (with speaker labels), the transcript browser and the resumable backfill work; the scoring/notify commands are still stubs. The design is in `Cooking Issues Segment Watcher — Plan.md` (kept out of git) and progress is logged in [docs/progress.md](docs/progress.md).
 
 ## Requirements
 
@@ -102,6 +102,8 @@ ciw download --episode ID --redownload | --verify         # replace the stored f
 
 `ciw download` streams to `<audio_dir>/<episode_id>.<ext>.part`, resumes after interruptions, checks the size against the server's own total and the duration with ffprobe, then renames atomically. A file that already exists but is not in state (the T0 fixture) is adopted after the same checks, without downloading. It is sequential (lock file `data/download.lock`), at most 2 requests/s, and refuses to start when `audio_dir`'s disk has less than `download.min_free_gb` free. Feed problems seen by `ciw poll` (401/403 or zero audio items) send one ntfy alert per status change when `NTFY_TOPIC` is set; otherwise they are only logged.
 
+The Patreon feed (`PATREON_FEED_URL` in `.env`) carries the same weekly episodes as Acast, published up to a couple of weeks earlier, plus a few exclusives. `ciw poll` pairs them (same title or near-identical title, Patreon up to 21 days earlier, durations within a few seconds; repeated titles are told apart by duration; anything still unclear is reported as ambiguous, never guessed), keeps the Acast id and downloads the Patreon copy of a matched episode (about 147 MB/hour, against about 59 MB for Acast). Unmatched Patreon items stay separate `patreon-…` episodes. See the rules at the top of `src/ciw/matching.py`.
+
 Episodes land in `data/state.sqlite` and `data/episodes/<episode_id>/meta.json` (git-ignored). A second `ciw poll` with unchanged feeds changes nothing.
 
 ## Transcription (WhisperX, local GPU)
@@ -123,7 +125,7 @@ ciw transcribe --audio some.mp3 --out /tmp/t.json         # any file, no pipelin
 ciw transcribe --episode ID --no-diarize --model large-v3
 ```
 
-Output is `data/episodes/<id>/transcript.json` (compact JSON, atomic write): words with start/end/speaker plus the model, versions, compute type, batch size, per-stage seconds and peak VRAM. `ciw.models.Transcript.render()` gives `[mm:ss] SPEAKER_01: text` lines. Model caches live on `/mnt/ssd0/ciw/hf_cache` (`asr.hf_home`). Speaker labels need a Hugging Face token: create a read token, accept the terms at https://huggingface.co/pyannote/speaker-diarization-community-1 and put `HF_TOKEN=...` in `.env`; without it transcription still runs, with no speakers and a one-line hint. One run at a time (`data/transcribe.lock`). `python -m pytest -m gpu` runs the real-model test on the 60 s excerpt.
+Output is `data/episodes/<id>/transcript.json` (compact JSON, atomic write): words with start/end/speaker plus the model, versions, compute type, batch size, per-stage seconds and peak VRAM. `ciw.models.Transcript.render()` gives `[mm:ss] SPEAKER_01: text` lines. Model caches live on `/mnt/ssd0/ciw/hf_cache` (`asr.hf_home`). Speaker labels need a Hugging Face token: create a read token, accept the terms at https://huggingface.co/pyannote/speaker-diarization-community-1 and put `HF_TOKEN=...` in `.env`; without it transcription still runs, with no speakers and a one-line hint. Speaker labels are `SPEAKER_00`, `SPEAKER_01`, … and their numbering is arbitrary per episode (no names). The model mostly separates the main host from everyone else; short interjections and remote voices are noisy. Diarization adds about 50% to the run time (about 24x realtime in total). One run at a time (`data/transcribe.lock`). `python -m pytest -m gpu` runs the real-model test on the 60 s excerpt.
 
 ### Vocabulary, correction and quality (T6)
 
@@ -149,7 +151,7 @@ ciw backfill status        # per source x stage, failures, suspect episodes, ETA
 ciw backfill stop          # finish the current episode, then exit      ciw backfill retry   # clear cool-downs
 ```
 
-The queue is the state: `run` (acast first, then hrn, newest first) downloads up to `backfill.prefetch` episodes ahead of the single GPU transcriber, isolates failures (cool-down 10 min / 1 h / 6 h, 3 attempts), stops after the current episode on Ctrl-C, SIGTERM, `ciw backfill stop` or `--max-hours`, and a re-run continues where it stopped. More than 10 episodes, or no selector at all, needs `--yes`. Events go to `data/logs/backfill-YYYYMMDD.jsonl`. Details: docs/progress.md (T8).
+The queue is the state: `run` (the order is `backfill.order`, default acast then hrn, so Patreon-only episodes are not included unless you add `patreon`; newest first) downloads up to `backfill.prefetch` episodes ahead of the single GPU transcriber, isolates failures (cool-down 10 min / 1 h / 6 h, 3 attempts), stops after the current episode on Ctrl-C, SIGTERM, `ciw backfill stop` or `--max-hours`, and a re-run continues where it stopped. More than 10 episodes, or no selector at all, needs `--yes`. Events go to `data/logs/backfill-YYYYMMDD.jsonl`. Details: docs/progress.md (T8).
 
 ## Configuration
 
