@@ -55,27 +55,27 @@ def test_stub_ignores_extra_arguments():
     assert "not implemented yet" in result.output
 
 
-def test_blog_stats_against_real_db():
+def test_blog_stats_against_real_db(blog_cfg):
     result = runner.invoke(app, ["blog", "stats"])
     assert result.exit_code == 0, result.output
     assert "Total posts scraped : 224 (8 primers)" in result.output
     assert "Index pages done    : 44" in result.output
 
 
-def test_blog_search_against_real_db():
+def test_blog_search_against_real_db(blog_cfg):
     result = runner.invoke(app, ["blog", "search", "carbonation", "--limit", "2"])
     assert result.exit_code == 0, result.output
     assert "2 result(s) for 'carbonation'" in result.output
 
 
-def test_fix_encoding_dry_run_changes_nothing():
+def test_fix_encoding_dry_run_changes_nothing(blog_cfg):
     result = runner.invoke(app, ["blog", "fix-encoding", "--dry-run"])
     assert result.exit_code == 0, result.output
     assert "[DRY RUN]" in result.output
     assert "Posts with changes : 0" in result.output
 
 
-def test_web_defaults_debug_off(monkeypatch):
+def test_web_defaults_debug_off(monkeypatch, blog_cfg):
     calls = {}
 
     def fake_run(self, host=None, port=None, debug=None, **kw):

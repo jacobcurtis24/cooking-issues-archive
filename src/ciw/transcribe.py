@@ -21,7 +21,7 @@ from pydantic import ValidationError
 
 from ciw import state
 from ciw.asr.base import ProgressFn, Transcriber
-from ciw.config import Config, redact
+from ciw.config import Config, guard_path, redact
 from ciw.ingest import episode_dir
 from ciw.models import Transcript
 
@@ -40,6 +40,7 @@ def transcript_path(cfg: Config, episode_id: str) -> Path:
 def transcribe_lock(cfg: Config) -> Iterator[None]:
     """Hold ``<data_dir>/transcribe.lock`` (flock): there is one GPU, so one run at a time."""
     path = cfg.data_dir / "transcribe.lock"
+    guard_path(path, "transcribe lock")
     path.parent.mkdir(parents=True, exist_ok=True)
     fd = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
     try:

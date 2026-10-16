@@ -52,6 +52,7 @@ where = ["src"]
 testpaths = ["tests"]
 markers = [
     "gpu: needs the NVIDIA GPU, the downloaded ASR models and real audio (skipped by default; run with -m gpu)",
+    "real_paths: may use the real repo config and paths (opt-in to the test-safety guard in ciw.config)",
 ]
 addopts = "-m 'not gpu'"
 filterwarnings = [

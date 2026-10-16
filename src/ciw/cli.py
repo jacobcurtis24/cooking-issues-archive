@@ -9,7 +9,7 @@ from typing import Annotated
 
 import typer
 
-from ciw import __version__
+from ciw import __version__, state
 from ciw.config import load_config
 
 app = typer.Typer(
@@ -189,7 +189,7 @@ def poll(
                 rep.status, "error"
             )
             typer.echo(f"WARNING: {rep.name} feed: {kind}: {rep.error}", err=True)
-    from ciw import health, state
+    from ciw import health
 
     with state.connect(cfg.state_db) as conn:
         for line in health.alert_feed_health(cfg, conn, report):
@@ -315,14 +315,13 @@ def episodes_list(
     source: Annotated[str | None, typer.Option("--source", help="acast, hrn or patreon.")] = None,
     limit: Annotated[int, typer.Option("--limit", "-n", help="Max rows.")] = 20,
     stage: Annotated[
-        str | None, typer.Option("--stage", help="downloaded or discovered (default: all).")
+        str | None,
+        typer.Option("--stage", help=f"{', '.join(state.STAGES)} (default: all)."),
     ] = None,
 ) -> None:
     """List episodes in state, newest first."""
-    from ciw import state
-
-    if stage not in (None, "discovered", "downloaded"):
-        raise typer.BadParameter("must be downloaded or discovered", param_hint="--stage")
+    if stage is not None and stage not in state.STAGES:
+        raise typer.BadParameter(f"must be one of {', '.join(state.STAGES)}", param_hint="--stage")
     cfg = load_config()
     with state.connect(cfg.state_db) as conn:
         rows = state.list_episodes(conn, source, limit, stage)
@@ -389,7 +388,6 @@ def download(
     from datetime import date
 
     from ciw import download as dl
-    from ciw import state
 
     _setup_logging(verbose)
     if source is not None and source not in ("acast", "hrn", "patreon"):
@@ -599,7 +597,6 @@ def transcribe(
     """Transcribe downloaded episodes with WhisperX (local GPU), one at a time."""
     import sys
 
-    from ciw import state
     from ciw import transcribe as tx
     from ciw.asr import get_transcriber
     from ciw.asr.base import SKIP_DISABLED, diarization_hint

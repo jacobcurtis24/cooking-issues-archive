@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 
 import pytest
 from asrfake import FakeTranscriber
+from conftest import write_config
 from typer.testing import CliRunner
 
 from ciw import state, transcribe
@@ -25,9 +26,7 @@ A, B, C, D = ("a" * 24, "b" * 24, "c" * 24, "d" * 24)
 @pytest.fixture
 def fake(tmp_cfg, tmp_path):
     """Fake backend registered as ``fake`` and selected by a tmp config.yaml."""
-    (tmp_path / "config.yaml").write_text(
-        f"audio_dir: {tmp_path / 'audio'}\nasr:\n  backend: fake\n  model: fake-model\n"
-    )
+    write_config(tmp_path, "asr:\n  backend: fake\n  model: fake-model\n")
     cfg = load_config(tmp_path, use_dotenv=False)
     assert str(cfg.audio_dir).startswith(str(tmp_path))  # never touch /mnt/ssd0 in tests
     assert str(cfg.state_db).startswith(str(tmp_path))
@@ -318,7 +317,7 @@ def test_audio_and_out_go_together_and_exclude_selectors(fake, tmp_path):
 
 
 def test_unknown_backend_is_a_usage_error(tmp_cfg, tmp_path):
-    (tmp_path / "config.yaml").write_text("asr:\n  backend: nope\n")
+    write_config(tmp_path, "asr:\n  backend: nope\n")
     result = invoke("--latest", "1")
     assert result.exit_code == 2 and "unknown asr.backend" in result.output
 
@@ -351,3 +350,20 @@ def test_select_episodes_unit(eps):
         assert [r["episode_id"] for r in rows] == [A, D] and unknown == ["zz"]
         rows, _ = transcribe.select_episodes(conn, all_downloaded=True)
         assert [r["episode_id"] for r in rows] == [A, B, C]
+
+
+def test_episodes_list_stage_filter_accepts_every_pipeline_stage(eps):
+    cfg, shared = eps
+    assert invoke("--episode", A).exit_code == 0
+
+    def listing(stage):
+        return runner.invoke(app, ["episodes", "list", "--stage", stage])
+
+    for stage in state.STAGES:  # one source of truth: no stage may be rejected
+        assert listing(stage).exit_code == 0, stage
+    done = listing("transcribed")
+    assert A in done.output and B not in done.output
+    assert B in listing("downloaded").output and A not in listing("downloaded").output
+    assert D in listing("discovered").output
+    bad = listing("bogus")
+    assert bad.exit_code == 2 and "must be one of" in " ".join(bad.output.split())

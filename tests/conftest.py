@@ -34,10 +34,26 @@ def _db_untouched():
 
 
 @pytest.fixture
-def flask_app():
+def allow_real_paths(monkeypatch):
+    """Opt in to the real repo config/paths (read-only tests only; see ciw.config guard)."""
+    from ciw.config import ALLOW_REAL_PATHS_ENV
+
+    monkeypatch.setenv(ALLOW_REAL_PATHS_ENV, "1")
+
+
+@pytest.fixture(autouse=True)
+def _real_paths_marker(request, monkeypatch):
+    """``@pytest.mark.real_paths`` is the same opt-in as the ``allow_real_paths`` fixture."""
+    if request.node.get_closest_marker("real_paths"):
+        request.getfixturevalue("allow_real_paths")
+
+
+@pytest.fixture
+def flask_app(tmp_cfg):
+    """The blog app on a tmp config whose only real path is the (read-only) blog database."""
     from ciw.web import create_app
 
-    app = create_app()
+    app = create_app(tmp_cfg.model_copy(update={"blog_db": DB_FILE}))
     app.config["TESTING"] = True
     return app
 
@@ -60,6 +76,13 @@ def db():
         conn.close()
 
 
+def write_config(root: Path, extra: str = "") -> None:
+    """Write ``root/config.yaml`` with audio/clips dirs inside ``root`` (never the real ones)."""
+    (root / "config.yaml").write_text(
+        f"audio_dir: {root / 'audio'}\nclips_dir: {root / 'clips'}\n{extra}"
+    )
+
+
 @pytest.fixture
 def tmp_cfg(tmp_path, monkeypatch):
     """A Config rooted in tmp_path (data/ lives there); no Patreon secret."""
@@ -68,6 +91,17 @@ def tmp_cfg(tmp_path, monkeypatch):
     for var in ("PATREON_FEED_URL", "HF_TOKEN", "ANTHROPIC_API_KEY", "NTFY_TOPIC"):
         monkeypatch.delenv(var, raising=False)
     monkeypatch.setenv("CIW_ROOT", str(tmp_path))
+    # Without this the default audio_dir/clips_dir are the real /mnt/ssd0/ciw (guarded).
+    write_config(tmp_path)
+    return load_config(tmp_path, use_dotenv=False)
+
+
+@pytest.fixture
+def blog_cfg(tmp_cfg, tmp_path):
+    """tmp config (CIW_ROOT) whose only real path is the read-only blog database."""
+    from ciw.config import load_config
+
+    write_config(tmp_path, f"blog_db: {DB_FILE}\n")
     return load_config(tmp_path, use_dotenv=False)
 
 

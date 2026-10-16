@@ -15,7 +15,8 @@ from ciw.models import Transcript
 
 EXCERPT = Path("/mnt/ssd0/ciw/audio/test_excerpt_60s.mp3")
 
-pytestmark = pytest.mark.gpu
+# real_paths: reads the real config (model caches on /mnt/ssd0); writes only to tmp_path.
+pytestmark = [pytest.mark.gpu, pytest.mark.real_paths]
 
 
 def test_excerpt_transcribes_end_to_end_on_the_gpu(tmp_path, monkeypatch):

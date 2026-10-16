@@ -6,8 +6,8 @@ from ciw.web import create_app
 from ciw.web.blog import fmt_date, short_excerpt
 
 
-def test_filters_are_registered_under_their_names():
-    filters = create_app().jinja_env.filters
+def test_filters_are_registered_under_their_names(blog_cfg):
+    filters = create_app(blog_cfg).jinja_env.filters
     assert filters["fmt_date"] is fmt_date
     assert filters["short_excerpt"] is short_excerpt
 

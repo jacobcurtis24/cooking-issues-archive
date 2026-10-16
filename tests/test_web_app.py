@@ -19,8 +19,8 @@ def test_create_app_uses_the_configured_blog_db(tmp_path):
     assert app.config["CIW"] is cfg
 
 
-def test_each_call_returns_an_independent_app():
-    assert create_app() is not create_app()
+def test_each_call_returns_an_independent_app(blog_cfg):
+    assert create_app(blog_cfg) is not create_app(blog_cfg)
 
 
 def test_nav_active_class_follows_the_blueprint_endpoints(client):

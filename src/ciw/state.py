@@ -12,6 +12,7 @@ from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 
+from ciw.config import guard_path
 from ciw.models import EpisodeMeta
 
 MIGRATIONS: list[str] = [
@@ -93,6 +94,7 @@ def connect(path: Path | str) -> Iterator[sqlite3.Connection]:
     Commits on a clean exit, rolls back on an exception, always closes. WAL mode.
     """
     path = Path(path)
+    guard_path(path, "state database")
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(path, timeout=30, isolation_level=None)  # we manage transactions
     conn.row_factory = sqlite3.Row

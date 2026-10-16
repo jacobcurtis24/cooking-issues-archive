@@ -40,6 +40,59 @@ def project_root() -> Path:
     )
 
 
+# ------------------------------------------------------------------- test-safety guard
+
+# Under pytest, anything that would touch the real runtime data must fail loudly. Twice (T4, T5)
+# an old stub test ran a real `ciw download`/`ciw transcribe` against the real config and caused
+# real downloads and GPU work. pytest sets PYTEST_CURRENT_TEST in the test process and in any
+# subprocess it starts, so the guard also covers `python -c` tests. A test that really must read
+# the real paths opts in with the ``allow_real_paths`` fixture (or ``@pytest.mark.real_paths``),
+# which sets ALLOW_REAL_PATHS_ENV. The blog database at the repo root is read-only and allowed.
+PYTEST_ENV_VAR = "PYTEST_CURRENT_TEST"
+ALLOW_REAL_PATHS_ENV = "CIW_TESTS_ALLOW_REAL_PATHS"
+GUARDED_PATHS = ("data_dir", "state_db", "audio_dir", "clips_dir")
+REAL_AUDIO_ROOT = Path("/mnt/ssd0/ciw")
+
+
+class UnsafeTestPathError(RuntimeError):
+    """A test tried to resolve a runtime path to the real repo ``data/`` or ``/mnt/ssd0/ciw``."""
+
+
+def code_root() -> Path:
+    """The checkout this package lives in (ignores ``$CIW_ROOT``)."""
+    for parent in Path(__file__).resolve().parents:
+        if (parent / "pyproject.toml").is_file():
+            return parent
+    raise RuntimeError(f"Cannot locate the project root (no pyproject.toml above {__file__}).")
+
+
+def real_runtime_roots() -> tuple[Path, ...]:
+    return (code_root() / "data", REAL_AUDIO_ROOT)
+
+
+def _under(path: Path, root: Path) -> bool:
+    return Path(os.path.abspath(path)).resolve().is_relative_to(root.resolve())
+
+
+def guard_path(path: Path | str, what: str = "path") -> None:
+    """Raise :class:`UnsafeTestPathError` if, under pytest, ``path`` is in the real runtime data."""
+    if not os.environ.get(PYTEST_ENV_VAR) or os.environ.get(ALLOW_REAL_PATHS_ENV):
+        return
+    for root in real_runtime_roots():
+        if _under(Path(path), root):
+            raise UnsafeTestPathError(
+                f"refusing to use {what} {path} under pytest: it is inside the real runtime "
+                f"data ({root}). Use the tmp_cfg fixture (or a tmp config.yaml with tmp "
+                f"audio_dir/clips_dir); a test that really needs the real paths must use the "
+                f"allow_real_paths fixture."
+            )
+
+
+def guard_config(cfg: Config) -> None:
+    for name in GUARDED_PATHS:
+        guard_path(getattr(cfg, name), f"config {name}")
+
+
 # ------------------------------------------------------------------------- models
 
 
@@ -205,7 +258,9 @@ def load_config(root: Path | None = None, *, use_dotenv: bool = True) -> Config:
     if use_dotenv:
         load_dotenv(root / ".env")
     secrets = Secrets(**{k.lower(): os.environ.get(k) or None for k in SECRET_ENV_VARS})
-    return Config(root=root, secrets=secrets, **data).resolve_paths()
+    cfg = Config(root=root, secrets=secrets, **data).resolve_paths()
+    guard_config(cfg)
+    return cfg
 
 
 # ---------------------------------------------------------------------- redaction

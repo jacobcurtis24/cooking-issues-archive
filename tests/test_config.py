@@ -9,6 +9,10 @@ from ciw.config import Config, load_config, parse_dotenv, project_root, redact
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
+# These tests are about config semantics (defaults, path resolution) and never touch the paths
+# they compute; the guard itself is tested in test_guard.py.
+pytestmark = pytest.mark.real_paths
+
 
 @pytest.fixture
 def clean_env(monkeypatch):

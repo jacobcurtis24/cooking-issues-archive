@@ -6,6 +6,7 @@ import sys
 
 import pytest
 from asrfake import FakeTranscriber
+from conftest import write_config
 
 from ciw import state
 from ciw.asr import ASR_BACKENDS, available_backends, get_transcriber, register_backend
@@ -37,7 +38,7 @@ def test_unknown_backend_is_a_clear_error(tmp_cfg):
         get_transcriber(with_backend(tmp_cfg, "parakeet"))
 
 
-def test_builtin_whisperx_builds_without_importing_torch():
+def test_builtin_whisperx_builds_without_importing_torch(tmp_cfg):
     """Constructing the backend (as the CLI does to check staleness) must stay torch-free."""
     code = (
         "import sys; from ciw.config import load_config; from ciw.asr import get_transcriber;"
@@ -61,8 +62,8 @@ def test_matches_compares_backend_model_and_version(tmp_cfg):
 
 
 def test_asr_config_defaults_and_path_resolution(tmp_path, monkeypatch):
-    (tmp_path / "config.yaml").write_text(
-        "asr:\n  hf_home: caches/hf\n  vocabulary_file: vocab.txt\n  batch_size: 4\n"
+    write_config(
+        tmp_path, "asr:\n  hf_home: caches/hf\n  vocabulary_file: vocab.txt\n  batch_size: 4\n"
     )
     cfg = load_config(tmp_path, use_dotenv=False)
     assert cfg.asr.hf_home == tmp_path / "caches" / "hf"
@@ -72,6 +73,7 @@ def test_asr_config_defaults_and_path_resolution(tmp_path, monkeypatch):
     assert cfg.asr.diarize and cfg.asr.diarization_model.endswith("community-1")
 
 
+@pytest.mark.real_paths
 def test_repo_config_keeps_model_caches_off_the_home_disk(monkeypatch):
     monkeypatch.delenv("HF_TOKEN", raising=False)
     cfg = load_config(use_dotenv=False)
@@ -133,7 +135,7 @@ def test_word_model_unchanged():
     assert Word(w="x", start=0, end=0).speaker is None
 
 
-def test_cli_and_web_import_without_torch_or_whisperx():
+def test_cli_and_web_import_without_torch_or_whisperx(blog_cfg):
     code = (
         "import sys; import ciw.cli, ciw.web, ciw.transcribe, ciw.transcript;"
         "from ciw.web import create_app; create_app();"

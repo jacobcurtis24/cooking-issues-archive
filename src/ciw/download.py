@@ -35,7 +35,7 @@ from urllib.parse import urlparse
 import httpx
 
 from ciw import state
-from ciw.config import Config, redact
+from ciw.config import Config, guard_path, redact
 from ciw.feeds import USER_AGENT, HttpClient
 from ciw.ingest import _audioish, meta_path, probe_audio
 from ciw.models import EpisodeMeta
@@ -163,6 +163,7 @@ def _sidecar(part: Path) -> Path:
 def download_lock(cfg: Config) -> Iterator[None]:
     """Hold ``<data_dir>/download.lock`` (flock) so two ``ciw download`` cannot run at once."""
     path = cfg.data_dir / "download.lock"
+    guard_path(path, "download lock")
     path.parent.mkdir(parents=True, exist_ok=True)
     fd = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
     try:
@@ -308,6 +309,7 @@ def sha256_file(path: Path) -> str:
 
 def check_disk(cfg: Config, need_bytes: int | None) -> None:
     """Refuse when free space is below ``download.min_free_gb`` or below 2x ``need_bytes``."""
+    guard_path(cfg.audio_dir, "audio_dir")
     cfg.audio_dir.mkdir(parents=True, exist_ok=True)
     free = shutil.disk_usage(cfg.audio_dir).free
     floor = cfg.download.min_free_gb * GIB

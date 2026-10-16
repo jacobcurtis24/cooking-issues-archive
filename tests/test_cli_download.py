@@ -4,6 +4,7 @@ import hashlib
 
 import pytest
 from audiofake import AudioWeb, ffmpeg_exe, make_mp3
+from conftest import write_config
 from test_download import add_episode
 from typer.testing import CliRunner
 
@@ -23,9 +24,7 @@ def mp3(tmp_path_factory):
 
 @pytest.fixture
 def cfg(tmp_cfg, tmp_path):
-    (tmp_path / "config.yaml").write_text(
-        f"audio_dir: {tmp_path / 'audio'}\ndownload:\n  min_free_gb: 0\n"
-    )
+    write_config(tmp_path, "download:\n  min_free_gb: 0\n")
     cfg = load_config(tmp_path, use_dotenv=False)
     assert str(cfg.audio_dir).startswith(str(tmp_path))  # never touch /mnt/ssd0 in tests
     return cfg
