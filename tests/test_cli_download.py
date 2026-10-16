@@ -57,7 +57,9 @@ def test_no_selector_is_a_usage_error_not_a_bulk_download(cfg, web):
 def test_latest_downloads_then_second_run_does_nothing(cfg, web, mp3):
     result = invoke("--latest", "2")
     assert result.exit_code == 0, result.output
-    lines = [ln for ln in result.output.splitlines() if ln.startswith("downloaded ")]
+    lines = [
+        ln for ln in result.output.splitlines() if ln.startswith("downloaded ") and "," not in ln
+    ]
     assert [ln.split()[1] for ln in lines] == [A, B]
     assert "downloaded 2, adopted 0, skipped 0, failed 0" in result.output
     assert "\r" not in result.output  # quiet progress when not a TTY
