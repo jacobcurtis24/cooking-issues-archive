@@ -46,16 +46,53 @@ def test_simple_match_with_title_variants():
 @pytest.mark.parametrize(
     ("offset", "matches"),
     [
-        (timedelta(days=3), True),  # exactly at the window edge
-        (timedelta(days=-3), True),
+        # offset = Patreon publish time minus Acast publish time
+        (timedelta(days=3), True),  # Patreon 3 days AFTER Acast: exactly at the window edge
         (timedelta(days=3, seconds=1), False),
-        (timedelta(days=-3, seconds=-1), False),
         (timedelta(0), True),
+        (timedelta(days=-3), True),  # Patreon early access (typical)
+        (timedelta(days=-14), True),  # ... even two weeks early (seen in the real feeds)
+        (timedelta(days=-21), True),  # exactly at the lead edge
+        (timedelta(days=-21, seconds=-1), False),
     ],
 )
 def test_date_window_edges(offset, matches):
     r = match_feeds([acast()], [patreon(days=offset.days, seconds=offset.seconds)])
     assert bool(r.pairs) is matches
+
+
+def test_patreon_early_access_by_days_matches():
+    r = match_feeds([acast(days=5)], [patreon(days=0)])
+    assert len(r.pairs) == 1 and not r.patreon_only and not r.acast_only
+
+
+def test_recurring_titles_are_separated_by_near_identical_durations():
+    """Weekly look-alike titles inside the lead window must not turn into ambiguity when the
+    durations tell them apart (the real feeds agree within a few seconds)."""
+    a = [
+        acast("a1", "No Tangent Tuesday", days=7, dur=3601),
+        acast("a2", "No Tangent Tuesday", days=14, dur=3302),
+    ]
+    p = [
+        patreon("p1", "No Tangent Tuesday", days=4, dur=3600),
+        patreon("p2", "No Tangent Tuesday", days=11, dur=3300),
+    ]
+    r = match_feeds(a, p)
+    assert sorted((x.guid, y.guid) for x, y in r.pairs) == [("a1", "p1"), ("a2", "p2")]
+    assert not r.ambiguous
+
+
+def test_same_title_and_same_duration_stays_ambiguous():
+    a = [acast("a1", "No Tangent Tuesday", days=7), acast("a2", "No Tangent Tuesday", days=14)]
+    p = [patreon("p1", "No Tangent Tuesday", days=4), patreon("p2", "No Tangent Tuesday", days=11)]
+    r = match_feeds(a, p)
+    assert not r.pairs and len(r.ambiguous) == 1
+
+
+def test_unknown_durations_never_break_a_tie():
+    a = [acast("a1", "Weekly", days=7, dur=None), acast("a2", "Weekly", days=14, dur=None)]
+    p = [patreon("p1", "Weekly", days=4, dur=None), patreon("p2", "Weekly", days=11, dur=None)]
+    assert not match_feeds(a, p).pairs
 
 
 @pytest.mark.parametrize(

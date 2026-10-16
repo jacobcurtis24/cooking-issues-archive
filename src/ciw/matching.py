@@ -4,13 +4,17 @@ The two feeds use different GUIDs, so an Acast item and a Patreon item are *cand
 same episode when all of these hold:
 
 * normalized titles are equal, or very similar (``TITLE_SIMILARITY``) with identical numbers;
-* publish dates are within ``DATE_WINDOW_DAYS`` (inclusive);
+* publish dates agree: Patreon is early access, so it may come up to ``PATREON_LEAD_DAYS`` before
+  the Acast item (real data: usually 2-3 days, sometimes two weeks) but only ``DATE_WINDOW_DAYS``
+  after it (both inclusive);
 * durations agree within ``max(DURATION_TOLERANCE_S, DURATION_TOLERANCE_PCT * longer)``
   (an unknown duration does not veto a match).
 
 Only an unambiguous 1:1 candidate relationship becomes a match. If an item has two or more
-candidates (or two items compete for one) nothing is guessed: the whole group is reported as
-ambiguous and every member stays unmatched. HRN never takes part.
+candidates (or two items compete for one), the pair is decided only when exactly one candidate on
+each side also has a near-identical duration (within ``TIGHT_DURATION_S``, which is how the real
+feeds differ: 1-3 s); otherwise nothing is guessed: the whole group is reported as ambiguous and
+every member stays unmatched. HRN never takes part.
 """
 
 from __future__ import annotations
@@ -23,7 +27,9 @@ from difflib import SequenceMatcher
 
 from ciw.models import FeedItem
 
-DATE_WINDOW_DAYS = 3
+DATE_WINDOW_DAYS = 3  # Patreon published up to this long AFTER the Acast item
+PATREON_LEAD_DAYS = 21  # Patreon published up to this long BEFORE the Acast item (early access)
+TIGHT_DURATION_S = 10.0
 DURATION_TOLERANCE_PCT = 0.10
 DURATION_TOLERANCE_S = 120.0
 TITLE_SIMILARITY = 0.90
@@ -45,7 +51,16 @@ def titles_match(a: FeedItem, b: FeedItem) -> bool:
 
 
 def dates_match(a: FeedItem, b: FeedItem) -> bool:
-    return abs(a.pub_date - b.pub_date) <= timedelta(days=DATE_WINDOW_DAYS)
+    """``a`` is the Acast item, ``b`` the Patreon one."""
+    lead = a.pub_date - b.pub_date  # positive: Patreon came first
+    return -timedelta(days=DATE_WINDOW_DAYS) <= lead <= timedelta(days=PATREON_LEAD_DAYS)
+
+
+def durations_tight(a: FeedItem, b: FeedItem) -> bool:
+    """Both durations known and almost identical (never true for an unknown duration)."""
+    if a.duration_s is None or b.duration_s is None:
+        return False
+    return abs(a.duration_s - b.duration_s) <= TIGHT_DURATION_S
 
 
 def durations_match(a: FeedItem, b: FeedItem) -> bool:
@@ -110,15 +125,41 @@ def match_feeds(
                 cand_a[a.guid].append(p.guid)
                 cand_p[p.guid].append(a.guid)
 
+    # Pass 1: strict 1:1 candidate relationships. Later passes only consider pairs that also have
+    # near-identical durations, which separates e.g. weekly "No Tangent Tuesday" look-alikes.
+    for tight_only in (False, True):
+        while True:
+            paired = False
+            for a in free_a:
+                if a.guid in used_a:
+                    continue
+                c = [
+                    g
+                    for g in cand_a[a.guid]
+                    if g not in used_p and (not tight_only or durations_tight(a, p_by[g]))
+                ]
+                if len(c) != 1:
+                    continue
+                back = [
+                    g
+                    for g in cand_p[c[0]]
+                    if g not in used_a and (not tight_only or durations_tight(a_by[g], p_by[c[0]]))
+                ]
+                if len(back) == 1:
+                    result.pairs.append((a, p_by[c[0]]))
+                    used_a.add(a.guid)
+                    used_p.add(c[0])
+                    paired = True
+            if not tight_only or not paired:
+                break
+
     contested_a: set[str] = set()
     contested_p: set[str] = set()
     for a in free_a:
-        c = cand_a[a.guid]
-        if len(c) == 1 and len(cand_p[c[0]]) == 1:
-            result.pairs.append((a, p_by[c[0]]))
-            used_a.add(a.guid)
-            used_p.add(c[0])
-        elif c:
+        if a.guid in used_a:
+            continue
+        c = [g for g in cand_a[a.guid] if g not in used_p]
+        if c:
             contested_a.add(a.guid)
             contested_p.update(c)
 
