@@ -2,7 +2,7 @@
 
 A local archive of [cookingissues.com](https://cookingissues.com) — 216 blog posts and 8 technical primers by Dave Arnold, stored in a searchable SQLite database with a web viewer.
 
-A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. It is in progress: ingest, download, transcription (with speaker labels), the transcript browser and the resumable backfill work; the scoring/notify commands are still stubs. The design is in `Cooking Issues Segment Watcher — Plan.md` (kept out of git) and progress is logged in [docs/progress.md](docs/progress.md).
+A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. Done: ingest (Acast, HRN and the Patreon early-access feed), download, transcription with speaker labels, the transcript browser and the resumable backfill. Next: LLM segment and scoring (the `score`/notify commands are still stubs), then review pages and ntfy, a gold-set eval and unattended operation. The task-by-task roadmap is [docs/plan.md](docs/plan.md), what was done and measured is in [docs/progress.md](docs/progress.md), and the original design is `Cooking Issues Segment Watcher — Plan.md` (kept out of git).
 
 ## Requirements
 
@@ -179,6 +179,8 @@ cooking-issues-archive/
 ├── CLAUDE.md              # notes for Claude Code sessions
 ├── README.md              # this file
 ├── summary.md             # technical decisions and architecture of the blog archive
+├── feeds/pins.txt         # hand-kept Acast/Patreon episode pairs
+├── docs/plan.md           # roadmap: tasks T0-T13, decisions, status
 ├── docs/progress.md       # task-by-task progress log
 ├── tests/                 # pytest suite
 └── src/ciw/

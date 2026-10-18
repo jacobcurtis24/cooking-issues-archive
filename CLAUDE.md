@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `transcribe.py`, `transcript.py`, `asr/`, `vocab.py`, `correct.py`, `quality.py`, `cli_vocab.py`, `search_index.py`, `related.py`, `htmlsafe.py`, `notify.py`, `health.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
+Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `transcribe.py`, `backfill.py`, `cli_backfill.py`, `transcript.py`, `asr/`, `vocab.py`, `correct.py`, `quality.py`, `cli_vocab.py`, `search_index.py`, `related.py`, `htmlsafe.py`, `notify.py`, `health.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
 
 ## Environment
 
@@ -13,7 +13,7 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 - Never commit `data/`, `.env`, `*.sqlite`, or audio. Secrets only in `.env`; never log them (use `ciw.config.redact`).
 - `cooking_issues.db` is tracked and read-only for tests; a session-wide test fails if it changes.
 - Audio and clips live on `/mnt/ssd0/ciw/` (see `config.yaml`), transcripts/state in repo `data/` (git-ignored).
-- Progress log: `docs/progress.md` (append a dated entry per task). Plan: `Cooking Issues Segment Watcher — Plan.md` (untracked; do not commit it).
+- Progress log: `docs/progress.md` (append a dated entry per task). Roadmap with every task T0-T13 and its status: `docs/plan.md` (tracked; update the status table when a task finishes). Original design: `Cooking Issues Segment Watcher — Plan.md` (untracked; do not commit or edit it).
 - Known oddities in the blog code (e.g. `/browse?page=abc` 500, `/search?q=!!!` error, stray `Â` in text, empty body of post 25) are intentionally unfixed until scheduled; tests pin them. See docs/progress.md (T1).
 
 ## Podcast ingest (T3)
@@ -60,3 +60,6 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 - State writes must not read before they write (SQLite stale-snapshot error when the downloader thread commits in between): `mark_transcribed` and `record_failure` are single UPDATEs first; `download_episode` ends its read transaction before the transfer.
 - Tests use `tests/test_backfill.py`'s `env` fixture (fake ASR + `FakeDownloads`); never call the real downloader or transcriber against real paths. `download.duration_tolerance_pct` is a fraction (0.10); `backfill.suspect_gap_pct` is a percent (5).
 
+## Next: LLM segment + score (T9)
+
+Not built yet; see `docs/plan.md`. Decided: Anthropic API (key `ANTHROPIC_API_KEY` in `.env`, never logged), `claude-sonnet-5-5` unless the planned Haiku/Sonnet/Opus comparison on a few sampled transcripts (user supplies the prompt) says otherwise, Batch API for the backlog, hard $25/month cap with a cost ledger in `state.sqlite`, and an estimate printed before any backlog is queued. Make no API call without the user's go-ahead; the comparison is expected to cost under $1.

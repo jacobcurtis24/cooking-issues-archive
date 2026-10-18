@@ -1,5 +1,7 @@
 # Cooking Issues Archive — Project Summary
 
+> This document covers the blog archive (2009-2013). The podcast pipeline built on top of it (`ciw`) is described in [README.md](README.md), [docs/plan.md](docs/plan.md) and [docs/progress.md](docs/progress.md).
+
 ## Goal
 
 cookingissues.com is unreliable and hard to search. The goal was to scrape the entire site into a local SQLite database and build a clean web viewer that makes the content more discoverable than the original site.
