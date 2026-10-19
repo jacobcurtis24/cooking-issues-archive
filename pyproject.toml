@@ -21,6 +21,7 @@ dependencies = [
     "anthropic",
     "wordfreq>=3.1,<4",  # common-English test for the vocabulary builder and the correction guard
     "jellyfish>=1.0",  # phonetic keys (metaphone) and edit distance for ciw.correct
+    "jsonschema>=4",  # validate LLM output against the prompt file's schema (ciw.compare)
 ]
 
 [project.optional-dependencies]
@@ -49,6 +50,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "ciw.web" = ["templates/*.html", "static/*"]
+ciw = ["compare_review.html"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -84,6 +84,27 @@ MIGRATIONS: list[str] = [
     ALTER TABLE episodes ADD COLUMN asr_gap_count INTEGER;
     ALTER TABLE episodes ADD COLUMN suspect INTEGER NOT NULL DEFAULT 0;
     """,
+    # 6: LLM cost ledger (T9): one row per API call, the basis of the monthly budget cap
+    """
+    CREATE TABLE llm_usage (
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        ts            TEXT NOT NULL,
+        purpose       TEXT NOT NULL,
+        run_id        TEXT,
+        episode_id    TEXT,
+        model         TEXT NOT NULL,
+        effort        TEXT,
+        input_tokens  INTEGER NOT NULL DEFAULT 0,
+        output_tokens INTEGER NOT NULL DEFAULT 0,
+        cache_read    INTEGER NOT NULL DEFAULT 0,
+        cache_write   INTEGER NOT NULL DEFAULT 0,
+        cost_usd      REAL NOT NULL DEFAULT 0,
+        request_id    TEXT,
+        status        TEXT NOT NULL
+    );
+    CREATE INDEX llm_usage_ts ON llm_usage(ts);
+    CREATE INDEX llm_usage_run ON llm_usage(run_id);
+    """,
 ]
 
 
@@ -481,3 +502,77 @@ def episodes_with_guid_source(conn: sqlite3.Connection, source: str) -> list[sql
         "WHERE g.source = ? ORDER BY e.pub_date DESC, e.episode_id",
         (source,),
     ).fetchall()
+
+
+# ------------------------------------------------------------------------ LLM ledger
+
+
+class BudgetExceeded(RuntimeError):
+    """A call (or run) would take the month's LLM spend past ``llm.monthly_budget_usd``."""
+
+
+def record_llm_usage(
+    conn: sqlite3.Connection,
+    *,
+    purpose: str,
+    model: str,
+    status: str,
+    cost_usd: float,
+    effort: str | None = None,
+    run_id: str | None = None,
+    episode_id: str | None = None,
+    input_tokens: int = 0,
+    output_tokens: int = 0,
+    cache_read: int = 0,
+    cache_write: int = 0,
+    request_id: str | None = None,
+) -> None:
+    """Append one API call to the ledger (a plain INSERT: no read before the write)."""
+    conn.execute(
+        "INSERT INTO llm_usage (ts, purpose, run_id, episode_id, model, effort, input_tokens, "
+        "output_tokens, cache_read, cache_write, cost_usd, request_id, status) "
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        (
+            now_iso(),
+            purpose,
+            run_id,
+            episode_id,
+            model,
+            effort,
+            input_tokens,
+            output_tokens,
+            cache_read,
+            cache_write,
+            cost_usd,
+            request_id,
+            status,
+        ),
+    )
+
+
+def month_spend_usd(conn: sqlite3.Connection, *, now: datetime | None = None) -> float:
+    """Total ledger spend in the (UTC) calendar month of ``now``."""
+    now = now or datetime.now(UTC)
+    start = now.strftime("%Y-%m-01T00:00:00Z")
+    year, month = (now.year + 1, 1) if now.month == 12 else (now.year, now.month + 1)
+    end = f"{year:04d}-{month:02d}-01T00:00:00Z"
+    row = conn.execute(
+        "SELECT COALESCE(SUM(cost_usd), 0) FROM llm_usage WHERE ts >= ? AND ts < ?", (start, end)
+    )
+    return float(row.fetchone()[0])
+
+
+def run_spend_usd(conn: sqlite3.Connection, run_id: str) -> float:
+    row = conn.execute("SELECT COALESCE(SUM(cost_usd), 0) FROM llm_usage WHERE run_id=?", (run_id,))
+    return float(row.fetchone()[0])
+
+
+def check_budget(conn: sqlite3.Connection, monthly_budget_usd: float, planned_usd: float) -> float:
+    """Raise :class:`BudgetExceeded` unless ``planned_usd`` fits in the month; return the spend."""
+    spent = month_spend_usd(conn)
+    if spent + planned_usd > monthly_budget_usd + 1e-9:
+        raise BudgetExceeded(
+            f"monthly LLM budget ${monthly_budget_usd:.2f}: ${spent:.2f} already spent this month, "
+            f"+ ${planned_usd:.2f} planned"
+        )
+    return spent

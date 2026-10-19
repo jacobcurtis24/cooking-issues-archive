@@ -1,0 +1,85 @@
+# Model/effort comparison (T9 step 0): `ciw compare plan|run|status|report|score`.
+#
+# YOU EDIT: system, user, schema, checks. The run matrix and the sample are set up already.
+#
+# Editing system / user / schema starts a NEW run (results are kept per prompt hash under
+# data/compare/run-<hash>/). Editing matrix, sample, checks or max_tokens does not.
+#
+# Placeholders usable in system and user (plain {{name}} replacement; JSON braces are safe):
+#   {{title}}  {{pub_date}}  {{duration}}  {{show_notes}}  {{transcript}}
+# {{transcript}} is "[mm:ss] SPEAKER_01: text" lines (words already vocabulary-corrected).
+# `ciw compare run` refuses while either prompt still contains the word TODO.
+
+system: |
+  TODO: write the system prompt.
+
+user: |
+  TODO: write the user prompt. It must include the transcript placeholder (see the list above).
+
+  Episode: {{title}} ({{pub_date}}, {{duration}})
+
+  Show notes:
+  {{show_notes}}
+
+  Transcript:
+  {{transcript}}
+
+# JSON Schema for the answer (structured outputs). Rules: the root and every nested object need
+# "additionalProperties: false" and every property listed in "required". This is only an example
+# of the shape; replace it with your own (summary, topics, recipe cards, tags, ...).
+schema:
+  type: object
+  additionalProperties: false
+  required: [summary, tags, key_quotes]
+  properties:
+    summary:
+      type: string
+    tags:
+      type: array
+      items: {type: string}
+    key_quotes:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [timestamp, quote]
+        properties:
+          timestamp: {type: string}
+          quote: {type: string}
+
+# Automatic checks, by JSON key name (anywhere in the output). A check you do not name is skipped.
+checks:
+  quote_fields: [quote]        # must appear in the transcript (verbatim, or nearly)
+  timestamp_fields: [timestamp]  # mm:ss, h:mm:ss or seconds, inside the episode
+  list_fields: [tags]          # overlap with the reference output (Jaccard)
+
+# Output budget per call (thinking tokens count against it). Truncated answers are recorded
+# as "truncated" and rated like any other; `ciw compare run --retry-bad` redoes them.
+max_tokens: 32000
+
+# 7 configurations. Effort: low | medium | high | xhigh | max.
+matrix:
+  - {id: haiku-medium,  model: claude-haiku-5-5,  effort: medium}
+  - {id: haiku-high,    model: claude-haiku-5-5,  effort: high}
+  - {id: haiku-xhigh,   model: claude-haiku-5-5,  effort: xhigh}
+  - {id: sonnet-medium, model: claude-sonnet-5-5, effort: medium}
+  - {id: sonnet-high,   model: claude-sonnet-5-5, effort: high}
+  - {id: sonnet-xhigh,  model: claude-sonnet-5-5, effort: xhigh}
+  - {id: opus-medium,   model: claude-opus-5-5,   effort: medium}
+
+# The reference for the agreement check (the review itself is blind: the page never says which
+# output is which).
+reference: opus-medium
+
+# 10 episodes. `ciw compare run --episodes 3` takes the first three (stage 1), `--all` the rest.
+sample:
+  - 69715223a6c658f1834fb3d6   # Biscuits, Bouillon and Beyond (fixture; home carbonation)
+  - 6ab1e27735231e4f55e430e2   # Tiny Trash Trucks: OG Crew NTT (mostly etiquette)
+  - hrn-6529293a5255ef04       # Episode 56: Chris Young (2011; guest; old audio, flagged suspect)
+  - 6aa9940ebf7eb386d361b8c3   # NTT: Back from Lima (one brisket hit in a travel episode)
+  - 69d52a583ae78d6f11c8a113   # Belated Birthday Tangents (ratios buried in tangents)
+  - 6a44f90d6771af4aa44f182b   # Inside Burger King's Culinary Innovation Lab (business + technique)
+  - patreon-4a5c679ed6c92ea9   # Fireplaces, Crisco Mysteries & Live-Fire Cooking (Patreon-only)
+  - hrn-2db90768-f25e-4fa9-9dbb-44f19c0dcabb   # Episode 340: Timing Issues (shortest, 22 min)
+  - hrn-02a4f89b-821a-4ea6-80b4-c52ba6d61734   # Tenth Anniversary Spectacular (longest, 109 min)
+  - hrn-bd705662e547d913       # Episode 3: Harold McGee (2010; guest; oldest era, flagged suspect)

@@ -93,6 +93,7 @@ def guard_config(cfg: Config) -> None:
         guard_path(getattr(cfg, name), f"config {name}")
     for name in ("log_dir", "stop_file"):
         guard_path(getattr(cfg.backfill, name), f"config backfill.{name}")
+    guard_path(cfg.llm.compare_dir, "config llm.compare_dir")
 
 
 # ------------------------------------------------------------------------- models
@@ -139,7 +140,13 @@ class AsrConfig(_Section):
 
 class LlmConfig(_Section):
     model: str = "claude-sonnet-5-5"
-    monthly_budget_usd: float = Field(25.0, ge=0)
+    monthly_budget_usd: float = Field(25.0, ge=0)  # hard cap, enforced against the llm_usage ledger
+    # `ciw compare`: the model/effort comparison on sampled transcripts (T9 step 0).
+    prompt_file: Path = Path("prompts/compare.yaml")  # the prompt, schema, matrix and sample
+    compare_dir: Path = Path("data/compare")  # <run_id>/<episode_id>/<config_id>.json
+    concurrency: int = Field(3, ge=1, le=8)  # calls in flight at once
+    max_usd_per_run: float = Field(10.0, ge=0)  # `compare run` stops before passing this
+    max_retries: int = Field(2, ge=0)  # the SDK's own retries (429, 5xx, connection errors)
 
 
 class NotifyConfig(_Section):
@@ -258,6 +265,13 @@ class Config(_Section):
         }
         if bf_updates:
             cfg = cfg.model_copy(update={"backfill": self.backfill.model_copy(update=bf_updates)})
+        llm_updates = {
+            name: self.root / getattr(self.llm, name)
+            for name in ("prompt_file", "compare_dir")
+            if not getattr(self.llm, name).is_absolute()
+        }
+        if llm_updates:
+            cfg = cfg.model_copy(update={"llm": self.llm.model_copy(update=llm_updates)})
         return cfg
 
 

@@ -126,3 +126,18 @@ def test_redact_literals_and_url_params(clean_env):
 def test_redact_leaves_plain_text_alone(clean_env):
     assert redact("nothing secret here") == "nothing secret here"
     assert redact(42) == "42"
+
+
+def test_llm_paths_resolve_against_the_root_and_defaults(tmp_path, monkeypatch):
+    """Relative llm.prompt_file / compare_dir must follow the root, never the cwd (a test once
+    read the real prompt file and would have written into the real data/compare)."""
+    from conftest import write_config
+
+    from ciw.config import load_config
+
+    monkeypatch.setenv("CIW_ROOT", str(tmp_path))
+    write_config(tmp_path)
+    cfg = load_config(tmp_path, use_dotenv=False)
+    assert cfg.llm.prompt_file == tmp_path / "prompts" / "compare.yaml"
+    assert cfg.llm.compare_dir == tmp_path / "data" / "compare"
+    assert (cfg.llm.concurrency, cfg.llm.max_usd_per_run, cfg.llm.monthly_budget_usd) == (3, 10, 25)

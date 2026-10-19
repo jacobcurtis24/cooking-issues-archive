@@ -2,7 +2,7 @@
 
 A local archive of [cookingissues.com](https://cookingissues.com) — 216 blog posts and 8 technical primers by Dave Arnold, stored in a searchable SQLite database with a web viewer.
 
-A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. Done: ingest (Acast, HRN and the Patreon early-access feed), download, transcription with speaker labels, the transcript browser and the resumable backfill. Next: LLM segment and scoring (the `score`/notify commands are still stubs), then review pages and ntfy, a gold-set eval and unattended operation. The task-by-task roadmap is [docs/plan.md](docs/plan.md), what was done and measured is in [docs/progress.md](docs/progress.md), and the original design is `Cooking Issues Segment Watcher — Plan.md` (kept out of git).
+A podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment scoring, ntfy alerts, review pages) is being added to the same package, `ciw`. Done: ingest (Acast, HRN and the Patreon early-access feed), download, transcription with speaker labels, the transcript browser and the resumable backfill. In progress: LLM segment and scoring, starting with a model comparison harness (`ciw compare`; `score`/notify are still stubs), then review pages and ntfy, a gold-set eval and unattended operation. The task-by-task roadmap is [docs/plan.md](docs/plan.md), what was done and measured is in [docs/progress.md](docs/progress.md), and the original design is `Cooking Issues Segment Watcher — Plan.md` (kept out of git).
 
 ## Requirements
 
@@ -153,6 +153,18 @@ ciw backfill stop          # finish the current episode, then exit      ciw back
 
 The queue is the state: `run` (the order is `backfill.order`, default acast, then the Patreon-only exclusives, then hrn; newest first) downloads up to `backfill.prefetch` episodes ahead of the single GPU transcriber, isolates failures (cool-down 10 min / 1 h / 6 h, 3 attempts), stops after the current episode on Ctrl-C, SIGTERM, `ciw backfill stop` or `--max-hours`, and a re-run continues where it stopped. More than 10 episodes, or no selector at all, needs `--yes`. Events go to `data/logs/backfill-YYYYMMDD.jsonl`. Details: docs/progress.md (T8).
 
+## Comparing Claude models (T9 step 0)
+
+```
+$EDITOR prompts/compare.yaml        # system/user prompt, JSON schema, checks (matrix and sample are set)
+ciw compare plan [--episodes N]     # grid, prompt problems, cost estimate; offline unless --count-tokens
+ciw compare run --episodes 3 --yes  # stage 1 (7 configs x 3 episodes); `--all --yes` for the rest
+ciw compare status | report         # results so far; report writes the blind data/compare/<run>/review.html
+ciw compare score ratings.json      # unblind the exported ratings: rating, cost, checks, backlog projection
+```
+
+Calls cost money: `run` needs `--yes`, stops before `--max-usd` (default `llm.max_usd_per_run`) or the monthly cap (`llm.monthly_budget_usd`) can be passed, and every call is recorded in the `llm_usage` ledger. Details: docs/progress.md (T9 step 0).
+
 ## Configuration
 
 Non-secret settings live in `config.yaml` (paths, feed IDs, models, web host/port). Relative paths resolve against the project root, so commands work from any directory (override the root with `CIW_ROOT`). Secrets go only in `.env` (git-ignored); copy `.env.example`.
@@ -195,6 +207,10 @@ cooking-issues-archive/
     ├── transcribe.py      # transcription orchestration: selection, staleness, lock, state
     ├── backfill.py        # resumable backfill: plan, estimates, prefetching pipeline, stop, JSONL log
     ├── cli_backfill.py    # `ciw backfill plan|run|status|stop|retry`
+    ├── llm.py             # Claude client, prices, cost (lazy `anthropic` import)
+    ├── compare.py         # model comparison: prompt file, runner, caps, checks
+    ├── compare_report.py  # blind review page, unblinded summary (+ compare_review.html)
+    ├── cli_compare.py     # `ciw compare plan|run|status|report|score`
     ├── transcript.py      # utterance grouping + `[mm:ss] SPEAKER_01: text` renderer
     ├── vocab.py           # mine candidate jargon, read vocabulary/aliases, build the prompt
     ├── correct.py         # conservative post-ASR correction against the vocabulary

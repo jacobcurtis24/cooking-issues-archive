@@ -11,6 +11,7 @@ import typer
 
 from ciw import __version__, state
 from ciw.cli_backfill import backfill_app
+from ciw.cli_compare import compare_app
 from ciw.cli_vocab import vocab_app
 from ciw.config import load_config
 
@@ -28,6 +29,7 @@ app.add_typer(blog_app, name="blog")
 app.add_typer(feeds_app, name="feeds")
 app.add_typer(vocab_app, name="vocab")
 app.add_typer(backfill_app, name="backfill")
+app.add_typer(compare_app, name="compare")
 
 _STUB_CONTEXT = {"allow_extra_args": True, "ignore_unknown_options": True}
 

@@ -44,20 +44,20 @@ RSS poll -> download -> WhisperX (+speakers) -> vocabulary correction -> search 
 | T6 | Vocabulary, correction pass, quality report | done | `m3-transcribe` |
 | T7 | Transcript browser, transcript search, related posts | done | `m3-transcribe` |
 | T8 | Resumable backfill runner | done (the long run is in progress, see below) | `m3-transcribe` |
-| T9 | LLM segment + score | next; blocked on `ANTHROPIC_API_KEY` | `m5-score` |
+| T9 | LLM segment + score | in progress: comparison harness built (step 0); waiting for the prompt | `m5-score` |
 | T10 | Review pages, clips, ntfy notifier | not started | |
 | T11 | Gold set and `ciw eval` | not started | |
 | T12 | Unattended `ciw run`, systemd timer, retention | not started | |
 | T13 | Extensions (optional) | not started | |
 
-`m3-transcribe` carries T5–T8 plus the Patreon work and is about 60 commits ahead of `main`; nothing has been pushed or merged.
+`m3-transcribe` (T5–T8 plus the Patreon work) was fast-forwarded into `main` and pushed on 2026-10-18; `m5-score` branches from it.
 
 ### State of the data (2026-10-18)
 
 - 696 episodes known: 241 Acast (each with a Patreon twin), 453 HRN, 2 Patreon-only exclusives.
 - 469 transcribed with speakers, 0 failures, 0 suspect transcripts. 227 HRN episodes (2010–2016) are still being processed by the user's backfill run (`ciw backfill run --yes --max-hours 8`), about 8 GPU hours at roughly 24x realtime.
 - Audio so far is about 47 GB on `/mnt/ssd0` (367 GB free). `/` is 90+% full (about 10 GB free), so nothing bulky belongs there.
-- 878 tests pass, 1 deselected (`gpu`).
+- 955 tests pass, 1 deselected (`gpu`).
 
 ## Tasks
 
@@ -90,10 +90,10 @@ Open: the aliases were fitted on the first two episodes; re-mine candidates from
 `ciw backfill plan|run|status|stop|retry`: prefetching downloader plus one GPU transcriber, failure isolation with cool-downs, `--max-hours`, graceful stop (a second signal aborts), JSONL logs, suspect-transcript flag. Order is `acast`, then Patreon-only exclusives, then `hrn`, newest first. The user starts long runs themselves; agent sessions never do.
 Remaining: finish the current run, then a short follow-up if `--max-hours` ran out.
 
-### T9 — LLM segment + score (next)
-Branch `m5-score`. Needs `ANTHROPIC_API_KEY` in `.env` (the user supplies it).
+### T9 — LLM segment + score (in progress)
+Branch `m5-score`. `ANTHROPIC_API_KEY` is in `.env`.
 
-0. **Model comparison first.** Before the production prompt is fixed, run the same user-supplied prompt on 5–6 sampled transcripts through Haiku 5.5, Sonnet 5.5 and Opus 5.5 and compare. Opus is the reference, not the truth. The review is blind (model labels shuffled) and is backed by automatic checks: schema-valid JSON, quoted phrases found in the transcript, timestamps inside the episode and in order, segment coverage, tokens and dollars per model. Expected cost is under $1. The sample should cover the fixture, a short and a long episode, an old HRN episode, a Patreon exclusive and one with weaker ASR. The prompt comes from the user; no API call is made before the key and prompt are in and the user says go.
+0. **Model comparison first.** (Harness built, not yet run.) One user-written prompt plus JSON schema (`prompts/compare.yaml`) runs on 10 sampled transcripts through 7 configurations: Haiku 5.5 and Sonnet 5.5 at medium/high/xhigh effort, and Opus 5.5 at medium as the reference. The review is blind (`ciw compare report`) and backed by automatic checks (schema validity, quotes found in the transcript, timestamps inside the episode, agreement with the reference, tokens, dollars). Staged: 3 episodes first, then the rest. Estimated cost $4-8 (the earlier "under $1" was for 3 models on 5-6 episodes with no effort sweep); a $10 per-run cap and the $25 monthly ledger cap apply. No API call is made without `--yes` and the user's go. See docs/progress.md (2026-10-18).
 1. Prompt templates in `prompts/`, `interests.yaml` as the interest profile, a Claude backend with pydantic validation and retry, prompt caching for the shared prefix.
 2. A cost ledger in `state.sqlite` and a hard monthly cap of $25. A cost estimate (exact input counts from `count_tokens`) is printed before any backlog is queued.
 3. The backlog goes through the Batch API (50% off, results within hours); new weekly episodes go through the normal API.

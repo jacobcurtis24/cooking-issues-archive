@@ -35,7 +35,12 @@ asr:
 
 llm:
   model: claude-sonnet-5-5
-  monthly_budget_usd: 25
+  monthly_budget_usd: 25          # hard cap; every call is recorded in state.sqlite (llm_usage)
+  prompt_file: prompts/compare.yaml   # `ciw compare`: prompt, schema, matrix, sample episodes
+  compare_dir: data/compare
+  concurrency: 3
+  max_usd_per_run: 10             # `ciw compare run` stops before a run passes this
+  max_retries: 2
 
 notify:
   server: https://ntfy.sh

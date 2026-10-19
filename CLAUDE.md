@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `transcribe.py`, `backfill.py`, `cli_backfill.py`, `transcript.py`, `asr/`, `vocab.py`, `correct.py`, `quality.py`, `cli_vocab.py`, `search_index.py`, `related.py`, `htmlsafe.py`, `notify.py`, `health.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
+Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_issues.db`, tracked in git), being extended with a podcast pipeline (RSS ingest, WhisperX transcripts, Claude segment/score, ntfy + review pages). Package: `src/ciw/` (`web/`, `blog/`, `cli.py`, `config.py`, `models.py`, `feeds.py`, `matching.py`, `ingest.py`, `state.py`, `download.py`, `transcribe.py`, `backfill.py`, `cli_backfill.py`, `transcript.py`, `asr/`, `vocab.py`, `correct.py`, `quality.py`, `cli_vocab.py`, `search_index.py`, `related.py`, `htmlsafe.py`, `notify.py`, `health.py`, `llm.py`, `compare.py`, `compare_report.py`, `cli_compare.py`). Stack: Python 3.11+, Flask, typer, pydantic v2, pyyaml, pytest, ruff.
 
 ## Environment
 
@@ -60,6 +60,14 @@ Flask site serving a scraped 2009-2013 Cooking Issues blog archive (`cooking_iss
 - State writes must not read before they write (SQLite stale-snapshot error when the downloader thread commits in between): `mark_transcribed` and `record_failure` are single UPDATEs first; `download_episode` ends its read transaction before the transfer.
 - Tests use `tests/test_backfill.py`'s `env` fixture (fake ASR + `FakeDownloads`); never call the real downloader or transcriber against real paths. `download.duration_tolerance_pct` is a fraction (0.10); `backfill.suspect_gap_pct` is a percent (5).
 
-## Next: LLM segment + score (T9)
+## LLM: model comparison (T9 step 0)
 
-Not built yet; see `docs/plan.md`. Decided: Anthropic API (key `ANTHROPIC_API_KEY` in `.env`, never logged), `claude-sonnet-5-5` unless the planned Haiku/Sonnet/Opus comparison on a few sampled transcripts (user supplies the prompt) says otherwise, Batch API for the backlog, hard $25/month cap with a cost ledger in `state.sqlite`, and an estimate printed before any backlog is queued. Make no API call without the user's go-ahead; the comparison is expected to cost under $1.
+- `ciw compare plan|run|status|report|score` (`ciw/compare.py`, `compare_report.py`, `cli_compare.py`; client, prices and cost in `ciw/llm.py`). Everything the user edits is `prompts/compare.yaml` (system, user with `{{title}} {{pub_date}} {{duration}} {{show_notes}} {{transcript}}`, JSON `schema`, `checks`, `matrix`, `reference`, `sample`); a prompt containing `TODO` is refused by `run`. Results: `data/compare/run-<prompt+schema hash>/<episode>/<config>.json`, `key.json` (label -> config), `review.html`, `summary.md`.
+- Decided: Anthropic API (key `ANTHROPIC_API_KEY` in `.env`, never logged: errors go through `redact`), `claude-sonnet-5-5` for production unless the comparison says otherwise, Batch API for the backlog, hard $25/month cap enforced against the `llm_usage` ledger in `state.sqlite` (migration 6), an estimate printed before any backlog is queued.
+- **Make no API call without the user's go-ahead.** `run` needs `--yes`; `plan --count-tokens` is a (free) API call too, so it is opt-in. Never run `ciw compare run` from an agent session unless the user said go for that stage. Staged: `--episodes 3`, review, then `--all`. `--max-usd` (default `llm.max_usd_per_run`) is checked against the worst case (output at `max_tokens`) before every call.
+- Request rules for these models: effort in `output_config`, adaptive thinking, JSON via `output_config.format`, streamed. Never send `temperature`/`top_p`, a forced `tool_choice`, `budget_tokens`, a prefill, or the `fallbacks` parameter (it would change which model answered). Refusals, truncation and invalid JSON are recorded results.
+- Tests use `tests/llmfake.py` (`FakeClient`, `install`) and `tests/comparefake.py` (`setup`: tmp root with a prompt file and three transcribed episodes). Under pytest `ciw.llm.make_client` raises unless a fake is installed. `llm.prompt_file` / `llm.compare_dir` resolve against the config root and `compare_dir` is covered by the real-path guard.
+
+## Next: LLM segment + score (T9 proper)
+
+After the comparison: prompt templates in `prompts/`, `ciw score`, `segments.json`/`scores.json`, Batch for the backlog. See `docs/plan.md`.

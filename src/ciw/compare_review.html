@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blind review __RUN_ID__</title>
+<style>
+:root{color-scheme:light dark;--bg:#fafaf8;--fg:#1d1d1b;--mut:#6b6b66;--card:#fff;--line:#d9d8d2;
+--good:#1f7a3d;--bad:#b3261e;--acc:#2456a6}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--fg:#ecebe6;--mut:#9a9992;--card:#1f1f1d;
+--line:#383835;--good:#59c07b;--bad:#ff7b72;--acc:#8ab4f8}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}
+main{max-width:1500px;margin:0 auto;padding:0 16px 64px}
+h1{font-size:1.3rem;margin:20px 0 4px}h2{font-size:1.15rem;margin:0}
+.bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 16px;
+display:flex;gap:12px;align-items:center;flex-wrap:wrap;z-index:2}
+button{font:inherit;padding:4px 12px;border:1px solid var(--line);background:var(--card);
+color:var(--fg);border-radius:6px;cursor:pointer}
+.ep{margin:28px 0;padding-top:12px;border-top:2px solid var(--line)}
+.meta,.notes,.empty{color:var(--mut)}a{color:var(--acc)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;
+align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;
+overflow-wrap:anywhere}
+.card header{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;border-bottom:1px solid
+var(--line);padding-bottom:6px}
+.card h3{margin:0;font-size:1rem}.rate label,.best{margin-right:6px;white-space:nowrap}
+.b{font-size:.78rem;border:1px solid currentColor;border-radius:10px;padding:0 7px}
+.good{color:var(--good)}.bad{color:var(--bad)}
+dl{margin:4px 0}dt{font-weight:600;margin-top:6px}dd{margin:0 0 0 12px}ul{margin:2px 0;padding-left:20px}
+.s{white-space:pre-wrap}pre{white-space:pre-wrap}
+.rated{outline:2px solid var(--acc)}
+</style></head><body>
+<div class="bar"><strong>Blind review __RUN_ID__</strong>
+<span id="progress"></span><span>__PENDING__</span>
+<button id="export" type="button">Export ratings.json</button>
+<button id="clear" type="button">Clear ratings</button></div>
+<main><h1>Rate each output 1-5 and pick the best per episode</h1>
+<p class="meta">Labels are shuffled per episode. Cost and model are hidden until you run
+<code>ciw compare score ratings.json</code>. Ratings are kept in this browser.</p>
+__BODY__</main>
+<script>
+(function(){
+var KEY='ciw-compare:__RUN_ID__',TOTAL=__TOTAL__,state={ratings:{},best:{}};
+try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){state=s;}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function paint(){
+  var n=0;
+  document.querySelectorAll('input[data-label]').forEach(function(i){
+    var v=(state.ratings[i.dataset.ep]||{})[i.dataset.label];
+    i.checked=(String(v)===i.value);});
+  document.querySelectorAll('input[name^=best-]').forEach(function(i){
+    i.checked=(state.best[i.dataset.ep]===i.value);});
+  Object.keys(state.best).forEach(function(){n++;});
+  document.getElementById('progress').textContent=n+' of '+TOTAL+' episodes have a best pick';
+}
+document.addEventListener('change',function(e){
+  var t=e.target;if(!t.dataset||!t.dataset.ep)return;
+  if(t.dataset.label){(state.ratings[t.dataset.ep]=state.ratings[t.dataset.ep]||{})[t.dataset.label]=parseInt(t.value,10);}
+  else{state.best[t.dataset.ep]=t.value;}
+  save();paint();});
+document.getElementById('export').onclick=function(){
+  var blob=new Blob([JSON.stringify({run_id:'__RUN_ID__',ratings:state.ratings,best:state.best},null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ratings.json';a.click();};
+document.getElementById('clear').onclick=function(){
+  if(confirm('Clear all ratings?')){state={ratings:{},best:{}};save();paint();}};
+paint();
+})();
+</script></body></html>
