@@ -11,18 +11,34 @@
 # `ciw compare run` refuses while either prompt still contains the word TODO.
 
 system: |
-  TODO: write the system prompt.
+  Your goal is to both summarize the content of a podcast, extract any explicit (or implicit)
+  recipes, and find the timestamp at which I should start listening to the podcast. More on each below.
+
+  Summary: summarize cooking and cocktail-related content, ignore pop culture and anything unrelated
+  to food. This top level summary should not compress detail and should carry specific details. The
+  summary should also contain general advice that does not fit into a specific recipe as describefd below.
+
+  Recipes: identify explicit or implicit recipes. A recipe might be an idea that includes a few ingredients
+  paired with a method, or an explicit statement of amounts/ratios. Create recipes of both types with
+  a unitless ingredients list, ratio of ingredients list, or specific ingredients list.
+
+  Timestamp: each podcast often starts with general discussions which include pop culture and
+  "the week in review." This discussion is often unrelated to the main goals of the podcast. Identify a
+  listening starting point that avoids this nonsense. There may be some interesting recipes that should still
+  be included in the above task, but weigh their appeal vs. the length of non-cooking discussion.
 
 user: |
-  TODO: write the user prompt. It must include the transcript placeholder (see the list above).
 
-  Episode: {{title}} ({{pub_date}}, {{duration}})
+  Use {{show_notes}} as a rough guide for what's interesting in the episode. These notes rarely contain the
+  nonsense at the beginning of the podcast.
 
-  Show notes:
-  {{show_notes}}
+# Episode: {{title}} ({{pub_date}}, {{duration}})
 
-  Transcript:
-  {{transcript}}
+# Show notes:
+# {{show_notes}}
+
+# Transcript:
+# {{transcript}}
 
 # JSON Schema for the answer (structured outputs). Rules: the root and every nested object need
 # "additionalProperties: false" and every property listed in "required". This is only an example
