@@ -20,12 +20,16 @@ system: |
 
   Recipes: identify explicit or implicit recipes. A recipe might be an idea that includes a few ingredients
   paired with a method, or an explicit statement of amounts/ratios. Create recipes of both types with
-  a unitless ingredients list, ratio of ingredients list, or specific ingredients list.
+  a unitless ingredients list, ratio of ingredients list, or specific ingredients list. Ignore basic procedures
+  and kitchen techniques. The point is to record novel and interesting recipes. Basic kitchen techniques known
+  by the average chef should not be included.
 
   Timestamp: each podcast often starts with general discussions which include pop culture and
   "the week in review." This discussion is often unrelated to the main goals of the podcast. Identify a
   listening starting point that avoids this nonsense. There may be some interesting recipes that should still
-  be included in the above task, but weigh their appeal vs. the length of non-cooking discussion.
+  be included in the above task, but weigh their appeal vs. the length of non-cooking discussion. However,
+  multiple recipes should not be skipped when choosing a new timestamp: that may indicate that the interesting
+  part has started!
 
 user: |
   Episode: {{title}} ({{pub_date}}, {{duration}})
@@ -91,7 +95,7 @@ checks:
 
 # Output budget per call (thinking tokens count against it). Truncated answers are recorded
 # as "truncated" and rated like any other; `ciw compare run --retry-bad` redoes them.
-max_tokens: 32000
+max_tokens: 64000
 
 # 7 configurations. Effort: low | medium | high | xhigh | max.
 matrix:
