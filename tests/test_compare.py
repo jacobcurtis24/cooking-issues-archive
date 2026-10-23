@@ -39,11 +39,11 @@ def test_load_and_lint_a_ready_prompt(env):
     assert p.run_id.startswith("run-") and len(p.prompt_hash()) == 64
 
 
-def test_the_shipped_prompt_file_loads_but_is_not_ready():
+def test_the_shipped_prompt_file_loads_and_is_ready():
     from conftest import REPO_ROOT
 
     p = cmp.load_prompt(REPO_ROOT / "prompts" / "compare.yaml")
-    assert any("TODO" in line for line in p.lint())
+    assert p.lint() == []
     assert len(p.matrix) == 7 and len(p.sample) == 10 and p.reference == "opus-medium"
     assert {(c.model, c.effort) for c in p.matrix} == {
         (m, e)

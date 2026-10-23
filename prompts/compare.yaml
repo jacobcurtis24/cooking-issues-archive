@@ -16,7 +16,7 @@ system: |
 
   Summary: summarize cooking and cocktail-related content, ignore pop culture and anything unrelated
   to food. This top level summary should not compress detail and should carry specific details. The
-  summary should also contain general advice that does not fit into a specific recipe as describefd below.
+  summary should also contain general advice that does not fit into a specific recipe as described below.
 
   Recipes: identify explicit or implicit recipes. A recipe might be an idea that includes a few ingredients
   paired with a method, or an explicit statement of amounts/ratios. Create recipes of both types with
@@ -28,46 +28,66 @@ system: |
   be included in the above task, but weigh their appeal vs. the length of non-cooking discussion.
 
 user: |
+  Episode: {{title}} ({{pub_date}}, {{duration}})
 
-  Use {{show_notes}} as a rough guide for what's interesting in the episode. These notes rarely contain the
-  nonsense at the beginning of the podcast.
+  Show notes (a rough guide to what is interesting; they rarely include the opening chatter):
+  {{show_notes}}
 
-# Episode: {{title}} ({{pub_date}}, {{duration}})
-
-# Show notes:
-# {{show_notes}}
-
-# Transcript:
-# {{transcript}}
+  Transcript (each line starts with its [mm:ss] time):
+  {{transcript}}
 
 # JSON Schema for the answer (structured outputs). Rules: the root and every nested object need
-# "additionalProperties: false" and every property listed in "required". This is only an example
-# of the shape; replace it with your own (summary, topics, recipe cards, tags, ...).
+# "additionalProperties: false" and every property listed in "required". Property order matters
+# for the checks: recipes come before start_listening_at so that the out-of-order timestamp count
+# is not tripped by a good recipe that sits before the chosen start point.
 schema:
   type: object
   additionalProperties: false
-  required: [summary, tags, key_quotes]
+  required: [summary, recipes, start_listening_at, start_reason]
   properties:
     summary:
       type: string
-    tags:
+      description: Detailed summary of the cooking and cocktail content, with specifics and any general advice that is not part of a single recipe.
+    recipes:
       type: array
-      items: {type: string}
-    key_quotes:
-      type: array
+      description: Recipes in the order they come up in the episode.
       items:
         type: object
         additionalProperties: false
-        required: [timestamp, quote]
+        required: [recipe_title, kind, basis, amount_style, timestamp, ingredients, method, evidence]
         properties:
-          timestamp: {type: string}
-          quote: {type: string}
+          recipe_title: {type: string}
+          kind: {type: string, enum: [food, cocktail]}
+          basis: {type: string, enum: [explicit, implicit], description: "explicit = the speakers state it as a recipe; implicit = ingredients and a method pieced together from discussion"}
+          amount_style: {type: string, enum: [specific, ratio, unitless]}
+          timestamp: {type: string, description: "[mm:ss] copied from the transcript line where the recipe starts"}
+          ingredients:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              required: [item, amount]
+              properties:
+                item: {type: string}
+                amount: {type: string, description: "exact amount, ratio part (e.g. 2 parts), or empty string if none was stated"}
+          method:
+            type: array
+            items: {type: string}
+          evidence:
+            type: string
+            description: Verbatim quote (at most 25 words, from a single speaker turn) that supports the recipe.
+    start_listening_at:
+      type: string
+      description: "[mm:ss] copied from the transcript line where I should start listening"
+    start_reason:
+      type: string
+      description: One or two sentences on why, including what you skipped and any recipe you decided to leave before the start point.
 
 # Automatic checks, by JSON key name (anywhere in the output). A check you do not name is skipped.
 checks:
-  quote_fields: [quote]        # must appear in the transcript (verbatim, or nearly)
-  timestamp_fields: [timestamp]  # mm:ss, h:mm:ss or seconds, inside the episode
-  list_fields: [tags]          # overlap with the reference output (Jaccard)
+  quote_fields: [evidence]                       # must appear in the transcript (verbatim, or nearly)
+  timestamp_fields: [timestamp, start_listening_at]  # mm:ss, h:mm:ss or seconds, inside the episode
+  list_fields: [recipe_title, item]              # overlap with the reference output (Jaccard)
 
 # Output budget per call (thinking tokens count against it). Truncated answers are recorded
 # as "truncated" and rated like any other; `ciw compare run --retry-bad` redoes them.
